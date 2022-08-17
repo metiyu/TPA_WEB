@@ -2,20 +2,40 @@ import React, { useState } from "react";
 import "./Signup.css";
 import logo from '../../assets/logo.png'
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import REGISTER_QUERY from "../../query/register";
 
 export default function SignUp() {
+    const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confPassword, setConfPassword] = useState("")
-    const [name, setName] = useState("")
-    const [profilePic, setProfilePic] = useState()
     const [errorMsg, setErrorMsg] = useState("")
     const [showError, setShowError] = useState(false)
-    const navigate = useNavigate()
 
-    function handleSubmit() {
+    const navigate = useNavigate()
+    const [registerFunc, { loading }] = useMutation(REGISTER_QUERY)
+
+
+    function handleSubmit(e: any) {
+        e.preventDefault()
+        const input = {
+            name: name,
+            email: email,
+            password: password
+        }
+
+        console.log(input);
+        
+
         if (PasswordValidation()) {
-            navigate('/')
+            registerFunc({ variables: { input: input } }).
+                then(() => {
+                    console.log("succes create user");
+                    navigate('/')
+                }).catch((err) => {
+                    console.log("error");
+                })
         }
     }
 
@@ -38,7 +58,7 @@ export default function SignUp() {
                 <h2>Sign Up</h2>
                 <p>Make the most of your professional life</p>
             </div>
-            <form>
+            <form onSubmit={(e) => handleSubmit(e)}>
                 <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -66,7 +86,7 @@ export default function SignUp() {
                 <div className="error">
                     <p>{errorMsg}</p>
                 </div>
-                <button type="button" onClick={() => handleSubmit()}>
+                <button>
                     Sign Up
                 </button>
             </form>

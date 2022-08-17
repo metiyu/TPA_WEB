@@ -16,6 +16,7 @@
   padding-bottom: 8px;
   border-radius: 20px;
   width: 80%;
+  cursor: pointer;
 }
 .profile__dropdown .signout {
   display: flex;

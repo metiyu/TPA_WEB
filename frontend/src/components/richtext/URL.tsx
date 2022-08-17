@@ -1,7 +1,12 @@
+import { useNavigate } from "react-router-dom"
+import './URL.css'
+
 export default function URL(text: any, url: any){
+    const navigate = useNavigate()
+    
     return(
-        <div>
-            
-        </div>
+        <span className="url" onClick={() => navigate('/' + {url})}>
+            {text}
+        </span>
     )
 }

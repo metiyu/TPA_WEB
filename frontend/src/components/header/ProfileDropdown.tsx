@@ -1,7 +1,10 @@
 import { Avatar } from "@material-ui/core"
+import { useNavigate } from "react-router-dom"
 import "./ProfileDropdown.css"
 
 export default function ProfileDropdown(){
+    const navigate = useNavigate()
+
     return(
         <div className="profile__dropdown">
             <div className="profile__content">
@@ -13,7 +16,7 @@ export default function ProfileDropdown(){
                     <p>Education</p>
                 </div>
             </div>
-            <button>
+            <button onClick={() => navigate('/profile')}>
                 View Profile
             </button>
             <div className="signout">
