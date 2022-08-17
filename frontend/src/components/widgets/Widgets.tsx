@@ -1,7 +1,8 @@
 import "./Widgets.css";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import logo from '../../assets/logo.png'
 
-function Widgets() {
+export default function Widgets() {
     const newArticle = (heading: any, subtitle: any) => (
         <div className="widgets__article">
             <div className="widgets__articleLeft">
@@ -23,7 +24,7 @@ function Widgets() {
     ]
 
     return (
-        <div className="container">
+        <div className="container__widget">
             <div className="widgets">
                 <img src="https://media.licdn.com/media/AAYQAgTPAAgAAQAAAAAAADVuOvKzTF-3RD6j-qFPqhubBQ.png" alt="Advertise on LinkedIn"></img>
             </div>
@@ -32,11 +33,10 @@ function Widgets() {
                     <a className="link" href={item.link}>{item.title}</a>
                 ))}
             </footer>
-            <div>
+            <div className="logo__container">
+                <img className="logo" src={logo} alt="logo.png" />
                 LinkHEdIn Corporation © 2022
             </div>
         </div>
     );
 }
-
-export default Widgets;

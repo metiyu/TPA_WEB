@@ -1,4 +1,4 @@
-.container {
+.container__widget {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,4 +64,10 @@ footer {
   width: 18vw;
   justify-content: center;
   align-self: center;
+}
+
+.logo {
+  width: 70px;
+  height: auto;
+  padding-right: 5px;
 }/*# sourceMappingURL=Widgets.css.map */

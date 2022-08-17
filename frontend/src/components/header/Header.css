@@ -1,42 +1,49 @@
 .header {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    display: flex;
-    background-color: white;
-    justify-content: space-evenly;
-    border-bottom: 0.1px solid lightgray;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 100%;
-    z-index: 999;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  display: flex;
+  background-color: white;
+  justify-content: space-evenly;
+  border-bottom: 0.1px solid lightgray;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  z-index: 999;
 }
 
-.header__left {
-    display: flex;
+.header__outer {
+  width: 100%;
 }
-
-.header__left img {
-    -o-object-fit: contain;
-    object-fit: contain;
-    height: 40px;
-    margin-right: 10px;
+.header__outer .header__left {
+  display: flex;
 }
-
-.header__search {
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    border-radius: 5px;
-    height: 22px;
-    color: gray;
-    background-color: #eef3f8;
+.header__outer .header__left img {
+  -o-object-fit: contain;
+     object-fit: contain;
+  height: 40px;
+  margin-right: 10px;
 }
-
-.header__search input {
-    outline: none;
-    border: none;
-    background: none;
+.header__outer .header__search {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  height: 22px;
+  color: gray;
+  background-color: #eef3f8;
 }
-
-/*# sourceMappingURL=Header.css.map */
+.header__outer .header__search input {
+  outline: none;
+  border: none;
+  background: none;
+}
+.header__outer .drop {
+  position: relative;
+  z-index: 20;
+  float: right;
+  padding-right: 15vw;
+}
+.header__outer .invisible {
+  display: none;
+}/*# sourceMappingURL=Header.css.map */

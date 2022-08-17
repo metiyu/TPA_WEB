@@ -1,21 +1,23 @@
-import Header from "./components/header/Header"
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import Sidebar from "./components/sidebar/Sidebar"
-import Feed from "./components/feed/Feed"
-import Widgets from "./components/widgets/Widgets"
+import Homepage from './pages/homepage/Homepage'
+import Message from './pages/message/Message'
+import MyNetwork from './pages/my-network/MyNetwork'
+import SignIn from './pages/sign-in/SignIn'
+import SignUp from './pages/sign-up/SignUp'
 
 function App() {
   return (
-    <div className="app">
-      <>
-        <Header />
-        <div className="app__body">
-            <Sidebar />
-            <Feed />
-            <Widgets />
-          </div>
-      </>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* <Route path='' element={< />} /> */}
+        <Route path='/' element={<SignIn />} />
+        <Route path='/sign-up' element={<SignUp />} />
+        <Route path='/feed' element={<Homepage />} />
+        <Route path='/mynetwork' element={<MyNetwork />} />
+        <Route path='/message' element={<Message />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
