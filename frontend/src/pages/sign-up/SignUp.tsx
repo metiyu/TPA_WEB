@@ -34,7 +34,7 @@ export default function SignUp() {
                     console.log("succes create user");
                     navigate('/')
                 }).catch((err) => {
-                    console.log("error");
+                    console.log(err);
                 })
         }
     }

@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/metiyu/gqlgen-linkhedin/database"
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
 )
@@ -12,6 +13,7 @@ func CreateUser(ctx context.Context, newUser model.NewUser) (*model.User, error)
 	newUser.Password = HashPassword(newUser.Password)
 	var emptyArrString []string
 	user := model.User{
+		ID:             uuid.NewString(),
 		Name:           newUser.Name,
 		Email:          newUser.Email,
 		Password:       newUser.Password,

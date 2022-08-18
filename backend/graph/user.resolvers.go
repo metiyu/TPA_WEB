@@ -7,18 +7,19 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/metiyu/gqlgen-linkhedin/auth"
 	"github.com/metiyu/gqlgen-linkhedin/graph/generated"
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
 )
 
 // Register is the resolver for the register field.
 func (r *mutationResolver) Register(ctx context.Context, input model.NewUser) (interface{}, error) {
-	panic(fmt.Errorf("not implemented"))
+	return auth.UserRegister(ctx, input)
 }
 
 // Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, email string, password string) (interface{}, error) {
-	panic(fmt.Errorf("not implemented"))
+	return auth.UserLogin(ctx, email, password)
 }
 
 // User is the resolver for the user field.
