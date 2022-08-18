@@ -7,19 +7,19 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/metiyu/gqlgen-linkhedin/auth"
 	"github.com/metiyu/gqlgen-linkhedin/graph/generated"
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
+	"github.com/metiyu/gqlgen-linkhedin/service"
 )
 
 // Register is the resolver for the register field.
 func (r *mutationResolver) Register(ctx context.Context, input model.NewUser) (interface{}, error) {
-	return auth.UserRegister(ctx, input)
+	return service.UserRegister(ctx, input)
 }
 
 // Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, email string, password string) (interface{}, error) {
-	return auth.UserLogin(ctx, email, password)
+	return service.UserLogin(ctx, email, password)
 }
 
 // User is the resolver for the user field.
@@ -30,6 +30,11 @@ func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
+}
+
+// Protected is the resolver for the protected field.
+func (r *queryResolver) Protected(ctx context.Context) (string, error) {
+	return "Success", nil
 }
 
 // ProfilePhotoURL is the resolver for the profile_photo_url field.

@@ -1,21 +1,23 @@
-package auth
+package service
 
 import (
 	"context"
+	"strings"
 
 	"github.com/google/uuid"
-	"github.com/metiyu/gqlgen-linkhedin/database"
+	"github.com/metiyu/gqlgen-linkhedin/config"
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
+	"github.com/metiyu/gqlgen-linkhedin/tools"
 )
 
 func CreateUser(ctx context.Context, newUser model.NewUser) (*model.User, error) {
 	db := database.GetDB()
-	newUser.Password = HashPassword(newUser.Password)
+	newUser.Password = tools.HashPassword(newUser.Password)
 	var emptyArrString []string
 	user := model.User{
 		ID:             uuid.NewString(),
 		Name:           newUser.Name,
-		Email:          newUser.Email,
+		Email:          strings.ToLower(newUser.Email),
 		Password:       newUser.Password,
 		Validate:       false,
 		PhotoProfile:   "https://picsum.photos/id/237/200/300",

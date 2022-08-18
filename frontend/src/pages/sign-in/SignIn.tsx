@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SignIn.css";
 import logo from '../../assets/logo.png'
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { LOGIN_QUERY } from "../../queries";
+import { UseCurrentUser } from "../../contexts/userCtx";
 
 export default function SignIn() {
     const [email, setEmail] = useState(() => "");
@@ -9,9 +12,39 @@ export default function SignIn() {
     const [name, setName] = useState(() => "");
     const [profilePic, setProfilePic] = useState(() => "");
     const navigate = useNavigate();
+    const [loginFunc, { data, loading, error }] = useMutation(LOGIN_QUERY)
+    const { getUser, setUserToStorage } = UseCurrentUser()
 
-    function handleSubmit(){
-        navigate('/feed')
+    console.log(getUser());
+    console.log(data);
+    console.log(error);
+
+    // useEffect(() => {
+    //     const user = getUser()
+    //     console.log(user);
+    //     if (user.token !== undefined){
+    //         navigate('/')
+    //     }
+    // }, [])
+
+    // useEffect(() => {
+    //     if (data && data.login.token !== undefined){
+    //         const user = data.logi
+    //     }
+    // }, [data])
+
+    function handleSubmit() {
+        loginFunc({
+            variables: {
+                email: email,
+                password: password
+            }
+        }).then(() => {
+            console.log("success login");
+            navigate('/feed')
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     return (

@@ -8,10 +8,12 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gorilla/mux"
-	"github.com/metiyu/gqlgen-linkhedin/database"
+	"github.com/metiyu/gqlgen-linkhedin/config"
 	"github.com/metiyu/gqlgen-linkhedin/graph"
+	"github.com/metiyu/gqlgen-linkhedin/directives"
 	"github.com/metiyu/gqlgen-linkhedin/graph/generated"
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
+	"github.com/metiyu/gqlgen-linkhedin/middlewares"
 )
 
 const defaultPort = "8080"
@@ -39,18 +41,18 @@ func main() {
 	db := database.GetDB()
 	db.AutoMigrate(&model.User{})
 
+	c := generated.Config{Resolvers: &graph.Resolver{
+		DB: db,
+	}}
+	c.Directives.Auth = directives.Auth
+
 	srv := handler.NewDefaultServer(
-		generated.NewExecutableSchema(
-			generated.Config{
-				Resolvers: &graph.Resolver{
-					DB: db,
-				},
-			},
-		),
+		generated.NewExecutableSchema(c),
 	)
 
 	router := mux.NewRouter()
 	router.Use(MyCors)
+	router.Use(middlewares.AuthMiddleware)
 	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	router.Handle("/query", srv)
 

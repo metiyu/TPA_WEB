@@ -1,4 +1,4 @@
-package auth
+package service
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gorm.io/gorm"
+	"github.com/metiyu/gqlgen-linkhedin/tools"
 )
 
 func UserRegister(ctx context.Context, newUser model.NewUser) (interface{}, error) {
@@ -23,7 +24,7 @@ func UserRegister(ctx context.Context, newUser model.NewUser) (interface{}, erro
 	if err != nil {
 		return nil, err
 	}
-	token, err := GenerateJWT(ctx, createdUser.ID)
+	token, err := JwtGenerate(ctx, createdUser.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -65,11 +66,11 @@ func UserLogin(ctx context.Context, email string, password string) (interface{},
 	// 	return nil, errors.New("Your account is not authenticated!")
 	// }
 
-	if err := ComparePassword(user.Password, password); err != nil {
+	if err := tools.ComparePassword(user.Password, password); err != nil {
 		return nil, err
 	}
 
-	token, err := GenerateJWT(ctx, user.ID)
+	token, err := JwtGenerate(ctx, user.ID)
 	if err != nil {
 		return nil, err
 	}

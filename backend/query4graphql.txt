@@ -1,0 +1,14 @@
+register
+{
+    "input": {
+    "name": "asd",
+    "email": "asd@asd.com",
+    "password": "asd123"
+  }
+}
+
+login
+{
+  "email": "asd@mail.com",
+  "password": "asd123"
+}

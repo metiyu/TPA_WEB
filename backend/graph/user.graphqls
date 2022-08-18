@@ -2,12 +2,10 @@
 #
 # https://gqlgen.com/getting-started/
 
-# type Todo {
-#   id: ID!
-#   text: String!
-#   done: Boolean!
-#   user: User!
-# }
+directive @goField(forceResolver: Boolean, name: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+# new directive
+directive @auth on FIELD_DEFINITION
 
 scalar Any
 
@@ -19,15 +17,16 @@ type User {
   bg_photo_url: String
 }
 
-type Query {
-  user(id: ID!): User!
-  users: [User!]!
-}
-
 input NewUser{
   name: String!
   email: String!
   password: String!
+}
+
+type Query {
+  user(id: ID!): User!
+  users: [User!]!
+  protected: String! @goField(forceResolver: true) @auth
 }
 
 type Mutation {

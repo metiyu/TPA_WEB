@@ -3,7 +3,7 @@ import "./Signup.css";
 import logo from '../../assets/logo.png'
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import REGISTER_QUERY from "../../query/register";
+import { REGISTER_QUERY } from "../../queries";
 
 export default function SignUp() {
     const [name, setName] = useState("")
@@ -16,29 +16,6 @@ export default function SignUp() {
     const navigate = useNavigate()
     const [registerFunc, { loading }] = useMutation(REGISTER_QUERY)
 
-
-    function handleSubmit(e: any) {
-        e.preventDefault()
-        const input = {
-            name: name,
-            email: email,
-            password: password
-        }
-
-        console.log(input);
-        
-
-        if (PasswordValidation()) {
-            registerFunc({ variables: { input: input } }).
-                then(() => {
-                    console.log("succes create user");
-                    navigate('/')
-                }).catch((err) => {
-                    console.log(err);
-                })
-        }
-    }
-
     function PasswordValidation() {
         if (password !== confPassword) {
             setErrorMsg("Confirm password doesn't match")
@@ -46,6 +23,30 @@ export default function SignUp() {
             return false
         }
         return true
+    }
+
+    function handleSubmit() {
+        const input = {
+            name: name,
+            email: email,
+            password: password
+        }
+
+        console.log(input);
+
+        if (PasswordValidation()) {
+            registerFunc({
+                variables: {
+                    input: input
+                }
+            }).
+                then(() => {
+                    console.log("succes create user");
+                    navigate('/')
+                }).catch((err) => {
+                    console.log(err);
+                })
+        }
     }
 
     return (
@@ -58,7 +59,7 @@ export default function SignUp() {
                 <h2>Sign Up</h2>
                 <p>Make the most of your professional life</p>
             </div>
-            <form onSubmit={(e) => handleSubmit(e)}>
+            <form onSubmit={() => handleSubmit()}>
                 <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
