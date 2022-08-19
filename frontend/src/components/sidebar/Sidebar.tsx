@@ -1,8 +1,12 @@
 import React from "react";
 import "./Sidebar.css";
 import Avatar from "@material-ui/core/Avatar";
+import { UseCurrentUser } from "../../contexts/userCtx";
 
 export default function Sidebar() {
+    const {getUser} = UseCurrentUser()
+    const currUser = getUser()
+
     const recentItem = (topic: string) => (
         <div className="sidebar__recentItem">
             <span className="sidebar__hash">#</span>
@@ -18,10 +22,12 @@ export default function Sidebar() {
                     alt=""
                 />
                 <Avatar src={"https://picsum.photos/200"} className="sidebar__avatar">
-                    email
+                    {currUser.email}
                 </Avatar>
-                <h2>name</h2>
-                <h4>email</h4>
+                <h2>{currUser.name}</h2>
+                {currUser.work ? (
+                    <h4>{currUser.work}</h4>
+                ) : ("")}
             </div>
 
             <div className="sidebar__stats">
@@ -35,14 +41,14 @@ export default function Sidebar() {
                 </div>
             </div>
 
-            <div className="sidebar__bottom">
+            {/* <div className="sidebar__bottom">
                 <p>Recent</p>
                 {recentItem("reactjs")}
                 {recentItem("programming")}
                 {recentItem("softwareengineering")}
                 {recentItem("design")}
                 {recentItem("developer")}
-            </div>
+            </div> */}
         </div>
     );
 }

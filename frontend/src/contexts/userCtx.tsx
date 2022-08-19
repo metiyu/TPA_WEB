@@ -34,9 +34,9 @@ export default function CurrentUserProvider({ children }: { children: any }) {
 
     const value = { setUserToStorage, user, getUser }
 
-    return <CurrentUserProvider value={value}>
+    return <userContext.Provider value={value}>
         {children}
-    </CurrentUserProvider>
+    </userContext.Provider>
 }
 
 export function UseCurrentUser() {

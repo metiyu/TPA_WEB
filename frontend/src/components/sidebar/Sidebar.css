@@ -8,6 +8,7 @@
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+  min-width: 200px;
 }
 
 .sidebar__avatar {

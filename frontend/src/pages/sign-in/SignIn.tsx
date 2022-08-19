@@ -14,24 +14,7 @@ export default function SignIn() {
     const navigate = useNavigate();
     const [loginFunc, { data, loading, error }] = useMutation(LOGIN_QUERY)
     const { getUser, setUserToStorage } = UseCurrentUser()
-
-    console.log(getUser());
-    console.log(data);
-    console.log(error);
-
-    // useEffect(() => {
-    //     const user = getUser()
-    //     console.log(user);
-    //     if (user.token !== undefined){
-    //         navigate('/')
-    //     }
-    // }, [])
-
-    // useEffect(() => {
-    //     if (data && data.login.token !== undefined){
-    //         const user = data.logi
-    //     }
-    // }, [data])
+    const [loadings, setLoadings] = useState(false)
 
     function handleSubmit() {
         loginFunc({
@@ -39,9 +22,14 @@ export default function SignIn() {
                 email: email,
                 password: password
             }
-        }).then(() => {
+        }).then((e) => {
             console.log("success login");
-            navigate('/feed')
+            if (data && data.login.token !== undefined) {
+                const user = data.login
+                console.log(user);
+                setUserToStorage(user)
+                navigate('/feed')
+            }
         }).catch((err) => {
             console.log(err);
         })

@@ -67,3 +67,23 @@
         }
     }
 }
+
+$width: 500px;
+$height: 500px;
+.edit__profile_show{
+    position: fixed;
+    background-color: blue;
+    min-width: $width;
+    min-height: $height;
+    top: 50%;
+    left: 50%;
+    margin-top: -($width/2); /* Negative half of height. */
+    margin-left: -($height/2); /* Negative half of width. */
+    border: 1px solid black;
+    box-shadow: 0.5px 0.5px 2px 2px grey;
+    border-radius: 10px;
+}
+
+.edit__profile_invisible{
+    display: none;
+}
