@@ -18,16 +18,18 @@ export default function Sidebar() {
         <div className="sidebar">
             <div className="sidebar__top">
                 <img
-                    src="https://images.unsplash.com/photo-1523650055327-53aeba964f5f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"
+                    src={currUser.photo_background}
                     alt=""
                 />
-                <Avatar src={"https://picsum.photos/200"} className="sidebar__avatar">
+                <Avatar src={currUser.photo_profile} className="sidebar__avatar">
                     {currUser.email}
                 </Avatar>
                 <h2>{currUser.name}</h2>
                 {currUser.work ? (
                     <h4>{currUser.work}</h4>
-                ) : ("")}
+                ) : (
+                    <h4>{currUser.education}</h4>
+                )}
             </div>
 
             <div className="sidebar__stats">

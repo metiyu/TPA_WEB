@@ -8,23 +8,31 @@ export default function ProfileBox() {
     const { getUser } = UseCurrentUser()
     const currUser = getUser()
     const [dropdownClassname, setDropdownClassname] = useState("edit__profile_invisible")
+    const [greyBackground, setGreyBackground] = useState("overlay_invisible")
 
     function handleShowEditProfile(){
         if(dropdownClassname == "edit__profile_invisible"){
             setDropdownClassname("edit__profile_show")
+            setGreyBackground("overlay_show")
         }
         else{
             setDropdownClassname("edit__profile_invisible")
+            setGreyBackground("overlay_invisible")
         }
     }
 
     return (
         <div className="default__profile">
-            <div className="cover__photo"></div>
-            <Avatar className="profile__photo" src="https://picsum.photos/200" />
+            <div className="cover__photo">
+                <img src={currUser.photo_background} alt="" />
+            </div>
+            <Avatar className="profile__photo" src={currUser.photo_profile} />
             <h3>{currUser.name}</h3>
             {currUser.work ? (
                 <h4>{currUser.work}</h4>
+            ) : ("")}
+            {currUser.education ? (
+                <h4>{currUser.education}</h4>
             ) : ("")}
             <div className="sub__information">
                 {currUser.region ? (
@@ -40,7 +48,10 @@ export default function ProfileBox() {
             </div>
             <div className={dropdownClassname}>
                 <EditProfile />
+                
             </div>
+            <div id={greyBackground} onClick={() => handleShowEditProfile()}></div>
+            
         </div>
     )
 }

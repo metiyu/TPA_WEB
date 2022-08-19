@@ -11,7 +11,7 @@ export default function ProfileDropdown(){
     return(
         <div className="profile__dropdown">
             <div className="profile__content">
-                <Avatar src="https://picsum.photos/200/300">
+                <Avatar src={currUser.photo_profile}>
 
                 </Avatar>
                 <div className="profile__text">

@@ -22,6 +22,11 @@ func (r *mutationResolver) Login(ctx context.Context, email string, password str
 	return service.UserLogin(ctx, email, password)
 }
 
+// UpdateUser is the resolver for the updateUser field.
+func (r *mutationResolver) UpdateUser(ctx context.Context, id string, name string, work string, education string, region string, profileURL string, backgroundURL string) (interface{}, error) {
+	return service.UpdateUser(ctx, id, name, work, education, region, profileURL, backgroundURL)
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
@@ -34,7 +39,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 
 // Protected is the resolver for the protected field.
 func (r *queryResolver) Protected(ctx context.Context) (string, error) {
-	return "Success", nil
+	panic(fmt.Errorf("not implemented"))
 }
 
 // ProfilePhotoURL is the resolver for the profile_photo_url field.
@@ -59,3 +64,13 @@ func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type userResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *mutationResolver) UpdateProfilePhoto(ctx context.Context, id string, name string, work string, region string, profileURL string, backgroundURL string) (interface{}, error) {
+	panic(fmt.Errorf("not implemented"))
+}

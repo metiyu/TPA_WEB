@@ -8,6 +8,8 @@ import MyNetwork from './pages/my-network/MyNetwork'
 import Profile from './pages/profile/Profile'
 import SignIn from './pages/sign-in/SignIn'
 import SignUp from './pages/sign-up/SignUp'
+import { initializeApp } from 'firebase/app'
+import { firebaseConfig } from './config/firebase'
 
 function App() {
   const { user } = UseCurrentUser()
@@ -32,13 +34,7 @@ function App() {
     cache: new InMemoryCache({}),
   })
 
-  function MakeHomepage(){
-    return(
-      <CurrentUserProvider>
-        <Homepage />
-      </CurrentUserProvider>
-    )
-  }
+  initializeApp(firebaseConfig)
 
   return (
     <BrowserRouter>
@@ -47,7 +43,7 @@ function App() {
           {/* <Route path='' element={< />} /> */}
           <Route path='/' element={<SignIn />} />
           <Route path='/sign-up' element={<SignUp />} />
-          <Route path='/feed' element={MakeHomepage()} />
+          <Route path='/feed' element={<Homepage />} />
           <Route path='/mynetwork' element={<MyNetwork />} />
           <Route path='/message' element={<Message />} />
           <Route path='/profile' element={<Profile />} />

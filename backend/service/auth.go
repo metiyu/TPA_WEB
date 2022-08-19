@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
+	"github.com/metiyu/gqlgen-linkhedin/tools"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"gorm.io/gorm"
-	"github.com/metiyu/gqlgen-linkhedin/tools"
 )
 
 func UserRegister(ctx context.Context, newUser model.NewUser) (interface{}, error) {
@@ -76,10 +76,18 @@ func UserLogin(ctx context.Context, email string, password string) (interface{},
 	}
 
 	return map[string]interface{}{
-		"id":            user.ID,
-		"token":         token,
-		"followed_user": user.FollowedUser,
-		"name":          user.Name,
-		"email":         user.Email,
+		"id":               user.ID,
+		"name":             user.Name,
+		"email":            user.Email,
+		"validate":         user.Validate,
+		"work":             user.Work,
+		"education":        user.Education,
+		"region":           user.Region,
+		"photo_profile":    user.PhotoProfile,
+		"photo_background": user.BackgroundPhoto,
+		"request_connect":  user.RequestConnect,
+		"followed_user":    user.FollowedUser,
+		"connected_user":   user.ConnectedUser,
+		"token":            token,
 	}, nil
 }

@@ -1,4 +1,5 @@
 register
+return service.UserRegister(ctx, input)
 {
     "input": {
     "name": "asd",
@@ -8,7 +9,20 @@ register
 }
 
 login
+return service.UserLogin(ctx, email, password)
 {
   "email": "asd@mail.com",
   "password": "asd123"
+}
+
+update user
+return service.UpdateUser(ctx, id, name, work, education, region, profileURL, backgroundURL)
+{
+  "id": "a6f4b244-8316-4ccc-b6d7-da3ec670e665",
+  "name": "updated",
+  "work": "work update",
+  "education": "edu update",
+  "region": "region update",
+  "profileURL": "https://i.picsum.photos/id/1011/200/200.jpg?hmac=ISwJXaLKDOtBGE_n3myoHUev_P_OH3zpWqLx0yHp0pY",
+  "backgroundURL": "https://i.picsum.photos/id/433/600/200.jpg?hmac=XdluDZSOcrFkkF2ddtrS13a8e_DZQPhfQosQhq2xYhg"
 }

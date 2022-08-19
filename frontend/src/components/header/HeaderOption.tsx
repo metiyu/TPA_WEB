@@ -1,13 +1,17 @@
 import React from "react";
 import "./HeaderOption.css";
 import Avatar from "@material-ui/core/Avatar";
+import { UseCurrentUser } from "../../contexts/userCtx";
 
 export default function HeaderOption({ avatar, Icon, title, onClick }: { avatar: any, Icon: any, title: any, onClick: any }) {
+    const {getUser} = UseCurrentUser()
+    const currUser = getUser()
+    
     return (
         <div onClick={onClick} className="headerOption">
             {Icon && <Icon className="headerOption__icon" />}
             {avatar && (
-                <Avatar className="headerOption__icon" src={"https://picsum.photos/200"}>
+                <Avatar className="headerOption__icon" src={currUser.photo_profile}>
                     email
                 </Avatar>
             )}

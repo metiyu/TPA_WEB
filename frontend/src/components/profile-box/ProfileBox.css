@@ -10,6 +10,12 @@
   height: 6rem;
   background-color: #0177b7;
 }
+.default__profile .cover__photo img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
 .default__profile .profile__photo {
   margin-left: 0.8rem;
   width: 5rem;
@@ -70,8 +76,26 @@
   border: 1px solid black;
   box-shadow: 0.5px 0.5px 2px 2px grey;
   border-radius: 10px;
+  z-index: 4;
+}
+
+#overlay_show {
+  display: block;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
 }
 
 .edit__profile_invisible {
+  display: none;
+}
+
+#overlay_invisible {
   display: none;
 }/*# sourceMappingURL=ProfileBox.css.map */
