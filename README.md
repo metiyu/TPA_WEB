@@ -6,3 +6,4 @@
 - update user profile & bg pic (with firebase)
 - send email activation link
 - activate account (validate acc if want to login)
+- forget pass (send email with code, reset pass)
