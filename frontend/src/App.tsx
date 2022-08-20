@@ -10,7 +10,10 @@ import SignIn from './pages/sign-in/SignIn'
 import SignUp from './pages/sign-up/SignUp'
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from './config/firebase'
-import Activation from './pages/activation/Activation'
+import Activation from './pages/user_helper/Activation'
+import ForgotPassword from './pages/user_helper/ForgotPassword'
+import CodeFromEmail from './pages/user_helper/CodeFromEmail'
+import ResetPassword from './pages/user_helper/ResetPassword'
 
 function App() {
   const { user } = UseCurrentUser()
@@ -43,8 +46,11 @@ function App() {
         <Routes>
           {/* <Route path='' element={< />} /> */}
           <Route path='/' element={<SignIn />} />
-          <Route path='/:id' element={<Activation />} />
           <Route path='/sign-up' element={<SignUp />} />
+          <Route path='/:id' element={<Activation />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/code-verification/:id' element={<CodeFromEmail />} />
+          <Route path='/reset-password/:id' element={<ResetPassword />} />
           <Route path='/feed' element={<Homepage />} />
           <Route path='/mynetwork' element={<MyNetwork />} />
           <Route path='/message' element={<Message />} />

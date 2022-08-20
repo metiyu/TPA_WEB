@@ -32,6 +32,11 @@ func (r *mutationResolver) ActivateUser(ctx context.Context, id string) (interfa
 	return service.ActivateUser(ctx, id)
 }
 
+// ResetPassword is the resolver for the resetPassword field.
+func (r *mutationResolver) ResetPassword(ctx context.Context, id string, newPass string) (interface{}, error) {
+	return service.ResetPassword(ctx, id, newPass)
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))

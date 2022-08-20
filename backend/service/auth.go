@@ -47,7 +47,7 @@ func UserRegister(ctx context.Context, newUser model.NewUser) (interface{}, erro
 		return nil, err
 	}
 
-	SendEmail(createdUser.Email, verification.Link)
+	SendEmail(createdUser.Email, verification.Link, "activation")
 
 	return map[string]interface{}{
 		"token": token,

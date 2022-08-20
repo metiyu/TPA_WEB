@@ -3,10 +3,18 @@ type ActivationLink {
   userId: String!
 }
 
+type ForgetCode{
+  id: ID!
+  userId: String!
+  code: String!
+}
+
 extend type Query {
   getLink(id: String!): ActivationLink!
+  getCode(id: String!): ForgetCode!
 }
 
 extend type Mutation {
   createLink(userId: String!): String!
+  createCode(email: String!): ForgetCode!
 }

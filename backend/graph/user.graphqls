@@ -45,4 +45,5 @@ type Mutation {
     backgroundURL: String!
   ): Any! @auth
   activateUser(id: ID!): Any!
+  resetPassword(id: ID!, newPass: String!): Any!
 }

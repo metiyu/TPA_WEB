@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
+	"github.com/metiyu/gqlgen-linkhedin/service"
 )
 
 // CreateLink is the resolver for the createLink field.
@@ -26,8 +27,38 @@ func (r *mutationResolver) CreateLink(ctx context.Context, userID string) (strin
 	return "Success", nil
 }
 
+// CreateCode is the resolver for the createCode field.
+func (r *mutationResolver) CreateCode(ctx context.Context, email string) (*model.ForgetCode, error) {
+	id := uuid.NewString()
+	user, err := service.GetUserByEmail(ctx, email)
+
+	if user == nil {
+		return nil, err
+	}
+
+	code := &model.ForgetCode{
+		ID:     id,
+		UserID: user.ID,
+		Code:   service.EncodeToString(6),
+	}
+
+	if r.DB.Create(code).Error != nil {
+		return nil, err
+	}
+
+	service.SendEmail(email, code.Code, "forget")
+
+	return code, nil
+}
+
 // GetLink is the resolver for the getLink field.
 func (r *queryResolver) GetLink(ctx context.Context, id string) (*model.ActivationLink, error) {
 	model := new(model.ActivationLink)
+	return model, r.DB.First(model, "id = ?", id).Error
+}
+
+// GetCode is the resolver for the getCode field.
+func (r *queryResolver) GetCode(ctx context.Context, id string) (*model.ForgetCode, error) {
+	model := new(model.ForgetCode)
 	return model, r.DB.First(model, "id = ?", id).Error
 }

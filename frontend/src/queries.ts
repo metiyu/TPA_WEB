@@ -27,9 +27,30 @@ export const GET_LINK_QUERY = gql`
         getLink(id: $id) {
             id
             userId
-    }}`;
+        }}`;
 
 export const ACTIVATE_ACC_QUERY = gql`
     mutation ActivateUser($id: ID!){
         activateUser(id: $id)
     }`;
+
+export const GET_FORGET_CODE_QUERY = gql`
+    query GetForgetCode($id: String!) {
+        getCode(id: $id){
+            id
+            userId
+            code
+        }}`;
+
+export const FORGET_CODE_QUERY = gql`
+    mutation ForgetCode($email: String!) {
+        createCode(email: $email){
+            id
+            userId
+            code
+        }}`;
+
+export const RESET_PASSWORD_QUERY = gql`
+    mutation ResetPassword($id: ID!, $newPass: String!) {
+        resetPassword(id: $id, newPass: $newPass)
+    }`

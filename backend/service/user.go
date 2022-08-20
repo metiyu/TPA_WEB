@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"github.com/google/uuid"
@@ -100,5 +101,21 @@ func ActivateUser(ctx context.Context, id string) (interface{}, error) {
 	if !isActive {
 		model.Validate = true
 	}
+	return model, db.Where("id = ?", id).Save(model).Error
+}
+
+func ResetPassword(ctx context.Context, id string, newPass string) (interface{}, error) {
+	model, err := UserGetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	db := database.GetDB()
+	if err := db.First(model, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+	if !model.Validate {
+		return nil, errors.New("your account is not authenticated")
+	}
+	model.Password = tools.HashPassword(newPass)
 	return model, db.Where("id = ?", id).Save(model).Error
 }
