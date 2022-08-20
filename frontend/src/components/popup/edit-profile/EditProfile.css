@@ -8,15 +8,35 @@
   display: flex;
   width: 100%;
   height: auto;
-  justify-content: flex-end;
+  justify-content: flex-start;
   margin-top: 10px;
+  color: var(--text_accent);
+  font-size: larger;
+  font-weight: 600;
 }
 .edit_profile .exit_button span {
   display: flex;
-  color: white;
+  color: var(--text_accent);
   justify-content: flex-end;
   cursor: pointer;
   font-size: large;
+}
+.edit_profile button {
+  margin-top: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-left: 10px;
+  font-size: medium;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 20px;
+  border: 1px solid var(--normal_accent);
+  background-color: var(--primary);
+  color: var(--normal_accent);
+}
+.edit_profile button:hover {
+  border: 2px solid var(--normal_accent);
+  background-color: var(--hover_accent);
 }
 
 .form__group {
@@ -29,10 +49,10 @@
   font-family: inherit;
   width: 100%;
   border: 0;
-  border-bottom: 2px solid #9b9b9b;
+  border-bottom: 2px solid;
   outline: 0;
   font-size: 1.3rem;
-  color: #fff;
+  color: var(--text_accent);
   padding: 7px 0;
   background: transparent;
   transition: border-color 0.2s;
@@ -67,15 +87,19 @@
   display: block;
   transition: 0.2s;
   font-size: 1rem;
-  color: #9b9b9b;
+  color: var(--text_accent);
+}
+.form__group .input_file {
+  margin-top: 10px;
+  border-radius: 4px;
 }
 
 .form__field:focus {
   padding-bottom: 6px;
   font-weight: 700;
   border-width: 3px;
-  -o-border-image: linear-gradient(to right, #11998e, #38ef7d);
-     border-image: linear-gradient(to right, #11998e, #38ef7d);
+  -o-border-image: linear-gradient(to right, var(--text_accent), var(--text_accent));
+     border-image: linear-gradient(to right, var(--text_accent), var(--text_accent));
   border-image-slice: 1;
 }
 .form__field:focus .form__label {
@@ -84,7 +108,7 @@
   display: block;
   transition: 0.2s;
   font-size: 1rem;
-  color: #11998e;
+  color: var(--text_accent);
   font-weight: 700;
 }
 .form__field:focus .form__field:required, .form__field:focus .form__field:invalid {

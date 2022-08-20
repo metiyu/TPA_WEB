@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Analytics.css"
-import RemoveRedEyeIcon from '@material-ui/icons/RemoveRedEye';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 export default function Analytics() {
     const [viewsCount, setViewCount] = useState(34)

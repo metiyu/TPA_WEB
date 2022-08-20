@@ -1,5 +1,5 @@
 import "./Widgets.css";
-import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import logo from '../../assets/logo.png'
 
 export default function Widgets() {

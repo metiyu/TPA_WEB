@@ -1,18 +1,22 @@
 import './Header.css'
-import SearchIcon from "@material-ui/icons/Search";
-import HomeIcon from "@material-ui/icons/Home";
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
-import ChatIcon from "@material-ui/icons/Chat";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+import SearchIcon from '@mui/icons-material/Search';
+import HomeIcon from '@mui/icons-material/Home';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import ChatIcon from '@mui/icons-material/Chat';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import HeaderOption from "./HeaderOption";
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import ProfileDropdown from './ProfileDropdown';
+import { UseCurrentTheme } from '../../contexts/themeCtx';
 
 export default function Header() {
     const navigate = useNavigate()
     const [dropdownClassname, setDropdownClassname] = useState("invisible")
+    const { changeTheme, theme } = UseCurrentTheme()
 
     function handleDropdown(){
         if(dropdownClassname == "invisible"){
@@ -45,6 +49,12 @@ export default function Header() {
                     <HeaderOption Icon={ChatIcon} title="Message" avatar={undefined} onClick={() => navigate('/message')} />
                     <HeaderOption Icon={NotificationsIcon} title="Notifications" avatar={undefined} onClick={undefined} />
                     <HeaderOption avatar={true} title="me" Icon={undefined} onClick={() => handleDropdown()} />
+                    {theme === 'light' ? (
+                        <HeaderOption Icon={LightModeIcon} title="Theme" avatar={undefined} onClick={() => changeTheme()} />
+                    ) : (
+                        <HeaderOption Icon={DarkModeIcon} title="Theme" avatar={undefined} onClick={() => changeTheme()} />
+                    )}
+                    
                 </div>
             </div>
             <div className={dropdownClassname}>

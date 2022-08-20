@@ -67,7 +67,6 @@ export default function EditProfile() {
                 profileURL: photoprofileURL,
                 backgroundURL: backgroundphotoURL
             },
-            
         }).then((e) => {
             console.log("success login");
             console.log(e.data.updateUser);
@@ -85,7 +84,7 @@ export default function EditProfile() {
     return (
         <div className='edit_profile'>
             <div className='exit_button'>
-                <span>✖</span>
+                <span>Edit Profile</span>
             </div>
             <div className="form__group field">
                 <input value={username} onChange={(e) => setUsername(e.target.value)} type="input" className="form__field" placeholder="Name" name="name" id='name' required />
@@ -105,14 +104,14 @@ export default function EditProfile() {
             </div>
             <div className="form__group field">
                 <label htmlFor="profile_photo" className="form__label">Profile Photo</label>
-                <input type="file" id="userPhoto" name="userPhoto" onChange={(e) => handleSetImage(e, "profile")} />
+                <input className='input_file' type="file" id="userPhoto" name="userPhoto" accept="image/png, image/gif, image/jpeg" onChange={(e) => handleSetImage(e, "profile")} />
             </div>
             <div className="form__group field">
                 <label htmlFor="background_photo" className="form__label">Background Photo</label>
-                <input type="file" id="userPhoto" name="userPhoto" onChange={(e) => handleSetImage(e, "background")} />
+                <input className='input_file' type="file" id="userPhoto" name="userPhoto" accept="image/png, image/gif, image/jpeg" onChange={(e) => handleSetImage(e, "background")} />
             </div>
             <div>
-                <button onClick={() => handleUpdate()}>SAVE</button>
+                <button onClick={() => handleUpdate()}>Save</button>
             </div>
         </div>
     )

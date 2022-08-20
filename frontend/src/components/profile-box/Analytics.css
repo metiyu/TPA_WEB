@@ -1,9 +1,10 @@
 .analytics {
-  background-color: white;
+  background-color: var(--primary);
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 10px;
   width: 50vw;
+  color: var(--text_accent);
 }
 .analytics .analytics__contents {
   display: flex;

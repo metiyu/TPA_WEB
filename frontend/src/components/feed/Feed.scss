@@ -1,15 +1,15 @@
 .feed {
     flex: 0.6;
     margin: 0 20px;
-    background-color: white;
+    background-color: var(--primary);
     border-radius: 10px;
-    border: 1px solid lightgray;
+    border: 1px solid var(--border_accent);
     height: fit-content;
     padding-bottom: 10px;
 }
 
 .feed__inputContainer {
-    background-color: white;
+    background-color: var(--primary);
     padding: 10px;
     padding-bottom: 20px;
     border-radius: 10px;
@@ -17,7 +17,7 @@
 }
 
 .feed__input {
-    border: 1px solid lightgray;
+    border: 1px solid var(--border_accent);
     border-radius: 30px;
     display: flex;
     padding: 10px;
@@ -32,6 +32,7 @@
             margin-left: 10px;
             outline-width: 0;
             font-weight: 600;
+            background-color: var(--primary);
         }
         button {
             display: none;

@@ -3,12 +3,12 @@
   flex-direction: column;
   align-items: center;
   margin-right: 20px;
-  color: gray;
+  color: var(--logo_accent);
   cursor: pointer;
 }
 
 .headerOption:hover {
-  color: black;
+  color: var(--text_accent);
 }
 
 .headerOption__title {

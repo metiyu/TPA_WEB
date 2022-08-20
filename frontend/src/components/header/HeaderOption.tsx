@@ -1,6 +1,6 @@
 import React from "react";
 import "./HeaderOption.css";
-import Avatar from "@material-ui/core/Avatar";
+import Avatar from '@mui/material/Avatar';
 import { UseCurrentUser } from "../../contexts/userCtx";
 
 export default function HeaderOption({ avatar, Icon, title, onClick }: { avatar: any, Icon: any, title: any, onClick: any }) {

@@ -9,9 +9,9 @@
   position: sticky;
   top: 80px;
   flex: 0.2;
-  background-color: white;
+  background-color: var(--primary);
   border-radius: 10px;
-  border: 1px solid lightgray;
+  border: 1px solid var(--border_accent);
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -66,7 +66,10 @@ footer {
   align-self: center;
 }
 
-.logo {
+.logo__container {
+  color: var(--text_accent);
+}
+.logo__container .logo {
   width: 70px;
   height: auto;
   padding-right: 5px;

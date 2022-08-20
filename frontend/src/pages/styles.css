@@ -1,5 +1,5 @@
 .app {
-  background-color: #f3f2fe;
+  background-color: var(--secondary);
   min-height: 100vh;
   display: flex;
   flex-direction: column;

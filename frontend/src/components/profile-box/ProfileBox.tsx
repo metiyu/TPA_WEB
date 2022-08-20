@@ -1,4 +1,4 @@
-import { Avatar } from "@material-ui/core";
+import Avatar from '@mui/material/Avatar';
 import { useState } from "react";
 import { UseCurrentUser } from "../../contexts/userCtx";
 import EditProfile from "../popup/edit-profile/EditProfile";

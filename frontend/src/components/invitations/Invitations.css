@@ -2,14 +2,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid rgb(185, 185, 185);
-  background-color: white;
+  border: 1px solid var(--border_accent);
+  background-color: var(--primary);
   border-radius: 20px;
   width: 400px;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   padding-bottom: 30px;
+  color: var(--text_accent);
 }
 
 .container__header {
@@ -23,12 +24,12 @@
   border: 0;
   border-radius: 6px;
   font-size: medium;
-  background-color: white;
-  color: grey;
+  background-color: var(--primary);
+  color: var(--logo_accent);
   cursor: pointer;
 }
 .container__header button:hover {
-  background-color: rgb(220, 220, 220);
+  background-color: var(--search_accent);
 }
 
 .container__cards {
@@ -42,6 +43,5 @@
   margin-bottom: 8px;
   border: 0;
   height: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.195);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: 1px solid var(--border_accent);
 }/*# sourceMappingURL=Invitations.css.map */

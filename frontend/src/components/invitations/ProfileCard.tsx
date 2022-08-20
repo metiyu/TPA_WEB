@@ -1,4 +1,4 @@
-import { Avatar } from "@material-ui/core";
+import Avatar from '@mui/material/Avatar';
 import { useState } from "react";
 import './ProfileCard.css'
 

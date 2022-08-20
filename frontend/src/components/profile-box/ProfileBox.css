@@ -1,18 +1,21 @@
 .default__profile {
-  background-color: white;
+  background-color: var(--primary);
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 10px;
   width: 50vw;
+  color: var(--text_accent);
 }
 .default__profile .cover__photo {
   width: 100%;
-  height: 6rem;
-  background-color: #0177b7;
+  height: 12rem;
+  background-color: var(--normal_accent);
 }
 .default__profile .cover__photo img {
   -o-object-fit: cover;
      object-fit: cover;
+  -o-object-position: 50% 50%;
+     object-position: 50% 50%;
   width: 100%;
   height: 100%;
 }
@@ -47,9 +50,9 @@
   gap: 5px;
 }
 .default__profile .buttons button {
-  background-color: white;
-  color: #0177b7;
-  border: #0177b7 solid 2px;
+  border: 1px solid var(--normal_accent);
+  background-color: var(--primary);
+  color: var(--normal_accent);
   font-size: small;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -59,22 +62,23 @@
   font-weight: 600;
 }
 .default__profile .buttons button:hover {
-  background-color: #0177b7;
-  color: white;
-  border: #0177b7 solid 2px;
+  border: 2px solid #0b65c3;
+  background-color: var(--hover_accent);
 }
 
 .edit__profile_show {
   position: fixed;
-  background-color: blue;
+  background-color: var(--primary);
   min-width: 500px;
   min-height: 500px;
   top: 50%;
   left: 50%;
-  margin-top: -250px; /* Negative half of height. */
-  margin-left: -250px; /* Negative half of width. */
-  border: 1px solid black;
-  box-shadow: 0.5px 0.5px 2px 2px grey;
+  margin-top: -250px;
+  /* Negative half of height. */
+  margin-left: -250px;
+  /* Negative half of width. */
+  border: 1px solid var(--border_accent);
+  box-shadow: 0.5px 0.5px 0.5px 0.5px var(--border_accent);
   border-radius: 10px;
   z-index: 4;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import "./Sidebar.css";
-import Avatar from "@material-ui/core/Avatar";
+import Avatar from '@mui/material/Avatar';
 import { UseCurrentUser } from "../../contexts/userCtx";
 
 export default function Sidebar() {
@@ -21,7 +21,7 @@ export default function Sidebar() {
                     src={currUser.photo_background}
                     alt=""
                 />
-                <Avatar src={currUser.photo_profile} className="sidebar__avatar">
+                <Avatar src={currUser.photo_profile} className="sidebar__avatar" sx={{ width: 70, height: 70 }}>
                     {currUser.email}
                 </Avatar>
                 <h2>{currUser.name}</h2>

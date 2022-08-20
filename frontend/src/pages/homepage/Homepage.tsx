@@ -3,15 +3,18 @@ import Feed from '../../components/feed/Feed'
 import Header from '../../components/header/Header'
 import Sidebar from '../../components/sidebar/Sidebar'
 import Widgets from '../../components/widgets/Widgets'
+import { UseCurrentTheme } from '../../contexts/themeCtx'
 import { UseCurrentUser } from '../../contexts/userCtx'
 import '../styles.css'
 
 export default function Homepage() {
-    const {user} = UseCurrentUser()
+    const { user } = UseCurrentUser()
     console.log(user);
-    
+
+    const { getTheme } = UseCurrentTheme()
+
     return (
-        <div className="app">
+        <div className="app" style={{ ...getTheme() }}>
             <>
                 <Header />
                 <div className="app__body">
