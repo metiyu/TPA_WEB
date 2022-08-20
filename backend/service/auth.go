@@ -2,7 +2,10 @@ package service
 
 import (
 	"context"
+	"errors"
 
+	"github.com/google/uuid"
+	database "github.com/metiyu/gqlgen-linkhedin/config"
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
 	"github.com/metiyu/gqlgen-linkhedin/tools"
 	"github.com/vektah/gqlparser/v2/gqlerror"
@@ -29,20 +32,22 @@ func UserRegister(ctx context.Context, newUser model.NewUser) (interface{}, erro
 		return nil, err
 	}
 
-	// verification := &model.UserValidation{
-	// 	ID:     uuid.New().String(),
-	// 	Link:   uuid.New().String(),
-	// 	UserID: createdUser.ID,
-	// }
+	newId := uuid.NewString()
 
-	// db := database.GetDB()
-	// err = db.Create(verification).Error
+	verification := &model.ActivationLink{
+		ID:     newId,
+		Link:   "http://localhost:5173/" + newId,
+		UserID: createdUser.ID,
+	}
+
+	db := database.GetDB()
+	err = db.Create(&verification).Error
 
 	if err != nil {
 		return nil, err
 	}
 
-	// mail.SendVerification(verification.Link)
+	SendEmail(createdUser.Email, verification.Link)
 
 	return map[string]interface{}{
 		"token": token,
@@ -62,9 +67,9 @@ func UserLogin(ctx context.Context, email string, password string) (interface{},
 		return nil, err
 	}
 
-	// if user.Validate == false {
-	// 	return nil, errors.New("Your account is not authenticated!")
-	// }
+	if !user.Validate {
+		return nil, errors.New("your account is not authenticated")
+	}
 
 	if err := tools.ComparePassword(user.Password, password); err != nil {
 		return nil, err

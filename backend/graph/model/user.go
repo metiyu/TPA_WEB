@@ -3,7 +3,7 @@ package model
 import "github.com/lib/pq"
 
 type User struct {
-	ID              string         `json:"id" gorm:"primaryKey;autoIncrement"`
+	ID              string         `json:"id" gorm:"primaryKey"`
 	Name            string         `json:"name"`
 	Email           string         `json:"email"`
 	Password        string         `json:"password"`

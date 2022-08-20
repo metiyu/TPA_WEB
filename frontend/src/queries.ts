@@ -21,3 +21,15 @@ export const UPDATE_USER = gql`
         profileURL: $profileURL
         backgroundURL: $backgroundURL
     )}`;
+
+export const GET_LINK_QUERY = gql`
+    query GetLink($id: String!) {
+        getLink(id: $id) {
+            id
+            userId
+    }}`;
+
+export const ACTIVATE_ACC_QUERY = gql`
+    mutation ActivateUser($id: ID!){
+        activateUser(id: $id)
+    }`;

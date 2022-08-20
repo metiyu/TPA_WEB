@@ -1,0 +1,24 @@
+.activate_app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.activate_app button {
+  margin-top: 10px;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-left: 10px;
+  font-size: xx-large;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 20px;
+  border: 1px solid var(--normal_accent);
+  background-color: var(--primary);
+  color: var(--normal_accent);
+}
+.activate_app button:hover {
+  border: 2px solid var(--normal_accent);
+  background-color: var(--hover_accent);
+}/*# sourceMappingURL=Activation.css.map */

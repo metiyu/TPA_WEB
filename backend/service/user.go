@@ -88,3 +88,17 @@ func UpdateUser(ctx context.Context, id string, name string, work string, educat
 	}, db.Where("id = ?", id).Save(model).Error
 	// return model, token, db.Where("id = ?", id).Save(model).Error
 }
+
+func ActivateUser(ctx context.Context, id string) (interface{}, error) {
+	model := new(model.User)
+	db := database.GetDB()
+	err := db.First(model, "id = ?", id).Error
+	if err != nil {
+		return nil, err
+	}
+	isActive := model.Validate
+	if !isActive {
+		model.Validate = true
+	}
+	return model, db.Where("id = ?", id).Save(model).Error
+}

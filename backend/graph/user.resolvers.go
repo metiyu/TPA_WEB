@@ -27,6 +27,11 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, name strin
 	return service.UpdateUser(ctx, id, name, work, education, region, profileURL, backgroundURL)
 }
 
+// ActivateUser is the resolver for the activateUser field.
+func (r *mutationResolver) ActivateUser(ctx context.Context, id string) (interface{}, error) {
+	return service.ActivateUser(ctx, id)
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))

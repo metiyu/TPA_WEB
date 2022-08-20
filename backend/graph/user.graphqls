@@ -2,7 +2,10 @@
 #
 # https://gqlgen.com/getting-started/
 
-directive @goField(forceResolver: Boolean, name: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+directive @goField(
+  forceResolver: Boolean
+  name: String
+) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
 
 # new directive
 directive @auth on FIELD_DEFINITION
@@ -17,7 +20,7 @@ type User {
   bg_photo_url: String
 }
 
-input NewUser{
+input NewUser {
   name: String!
   email: String!
   password: String!
@@ -32,5 +35,14 @@ type Query {
 type Mutation {
   register(input: NewUser!): Any!
   login(email: String!, password: String!): Any!
-  updateUser(id: String!, name: String!, work: String!, education: String!, region: String!, profileURL: String!, backgroundURL: String!): Any! @auth
+  updateUser(
+    id: String!
+    name: String!
+    work: String!
+    education: String!
+    region: String!
+    profileURL: String!
+    backgroundURL: String!
+  ): Any! @auth
+  activateUser(id: ID!): Any!
 }
