@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"sort"
 	"strings"
 
 	"github.com/google/uuid"
@@ -20,13 +21,14 @@ func CreateUser(ctx context.Context, newUser model.NewUser) (*model.User, error)
 		Name:           newUser.Name,
 		Email:          strings.ToLower(newUser.Email),
 		Password:       newUser.Password,
-		Validate:       false,
+		Validate:       true,
 		Work:           "",
 		Region:         "",
 		PhotoProfile:   "https://e7.pngegg.com/pngimages/753/432/png-clipart-user-profile-2018-in-sight-user-conference-expo-business-default-business-angle-service.png",
 		RequestConnect: emptyArrString,
 		FollowedUser:   emptyArrString,
 		ConnectedUser:  emptyArrString,
+		PendingRequest: emptyArrString,
 	}
 	if err := db.Model(user).Create(&user).Error; err != nil {
 		return nil, err
@@ -80,11 +82,12 @@ func UpdateUser(ctx context.Context, id string, name string, work string, educat
 		"work":             model.Work,
 		"education":        model.Education,
 		"region":           model.Region,
+		"followed_user":    model.FollowedUser,
+		"pending_request":  model.RequestConnect,
+		"request_connect":  model.RequestConnect,
+		"connected_user":   model.ConnectedUser,
 		"photo_profile":    model.PhotoProfile,
 		"photo_background": model.BackgroundPhoto,
-		"request_connect":  model.RequestConnect,
-		"followed_user":    model.FollowedUser,
-		"connected_user":   model.ConnectedUser,
 		"token":            token,
 	}, db.Where("id = ?", id).Save(model).Error
 	// return model, token, db.Where("id = ?", id).Save(model).Error
@@ -118,4 +121,139 @@ func ResetPassword(ctx context.Context, id string, newPass string) (interface{},
 	}
 	model.Password = tools.HashPassword(newPass)
 	return model, db.Where("id = ?", id).Save(model).Error
+}
+
+func GetUsersByName(ctx context.Context, name string, limit int, offset int) ([]*model.User, error) {
+	db := database.GetDB()
+	if name == "" {
+		name = "%"
+	}
+
+	var users []*model.User
+	if err := db.Limit(limit).Offset(offset).Find(&users, "LOWER(name) like ?", "%"+strings.ToLower(name)+"%").Error; err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
+func FollowUser(ctx context.Context, id string, followedId string) (interface{}, error) {
+	db := database.GetDB()
+	model, err := UserGetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	model.FollowedUser = append(model.FollowedUser, followedId)
+	return model, db.Where("id = ?", id).Save(model).Error
+}
+
+func UnfollowUser(ctx context.Context, id string, unfollowedId string) (interface{}, error) {
+	db := database.GetDB()
+	model, err := UserGetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	index := sort.StringSlice(model.FollowedUser).Search(unfollowedId)
+	model.FollowedUser[index] = model.FollowedUser[len(model.FollowedUser)-1]
+	model.FollowedUser[len(model.FollowedUser)-1] = ""
+	model.FollowedUser = model.FollowedUser[:len(model.FollowedUser)-1]
+	return model, db.Where("id = ?", id).Save(model).Error
+}
+
+func SendConnectRequest(ctx context.Context, id string, requestedId string) (interface{}, error) {
+	db := database.GetDB()
+	userRequested, err := UserGetByID(ctx, requestedId)
+	if err != nil {
+		return nil, err
+	}
+	userRequested.RequestConnect = append(userRequested.RequestConnect, id)
+	userNow, err := UserGetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	userNow.PendingRequest = append(userNow.PendingRequest, requestedId)
+	db.Where("id = ?", userNow.ID).Save(userNow)
+	return map[string]interface{}{
+		"userNow":       userNow,
+		"userRequested": userRequested,
+	}, db.Where("id = ?", requestedId).Save(userRequested).Error
+}
+
+func AcceptConnectRequest(ctx context.Context, id string, acceptedId string) (interface{}, error) {
+	db := database.GetDB()
+	if userNow, err := UserGetByID(ctx, id); err != nil {
+		return nil, err
+	} else {
+		userNow.RequestConnect = RemoveElementFromArray(userNow.RequestConnect, acceptedId)
+		userNow.ConnectedUser = append(userNow.ConnectedUser, acceptedId)
+		if err := db.Where("id = ?", id).Save(userNow).Error; err != nil {
+			return nil, err
+		} else {
+			db.Where("id = ?", id).Save(userNow)
+		}
+	}
+	if userWillAccept, err := UserGetByID(ctx, acceptedId); err != nil {
+		return nil, err
+	} else {
+		userWillAccept.PendingRequest = RemoveElementFromArray(userWillAccept.PendingRequest, id)
+		userWillAccept.ConnectedUser = append(userWillAccept.ConnectedUser, id)
+		if err := db.Where("id = ?", acceptedId).Save(userWillAccept).Error; err != nil {
+			return nil, err
+		} else {
+			db.Where("id = ?", acceptedId).Save(userWillAccept)
+		}
+	}
+	user, err := UserGetByID(ctx, id)
+	return user, err
+}
+
+func IgnoreConnectRequest(ctx context.Context, id string, ignoredId string) (interface{}, error) {
+	db := database.GetDB()
+	if userNow, err := UserGetByID(ctx, id); err != nil {
+		return nil, err
+	} else {
+		userNow.RequestConnect = RemoveElementFromArray(userNow.RequestConnect, ignoredId)
+		if err := db.Where("id = ?", id).Save(userNow).Error; err != nil {
+			return nil, err
+		} else {
+			db.Where("id = ?", id).Save(userNow)
+		}
+	}
+	if userWillAccept, err := UserGetByID(ctx, ignoredId); err != nil {
+		return nil, err
+	} else {
+		userWillAccept.PendingRequest = RemoveElementFromArray(userWillAccept.PendingRequest, id)
+		if err := db.Where("id = ?", ignoredId).Save(userWillAccept).Error; err != nil {
+			return nil, err
+		} else {
+			db.Where("id = ?", ignoredId).Save(userWillAccept)
+		}
+	}
+	user, err := UserGetByID(ctx, id)
+	return user, err
+}
+
+func UnconnectUser(ctx context.Context, id string, unconnectedId string) (interface{}, error) {
+	db := database.GetDB()
+	if userNow, err := UserGetByID(ctx, id); err != nil {
+		return nil, err
+	} else {
+		userNow.ConnectedUser = RemoveElementFromArray(userNow.ConnectedUser, unconnectedId)
+		if err := db.Where("id = ?", id).Save(userNow).Error; err != nil {
+			return nil, err
+		} else {
+			db.Where("id = ?", id).Save(userNow)
+		}
+	}
+	if userWillUnconnect, err := UserGetByID(ctx, unconnectedId); err != nil {
+		return nil, err
+	} else {
+		userWillUnconnect.ConnectedUser = RemoveElementFromArray(userWillUnconnect.ConnectedUser, id)
+		if err := db.Where("id = ?", unconnectedId).Save(userWillUnconnect).Error; err != nil {
+			return nil, err
+		} else {
+			db.Where("id = ?", unconnectedId).Save(userWillUnconnect)
+		}
+	}
+	user, err := UserGetByID(ctx, id)
+	return user, err
 }

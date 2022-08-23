@@ -1,7 +1,15 @@
+import { useQuery } from '@apollo/client'
+import { UseCurrentTheme } from '../../contexts/themeCtx'
+import { UseCurrentUser } from '../../contexts/userCtx'
+import { GET_USER } from '../../query-queries'
 import './Invitations.css'
 import ProfileCard from './ProfileCard'
 
 export default function Invitations() {
+    const { getUser } = UseCurrentUser()
+    console.log(getUser().request_connect);
+
+
     return (
         <div className="container__invitations">
             <div className='container__header'>
@@ -9,12 +17,16 @@ export default function Invitations() {
                 <button>Manage</button>
             </div>
             <div className='container__cards'>
-                <hr />
-                <ProfileCard />
-                <hr />
-                <ProfileCard />
-                <hr />
-                <ProfileCard />
+                {getUser().request_connect ?
+                    getUser().request_connect.map((user: any) =>
+                        <>
+                            <hr />
+                            <ProfileCard props={user} />
+                        </>
+                    ) : ""
+                }
+
+
             </div>
         </div>
     )

@@ -37,6 +37,7 @@
   outline: none;
   border: none;
   background: none;
+  color: var(--text_accent);
 }
 .header__outer .drop {
   position: relative;

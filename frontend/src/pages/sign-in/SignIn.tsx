@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./SignIn.css";
 import logo from '../../assets/logo.png'
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@apollo/client";
-import { LOGIN_QUERY } from "../../queries";
+import { useMutation, useQuery } from "@apollo/client";
+import { LOGIN_QUERY } from "../../mutation-queries";
 import { UseCurrentUser } from "../../contexts/userCtx";
+import toast, { Toaster } from 'react-hot-toast';
+import { GET_USER } from "../../query-queries";
 
 export default function SignIn() {
     const [email, setEmail] = useState(() => "");
@@ -14,9 +16,34 @@ export default function SignIn() {
     const navigate = useNavigate();
     const [loginFunc, { data, loading, error }] = useMutation(LOGIN_QUERY)
     const { getUser, setUserToStorage } = UseCurrentUser()
-    const [loadings, setLoadings] = useState(false)
+
+    {
+        const { data, loading, error } = useQuery(GET_USER, {
+            variables: {
+                id: getUser().id
+            }
+        })
+        if (!loading) {
+            if(data == undefined){
+                window.localStorage.removeItem("user")
+            }
+        }
+    }
 
     function handleSubmit() {
+        if (email == "") {
+            toast.error("Email is empty")
+            return
+        }
+        if (password == "") {
+            toast.error("Password is empty")
+            return
+        }
+        if (email.indexOf("'") != -1 || password.indexOf("'") != -1) {
+            toast.error("SQL Injection detected")
+            return
+        }
+
         loginFunc({
             variables: {
                 email: email,
@@ -32,11 +59,18 @@ export default function SignIn() {
             }
         }).catch((err) => {
             console.log(err);
+            if (err.message == "crypto/bcrypt: hashedPassword is not the hash of the given password")
+                toast.error("Wrong password")
+            else if (err.message == "your account is not authenticated")
+                toast.error("Your account is not activated")
+            else
+                toast.error(err.message)
         })
     }
 
     return (
         <div className="login">
+            <Toaster position="top-right" />
             <img
                 src={logo}
                 alt=""

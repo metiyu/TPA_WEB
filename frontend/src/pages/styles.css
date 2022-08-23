@@ -23,4 +23,13 @@
   max-width: 1200px;
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.search__body {
+  position: absolute;
+  display: flex;
+  margin-top: 150px;
+  max-width: 1200px;
+  margin-left: 20px;
+  margin-right: 20px;
 }/*# sourceMappingURL=styles.css.map */

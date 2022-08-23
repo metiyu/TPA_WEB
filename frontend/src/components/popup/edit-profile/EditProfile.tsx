@@ -4,7 +4,7 @@ import ProfileBox from '../../profile-box/ProfileBox'
 import './EditProfile.css'
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage"
 import { useMutation } from '@apollo/client'
-import { LOGIN_QUERY, UPDATE_USER } from '../../../queries'
+import { LOGIN_QUERY, UPDATE_USER } from '../../../mutation-queries'
 
 export default function EditProfile() {
     const { getUser, setUserToStorage } = UseCurrentUser()
@@ -55,9 +55,9 @@ export default function EditProfile() {
         setBackgroundPhoto()
     }, [user.id])
 
-    const [updatePhotoprofile, { data, loading, error }] = useMutation(UPDATE_USER)
+    const [updateUser] = useMutation(UPDATE_USER)
     function handleUpdate() {
-        updatePhotoprofile({
+        updateUser({
             variables: {
                 id: user.id,
                 name: username,
@@ -70,12 +70,10 @@ export default function EditProfile() {
         }).then((e) => {
             console.log("success login");
             console.log(e.data.updateUser);
-            if (e && e.data.updateUser.token !== undefined) {
-                const user = e.data.updateUser
-                console.log(user);
-                setUserToStorage(user)
-                setUser(getUser())
-            }
+            const user = e.data.updateUser
+            console.log(user);
+            setUserToStorage(user)
+            setUser(getUser())
         }).catch((err) => {
             console.log(err);
         })

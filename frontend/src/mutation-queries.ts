@@ -22,25 +22,10 @@ export const UPDATE_USER = gql`
         backgroundURL: $backgroundURL
     )}`;
 
-export const GET_LINK_QUERY = gql`
-    query GetLink($id: String!) {
-        getLink(id: $id) {
-            id
-            userId
-        }}`;
-
 export const ACTIVATE_ACC_QUERY = gql`
     mutation ActivateUser($id: ID!){
         activateUser(id: $id)
     }`;
-
-export const GET_FORGET_CODE_QUERY = gql`
-    query GetForgetCode($id: String!) {
-        getCode(id: $id){
-            id
-            userId
-            code
-        }}`;
 
 export const FORGET_CODE_QUERY = gql`
     mutation ForgetCode($email: String!) {
@@ -53,4 +38,24 @@ export const FORGET_CODE_QUERY = gql`
 export const RESET_PASSWORD_QUERY = gql`
     mutation ResetPassword($id: ID!, $newPass: String!) {
         resetPassword(id: $id, newPass: $newPass)
-    }`
+    }`;
+
+export const SEND_CONNECT_QUERY = gql`
+    mutation SendConnect($id: ID!, $requestedId: ID!){
+        sendConnectRequest(id: $id, requestedId: $requestedId)
+    }`;
+
+export const ACCEPT_CONNECT_QUERY = gql`
+    mutation AcceptConnectReq($id: ID!, $acceptedId: ID!){
+    acceptConnectRequest(id: $id, acceptedId: $acceptedId)
+    }`;
+
+export const IGNORE_CONNECT_QUERY = gql`
+    mutation IgnoreConnectReq($id: ID!, $ignoredId: ID!){
+        ignoreConnectRequest(id: $id, ignoredId: $ignoredId)
+    }`;
+
+export const UNCONNECT_USER_QUERY = gql`
+    mutation UnconnectUser($id: ID!, $unconnectedId: ID!){
+        unconnectUser(id: $id, unconnectedId: $unconnectedId)
+    }`;

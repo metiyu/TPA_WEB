@@ -1,0 +1,35 @@
+.search_people__container {
+  max-width: 800px;
+  display: flex;
+  background-color: var(--primary);
+  align-items: center;
+  border-radius: 10px;
+}
+.search_people__container .avatar {
+  margin-top: 1.6rem;
+  margin-right: 1.2rem;
+  margin-bottom: 1.2rem;
+  margin-left: 1.6rem;
+}
+.search_people__container .people_data {
+  padding-right: 200px;
+}
+.search_people__container .connect_button {
+  padding-right: 10px;
+}
+.search_people__container button {
+  background-color: var(--primary);
+  color: var(--normal_accent);
+  border: 1px solid var(--normal_accent);
+  font-size: small;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 20px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-weight: 600;
+}
+.search_people__container button:hover {
+  background-color: var(--hover_accent);
+  border: 2px solid var(--normal_accent);
+}/*# sourceMappingURL=PeopleCard.css.map */

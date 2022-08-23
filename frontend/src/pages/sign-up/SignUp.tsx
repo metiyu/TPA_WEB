@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Signup.css";
 import logo from '../../assets/logo.png'
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@apollo/client";
-import { REGISTER_QUERY } from "../../queries";
+import { useMutation, useQuery } from "@apollo/client";
+import { REGISTER_QUERY } from "../../mutation-queries";
+import toast, { Toaster } from 'react-hot-toast';
+import { GET_USER } from "../../query-queries";
+import { UseCurrentUser } from "../../contexts/userCtx";
 
 export default function SignUp() {
     const [name, setName] = useState("")
@@ -14,43 +17,58 @@ export default function SignUp() {
     const [showError, setShowError] = useState(false)
 
     const navigate = useNavigate()
-    const [registerFunc, { loading }] = useMutation(REGISTER_QUERY)
-
-    function PasswordValidation() {
-        if (password !== confPassword) {
-            setErrorMsg("Confirm password doesn't match")
-            setShowError(true)
-            return false
-        }
-        return true
-    }
+    const { getUser } = UseCurrentUser()
+    const [registerFunc, { loading, data, error }] = useMutation(REGISTER_QUERY)
 
     function handleSubmit() {
+        if (name == "") {
+            toast.error("Name is empty")
+            return
+        }
+        if (email == "") {
+            toast.error("Email is empty")
+            return
+        }
+        if (!(/\S+@\S+\.\S+/.test(email))) {
+            toast.error("Invalid email")
+            return
+        }
+        if (password == "") {
+            toast.error("Password is empty")
+            return
+        }
+        if (password !== confPassword) {
+            toast.error("Confirm password doesn't match")
+            return
+        }
+
         const input = {
             name: name,
             email: email,
             password: password
         }
 
-        console.log(input);
-
-        if (PasswordValidation()) {
+        toast.promise(
             registerFunc({
                 variables: {
                     input: input
                 }
-            }).
-                then(() => {
-                    console.log("succes create user");
-                    navigate('/')
-                }).catch((err) => {
-                    console.log(err);
-                })
-        }
+            }).then(() => {
+                console.log("succes create user");
+                navigate('/')
+            }).catch((err) => {
+                console.log(err);
+                toast.error(err.message)
+            }), {
+            loading: "Processing",
+            success: "Success create account",
+            error: "Error"
+        })
     }
 
     return (
         <div className="login">
+            <Toaster position="top-right" />
             <img
                 src={logo}
                 alt=""
@@ -59,7 +77,7 @@ export default function SignUp() {
                 <h2>Sign Up</h2>
                 <p>Make the most of your professional life</p>
             </div>
-            <form onSubmit={() => handleSubmit()}>
+            <form>
                 <input
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -84,10 +102,7 @@ export default function SignUp() {
                     placeholder="Confirm Password"
                     type="password"
                 />
-                <div className="error">
-                    <p>{errorMsg}</p>
-                </div>
-                <button>
+                <button type="button" onClick={() => handleSubmit()}>
                     Sign Up
                 </button>
             </form>

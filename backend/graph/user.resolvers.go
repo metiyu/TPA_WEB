@@ -37,9 +37,39 @@ func (r *mutationResolver) ResetPassword(ctx context.Context, id string, newPass
 	return service.ResetPassword(ctx, id, newPass)
 }
 
+// FollowUser is the resolver for the followUser field.
+func (r *mutationResolver) FollowUser(ctx context.Context, id string, followedID string) (interface{}, error) {
+	return service.FollowUser(ctx, id, followedID)
+}
+
+// UnfollowUser is the resolver for the unfollowUser field.
+func (r *mutationResolver) UnfollowUser(ctx context.Context, id string, unfollowedID string) (interface{}, error) {
+	return service.UnfollowUser(ctx, id, unfollowedID)
+}
+
+// SendConnectRequest is the resolver for the sendConnectRequest field.
+func (r *mutationResolver) SendConnectRequest(ctx context.Context, id string, requestedID string) (interface{}, error) {
+	return service.SendConnectRequest(ctx, id, requestedID)
+}
+
+// AcceptConnectRequest is the resolver for the acceptConnectRequest field.
+func (r *mutationResolver) AcceptConnectRequest(ctx context.Context, id string, acceptedID string) (interface{}, error) {
+	return service.AcceptConnectRequest(ctx, id, acceptedID)
+}
+
+// IgnoreConnectRequest is the resolver for the ignoreConnectRequest field.
+func (r *mutationResolver) IgnoreConnectRequest(ctx context.Context, id string, ignoredID string) (interface{}, error) {
+	return service.IgnoreConnectRequest(ctx, id, ignoredID)
+}
+
+// UnconnectUser is the resolver for the unconnectUser field.
+func (r *mutationResolver) UnconnectUser(ctx context.Context, id string, unconnectedID string) (interface{}, error) {
+	return service.UnconnectUser(ctx, id, unconnectedID)
+}
+
 // User is the resolver for the user field.
-func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) User(ctx context.Context, id string) (interface{}, error) {
+	return service.UserGetByID(ctx, id)
 }
 
 // Users is the resolver for the users field.
@@ -52,35 +82,11 @@ func (r *queryResolver) Protected(ctx context.Context) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-// ProfilePhotoURL is the resolver for the profile_photo_url field.
-func (r *userResolver) ProfilePhotoURL(ctx context.Context, obj *model.User) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-// BgPhotoURL is the resolver for the bg_photo_url field.
-func (r *userResolver) BgPhotoURL(ctx context.Context, obj *model.User) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-// User returns generated.UserResolver implementation.
-func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
-
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-type userResolver struct{ *Resolver }
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//    it when you're done.
-//  - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *mutationResolver) UpdateProfilePhoto(ctx context.Context, id string, name string, work string, region string, profileURL string, backgroundURL string) (interface{}, error) {
-	panic(fmt.Errorf("not implemented"))
-}

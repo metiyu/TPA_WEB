@@ -65,6 +65,10 @@ footer {
     width: 18vw;
     justify-content: center;
     align-self: center;
+    .link{
+        cursor: pointer;
+        text-decoration: underline;
+    }
 }
 
 .logo__container {

@@ -2,7 +2,8 @@ import { useMutation, useQuery } from '@apollo/client'
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { UseCurrentTheme } from '../../contexts/themeCtx'
-import { ACTIVATE_ACC_QUERY, GET_LINK_QUERY } from '../../queries'
+import { ACTIVATE_ACC_QUERY } from '../../mutation-queries'
+import { GET_LINK_QUERY } from '../../query-queries'
 import './Activation.css'
 
 export default function Activation() {

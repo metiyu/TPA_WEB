@@ -10,13 +10,14 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import HeaderOption from "./HeaderOption";
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import ProfileDropdown from './ProfileDropdown';
 import { UseCurrentTheme } from '../../contexts/themeCtx';
+import ProfileDropdown from '../popup/profile-dropdown/ProfileDropdown';
 
 export default function Header() {
     const navigate = useNavigate()
     const [dropdownClassname, setDropdownClassname] = useState("invisible")
     const { changeTheme, theme } = UseCurrentTheme()
+    const [search, setSearch] = useState("")
 
     function handleDropdown(){
         if(dropdownClassname == "invisible"){
@@ -24,6 +25,12 @@ export default function Header() {
         }
         else{
             setDropdownClassname("invisible")
+        }
+    }
+
+    function handleSearch(e: any){
+        if(e.code == "Enter"){
+            navigate(`/search/all/keyword=${search}/page=1`)
         }
     }
 
@@ -38,7 +45,7 @@ export default function Header() {
 
                     <div className="header__search">
                         <SearchIcon />
-                        <input placeholder="Search" type="text" />
+                        <input placeholder="Search" type="text" value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => handleSearch(e)}/>
                     </div>
                 </div>
 

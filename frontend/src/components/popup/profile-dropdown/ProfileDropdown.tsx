@@ -1,17 +1,21 @@
 import Avatar from '@mui/material/Avatar';
 import { useNavigate } from "react-router-dom"
-import { UseCurrentUser } from "../../contexts/userCtx"
+import { UseCurrentUser } from '../../../contexts/userCtx';
 import "./ProfileDropdown.css"
 
-export default function ProfileDropdown(){
+export default function ProfileDropdown() {
     const navigate = useNavigate()
-    const {getUser} = UseCurrentUser()
+    const { getUser } = UseCurrentUser()
     const currUser = getUser()
 
-    return(
+    function handleSignout() {
+
+    }
+
+    return (
         <div className="profile__dropdown">
             <div className="profile__content">
-                <Avatar src={currUser.photo_profile}>
+                <Avatar className='avatar' src={currUser.photo_profile}>
 
                 </Avatar>
                 <div className="profile__text">
@@ -21,16 +25,16 @@ export default function ProfileDropdown(){
                     ) : (
                         ""
                     )}
-                    
+
                 </div>
             </div>
-            <button onClick={() => navigate('/profile')}>
-                View Profile
-            </button>
-            <div className="signout">
-                <h4>Account</h4>
-                <p>Sign Out</p>
-                <p>Account Preference</p>
+            <div className='button__dropdown'>
+                <button onClick={() => navigate('/profile')}>
+                    View Profile
+                </button>
+                <button onClick={() => handleSignout()}>
+                    Sign Out
+                </button>
             </div>
         </div>
     )

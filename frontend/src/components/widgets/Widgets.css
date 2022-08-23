@@ -65,6 +65,10 @@ footer {
   justify-content: center;
   align-self: center;
 }
+footer .link {
+  cursor: pointer;
+  text-decoration: underline;
+}
 
 .logo__container {
   color: var(--text_accent);

@@ -12,6 +12,11 @@
 .profile__dropdown .profile__content {
   display: flex;
   margin-top: 5px;
+  text-align: left;
+}
+.profile__dropdown .profile__content .avatar {
+  margin-left: 3px;
+  margin-right: 3px;
 }
 .profile__dropdown button {
   background-color: var(--primary);
@@ -36,4 +41,10 @@
 }
 .profile__dropdown .signout p {
   font-size: 13px;
+}
+.profile__dropdown .button__dropdown {
+  display: flex;
+  gap: 3px;
+  padding-top: 5px;
+  padding-bottom: 10px;
 }/*# sourceMappingURL=ProfileDropdown.css.map */

@@ -1,8 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { FORGET_CODE_QUERY, GET_FORGET_CODE_QUERY, RESET_PASSWORD_QUERY } from '../../queries'
+import { FORGET_CODE_QUERY, RESET_PASSWORD_QUERY } from '../../mutation-queries'
 import './ForgotPassword.css'
+import toast, { Toaster } from 'react-hot-toast';
+import { GET_FORGET_CODE_QUERY } from '../../query-queries'
 
 export default function ResetPassword() {
     const [password, setPassword] = useState("")
@@ -24,8 +26,12 @@ export default function ResetPassword() {
     }, [data])
 
     function handleSubmit() {
+        if (password == ""){
+            toast.error("Password is empty")
+            return
+        }
         if (password !== confPassword) {
-            console.log("password not match");
+            toast.error("Confirm password doesn't match")
             return
         }
         funcResetPass({
@@ -43,6 +49,7 @@ export default function ResetPassword() {
 
     return (
         <div className='user_helper'>
+            <Toaster position='top-right'/>
             <div className="title">
                 <h2>Choose a new password.</h2>
                 <p>Create a new password</p>

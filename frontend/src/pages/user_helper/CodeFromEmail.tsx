@@ -1,8 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { FORGET_CODE_QUERY, GET_FORGET_CODE_QUERY } from '../../queries'
+import { FORGET_CODE_QUERY } from '../../mutation-queries'
 import './ForgotPassword.css'
+import toast, { Toaster } from 'react-hot-toast';
+import { GET_FORGET_CODE_QUERY } from '../../query-queries'
 
 export default function CodeFromEmail() {
     const [code, setCode] = useState("")
@@ -30,7 +32,7 @@ export default function CodeFromEmail() {
 
     function handleSubmit() {
         if (code !== codeFromDB) {
-            console.log("wrong code");
+            toast.error("Wrong code")
             return
         }
         navigate('/reset-password/' + id)
@@ -49,6 +51,7 @@ export default function CodeFromEmail() {
 
     return (
         <div className='user_helper'>
+            <Toaster position='top-right'/>
             <div className="title">
                 <h2>We sent a code to your email</h2>
                 <p>Enter the 6-digit verification code sent to your email</p>

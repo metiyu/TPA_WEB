@@ -3,17 +3,6 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import logo from '../../assets/logo.png'
 
 export default function Widgets() {
-    const newArticle = (heading: any, subtitle: any) => (
-        <div className="widgets__article">
-            <div className="widgets__articleLeft">
-                <FiberManualRecordIcon />
-            </div>
-            <div className="widgets__articleRight">
-                <h4>{heading}</h4>
-                <p>{subtitle}</p>
-            </div>
-        </div>
-    );
 
     const links = [
         { title: "About", link: "https://about.linkedin.com/" },
@@ -30,7 +19,7 @@ export default function Widgets() {
             </div>
             <footer>
                 {links.map((item) => (
-                    <a className="link" href={item.link}>{item.title}</a>
+                    <a className="link" onClick={() => window.open(item.link)}>{item.title}</a>
                 ))}
             </footer>
             <div className="logo__container">

@@ -13,11 +13,15 @@ directive @auth on FIELD_DEFINITION
 scalar Any
 
 type User {
-  id: ID!
-  name: String!
-  email: String!
-  profile_photo_url: String
-  bg_photo_url: String
+  ID: String!
+  Name: String!
+  Email: String!
+  Password: String!
+  Work: String
+  Education: String
+  Region: String
+  PhotoProfile: String
+  BackgroundPhoto: String
 }
 
 input NewUser {
@@ -27,7 +31,7 @@ input NewUser {
 }
 
 type Query {
-  user(id: ID!): User!
+  user(id: ID!): Any!
   users: [User!]!
   protected: String! @goField(forceResolver: true) @auth
 }
@@ -43,7 +47,13 @@ type Mutation {
     region: String!
     profileURL: String!
     backgroundURL: String!
-  ): Any! @auth
+  ): Any!
   activateUser(id: ID!): Any!
   resetPassword(id: ID!, newPass: String!): Any!
+  followUser(id: ID!, followedId: ID!): Any!
+  unfollowUser(id: ID!, unfollowedId: ID!): Any!
+  sendConnectRequest(id: ID!, requestedId: ID!): Any!
+  acceptConnectRequest(id: ID!, acceptedId: ID!): Any!
+  ignoreConnectRequest(id: ID!, ignoredId: ID!): Any!
+  unconnectUser(id: ID!, unconnectedId: ID!): Any!
 }
