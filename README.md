@@ -7,3 +7,6 @@
 - send email activation link
 - activate account (validate acc if want to login)
 - forget pass (send email with code, reset pass)
+- search (only user)
+- send connect request (accept & ignore) & unconnect
+- follow & unfollow (only backend)
