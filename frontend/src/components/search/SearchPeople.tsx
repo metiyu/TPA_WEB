@@ -15,9 +15,9 @@ export default function SearchPeople({ props }: { props: any }) {
                 props.search.users.map((user: any) => (
                     user.ID != getUser().id ? (
                         <div>
-                        <PeopleCard props={user} />
-                        <hr />
-                    </div>
+                            <PeopleCard props={user} />
+                            <hr />
+                        </div>
                     ) : ("")
                 ))
             )}

@@ -1,5 +1,6 @@
 import Header from '../../components/header/Header'
 import Invitations from '../../components/invitations/Invitations'
+import UserYouMightKnow from '../../components/you-might-know/UserYouMightKnow'
 import { UseCurrentTheme } from '../../contexts/themeCtx'
 import '../styles.css'
 
@@ -9,8 +10,9 @@ export default function MyNetwork() {
         <div className="app" style={{ ...getTheme() }}>
             <>
                 <Header />
-                <div className='app__body'>
+                <div className='profile__body'>
                     <Invitations />
+                    <UserYouMightKnow />
                 </div>
             </>
         </div>

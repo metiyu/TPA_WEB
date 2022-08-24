@@ -9,9 +9,14 @@ type ForgetCode{
   code: String!
 }
 
+type Search {
+    users: [User!]! @goField(forceResolver: true)
+}
+
 extend type Query {
   getLink(id: String!): ActivationLink!
   getCode(id: String!): ForgetCode!
+  search(keyword: String!, limit: Int!, offset: Int!): Any!
 }
 
 extend type Mutation {

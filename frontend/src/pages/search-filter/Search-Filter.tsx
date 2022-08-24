@@ -11,7 +11,7 @@ import { SEARCH_QUERY } from "../../query-queries"
 export default function SearchFilter() {
     const { getTheme } = UseCurrentTheme()
     const { type, keyword, page } = useParams()
-    const {data, loading, error} = useQuery(SEARCH_QUERY, {
+    const { data, loading, error } = useQuery(SEARCH_QUERY, {
         variables: {
             keyword: keyword,
             limit: 10,
@@ -19,20 +19,25 @@ export default function SearchFilter() {
         }
     })
 
+    if(data)
+        console.log(data);
+        
+
     return (
         <div className="app" style={{ ...getTheme() }}>
             <>
                 <Header />
                 <SearchHeader />
                 <div className="search__body">
-                    {type == "all" ? (
-                        ""
-                    ) : type == "posts" ? (
-                        <SearchPosts />
-                    ) : (
-                        <SearchPeople props={data}/>
-                    )}
-                    
+                    {data ? (
+                        type == "all" ? (
+                            ""
+                        ) : type == "posts" ? (
+                            <SearchPosts />
+                        ) : (
+                            <SearchPeople props={data} />
+                        )
+                    ) : ""}
                 </div>
             </>
         </div>

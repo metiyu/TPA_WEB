@@ -19,7 +19,7 @@ export default function Widgets() {
             </div>
             <footer>
                 {links.map((item) => (
-                    <a className="link" onClick={() => window.open(item.link)}>{item.title}</a>
+                    <a className="link" onClick={() => window.open(item.link)} key={item.link}>{item.title}</a>
                 ))}
             </footer>
             <div className="logo__container">

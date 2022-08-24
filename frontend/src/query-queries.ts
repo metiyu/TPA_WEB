@@ -22,15 +22,10 @@ query GetForgetCode($id: String!) {
 
 export const SEARCH_QUERY = gql`
 query Search($keyword: String!, $limit: Int!, $offset: Int!){
-    search(keyword: $keyword, limit: $limit, offset: $offset){
-        users{
-        ID
-        Name
-        Email
-        Work
-        Education
-        Region
-        PhotoProfile
-        BackgroundPhoto
-        }
-    }}`
+    search(keyword: $keyword, limit: $limit, offset: $offset)
+    }`;
+
+export const USER_YOU_MIGHT_KNOW_QUERY = gql`
+    query UserYouMightKnow($id: ID!){
+        userYouMightKnow(id: $id)
+    }`;

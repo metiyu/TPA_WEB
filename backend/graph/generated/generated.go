@@ -74,12 +74,13 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetCode   func(childComplexity int, id string) int
-		GetLink   func(childComplexity int, id string) int
-		Protected func(childComplexity int) int
-		Search    func(childComplexity int, keyword string, limit int, offset int) int
-		User      func(childComplexity int, id string) int
-		Users     func(childComplexity int) int
+		GetCode          func(childComplexity int, id string) int
+		GetLink          func(childComplexity int, id string) int
+		Protected        func(childComplexity int) int
+		Search           func(childComplexity int, keyword string, limit int, offset int) int
+		User             func(childComplexity int, id string) int
+		UserYouMightKnow func(childComplexity int, id string) int
+		Users            func(childComplexity int) int
 	}
 
 	Search struct {
@@ -118,9 +119,10 @@ type QueryResolver interface {
 	User(ctx context.Context, id string) (interface{}, error)
 	Users(ctx context.Context) ([]*model.User, error)
 	Protected(ctx context.Context) (string, error)
-	Search(ctx context.Context, keyword string, limit int, offset int) (*model.Search, error)
+	UserYouMightKnow(ctx context.Context, id string) (interface{}, error)
 	GetLink(ctx context.Context, id string) (*model.ActivationLink, error)
 	GetCode(ctx context.Context, id string) (*model.ForgetCode, error)
+	Search(ctx context.Context, keyword string, limit int, offset int) (interface{}, error)
 }
 type SearchResolver interface {
 	Users(ctx context.Context, obj *model.Search) ([]*model.User, error)
@@ -387,6 +389,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.User(childComplexity, args["id"].(string)), true
 
+	case "Query.userYouMightKnow":
+		if e.complexity.Query.UserYouMightKnow == nil {
+			break
+		}
+
+		args, err := ec.field_Query_userYouMightKnow_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.UserYouMightKnow(childComplexity, args["id"].(string)), true
+
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
 			break
@@ -533,13 +547,6 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../search.graphqls", Input: `type Search {
-    users: [User!]! @goField(forceResolver: true)
-}
-
-extend type Query{
-    search(keyword: String!, limit: Int!, offset: Int!): Search!
-}`, BuiltIn: false},
 	{Name: "../user.graphqls", Input: `# GraphQL schema example
 #
 # https://gqlgen.com/getting-started/
@@ -575,7 +582,8 @@ input NewUser {
 type Query {
   user(id: ID!): Any!
   users: [User!]!
-  protected: String! @goField(forceResolver: true)
+  protected: String! @goField(forceResolver: true) @auth
+  userYouMightKnow(id: ID!): Any!
 }
 
 type Mutation {
@@ -611,9 +619,14 @@ type ForgetCode{
   code: String!
 }
 
+type Search {
+    users: [User!]! @goField(forceResolver: true)
+}
+
 extend type Query {
   getLink(id: String!): ActivationLink!
   getCode(id: String!): ForgetCode!
+  search(keyword: String!, limit: Int!, offset: Int!): Any!
 }
 
 extend type Mutation {
@@ -1024,6 +1037,21 @@ func (ec *executionContext) field_Query_search_args(ctx context.Context, rawArgs
 		}
 	}
 	args["offset"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_userYouMightKnow_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -2155,8 +2183,28 @@ func (ec *executionContext) _Query_protected(ctx context.Context, field graphql.
 		}
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Protected(rctx)
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().Protected(rctx)
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			if ec.directives.Auth == nil {
+				return nil, errors.New("directive auth is not implemented")
+			}
+			return ec.directives.Auth(ctx, nil, directive0)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(string); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be string`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2186,8 +2234,8 @@ func (ec *executionContext) fieldContext_Query_protected(ctx context.Context, fi
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_search(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_search(ctx, field)
+func (ec *executionContext) _Query_userYouMightKnow(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_userYouMightKnow(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2200,7 +2248,7 @@ func (ec *executionContext) _Query_search(ctx context.Context, field graphql.Col
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Search(rctx, fc.Args["keyword"].(string), fc.Args["limit"].(int), fc.Args["offset"].(int))
+		return ec.resolvers.Query().UserYouMightKnow(rctx, fc.Args["id"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2212,23 +2260,19 @@ func (ec *executionContext) _Query_search(ctx context.Context, field graphql.Col
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Search)
+	res := resTmp.(interface{})
 	fc.Result = res
-	return ec.marshalNSearch2ᚖgithubᚗcomᚋmetiyuᚋgqlgenᚑlinkhedinᚋgraphᚋmodelᚐSearch(ctx, field.Selections, res)
+	return ec.marshalNAny2interface(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_search(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_userYouMightKnow(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "users":
-				return ec.fieldContext_Search_users(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Search", field.Name)
+			return nil, errors.New("field of type Any does not have child fields")
 		},
 	}
 	defer func() {
@@ -2238,7 +2282,7 @@ func (ec *executionContext) fieldContext_Query_search(ctx context.Context, field
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_search_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_userYouMightKnow_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -2363,6 +2407,61 @@ func (ec *executionContext) fieldContext_Query_getCode(ctx context.Context, fiel
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_getCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_search(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_search(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Search(rctx, fc.Args["keyword"].(string), fc.Args["limit"].(int), fc.Args["offset"].(int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(interface{})
+	fc.Result = res
+	return ec.marshalNAny2interface(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_search(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Any does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_search_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -5080,7 +5179,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "search":
+		case "userYouMightKnow":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -5089,7 +5188,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_search(ctx, field)
+				res = ec._Query_userYouMightKnow(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -5136,6 +5235,29 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_getCode(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "search":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_search(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -5697,20 +5819,6 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 func (ec *executionContext) unmarshalNNewUser2githubᚗcomᚋmetiyuᚋgqlgenᚑlinkhedinᚋgraphᚋmodelᚐNewUser(ctx context.Context, v interface{}) (model.NewUser, error) {
 	res, err := ec.unmarshalInputNewUser(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNSearch2githubᚗcomᚋmetiyuᚋgqlgenᚑlinkhedinᚋgraphᚋmodelᚐSearch(ctx context.Context, sel ast.SelectionSet, v model.Search) graphql.Marshaler {
-	return ec._Search(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNSearch2ᚖgithubᚗcomᚋmetiyuᚋgqlgenᚑlinkhedinᚋgraphᚋmodelᚐSearch(ctx context.Context, sel ast.SelectionSet, v *model.Search) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._Search(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {

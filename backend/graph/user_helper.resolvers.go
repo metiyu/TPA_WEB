@@ -5,8 +5,10 @@ package graph
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
+	"github.com/metiyu/gqlgen-linkhedin/graph/generated"
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
 	"github.com/metiyu/gqlgen-linkhedin/service"
 )
@@ -62,3 +64,26 @@ func (r *queryResolver) GetCode(ctx context.Context, id string) (*model.ForgetCo
 	model := new(model.ForgetCode)
 	return model, r.DB.First(model, "id = ?", id).Error
 }
+
+// Search is the resolver for the search field.
+func (r *queryResolver) Search(ctx context.Context, keyword string, limit int, offset int) (interface{}, error) {
+	search := new(model.Search)
+
+	users, err := service.GetUsersByName(ctx, keyword, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+	search.Users = users
+
+	return search, nil
+}
+
+// Users is the resolver for the users field.
+func (r *searchResolver) Users(ctx context.Context, obj *model.Search) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+// Search returns generated.SearchResolver implementation.
+func (r *Resolver) Search() generated.SearchResolver { return &searchResolver{r} }
+
+type searchResolver struct{ *Resolver }

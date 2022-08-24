@@ -1,6 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { Avatar } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { UseCurrentUser } from "../../contexts/userCtx";
 import { SEND_CONNECT_QUERY, UNCONNECT_USER_QUERY } from "../../mutation-queries";
 import './PeopleCard.css'
@@ -10,6 +11,7 @@ export default function PeopleCard({ props }: { props: any }) {
     const [unconnectFunc] = useMutation(UNCONNECT_USER_QUERY)
     const { getUser, setUserToStorage } = UseCurrentUser()
     const [button, setButton] = useState("connect")
+    const navigate = useNavigate()
 
     console.log(getUser());
 
@@ -24,7 +26,6 @@ export default function PeopleCard({ props }: { props: any }) {
                 setButton("unconnect")
             }
         }
-
     }, [])
 
     function handleConnect(e: any) {
@@ -56,12 +57,12 @@ export default function PeopleCard({ props }: { props: any }) {
     }
 
     return (
-        <div className="search_people__container">
-            <Avatar className='avatar' src='' />
+        <div className="search_people__container" onClick={() => navigate(`/profile/${props.ID}`)}>
+            <Avatar className='avatar' src={props.photo_profile} />
             <div className='people_data'>
-                <h4>{props.Name}</h4>
-                <p>{props.Work}</p>
-                <p>{props.Region}</p>
+                <h4>{props.name}</h4>
+                <p>{props.work}</p>
+                <p>{props.region}</p>
             </div>
             <div className='connect_button'>
                 {button == "connect" ? (

@@ -9,7 +9,8 @@ export default function ProfileDropdown() {
     const currUser = getUser()
 
     function handleSignout() {
-
+        localStorage.removeItem('user')
+        navigate('/')
     }
 
     return (

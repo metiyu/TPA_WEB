@@ -59,3 +59,13 @@ export const UNCONNECT_USER_QUERY = gql`
     mutation UnconnectUser($id: ID!, $unconnectedId: ID!){
         unconnectUser(id: $id, unconnectedId: $unconnectedId)
     }`;
+
+export const FOLLOW_USER_QUERY = gql`
+    mutation FollowUser($id: ID!, $followedId: ID!){
+        followUser(id: $id, followedId: $followedId)
+    }`;
+
+export const UNFOLLOW_USER_QUERY = gql`
+    mutation UnfollowUser($id: ID!, $unfollowedId: ID!){
+        unfollowUser(id: $id, unfollowedId: $unfollowedId)
+    }`;

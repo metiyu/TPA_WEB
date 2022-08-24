@@ -257,3 +257,27 @@ func UnconnectUser(ctx context.Context, id string, unconnectedId string) (interf
 	user, err := UserGetByID(ctx, id)
 	return user, err
 }
+
+func UserYouMightKnow(ctx context.Context, id string) (interface{}, error) {
+	var users []*model.User
+	userNow, err := UserGetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	for i := 0; i < len(userNow.ConnectedUser); i++ {
+		userFriends, err := UserGetByID(ctx, userNow.ConnectedUser[i])
+		if err != nil {
+			return nil, err
+		}
+		for j := 0; j < len(userFriends.ConnectedUser); j++ {
+			if userFriends.ConnectedUser[j] != id {
+				userFriends, err := UserGetByID(ctx, userFriends.ConnectedUser[j])
+				if err != nil {
+					return nil, err
+				}
+				users = append(users, userFriends)
+			}
+		}
+	}
+	return users, nil
+}

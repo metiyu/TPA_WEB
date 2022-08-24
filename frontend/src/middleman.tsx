@@ -52,6 +52,7 @@ export default function Middleman() {
                 <Route path='/feed' element={<Homepage />} />
                 <Route path='/mynetwork' element={<MyNetwork />} />
                 <Route path='/message' element={<Message />} />
+                <Route path='/profile/:id' element={<Profile />} />
                 <Route path='/profile' element={<Profile />} />
                 <Route path='/search/:type/keyword=:keyword/page=:page' element={<SearchFilter />} />
             </Routes>
