@@ -43,7 +43,7 @@ export default function Header() {
                         alt=""
                     />
 
-                    <div className="header__search">
+                    <div className="search__header">
                         <SearchIcon />
                         <input placeholder="Search" type="text" value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => handleSearch(e)}/>
                     </div>

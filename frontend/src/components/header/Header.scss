@@ -1,5 +1,5 @@
 .header {
-    position: sticky;
+    position: fixed;
     top: 0;
     display: flex;
     background-color: var(--primary);
@@ -24,7 +24,7 @@
         }
     }
 
-    .header__search {
+    .search__header {
         padding: 10px;
         display: flex;
         align-items: center;
@@ -42,9 +42,10 @@
     }
 
     .drop {
-        position: relative;
+        position: fixed;
         z-index: 20;
-        float: right;
+        top: 11%;
+        right: 3%;
         padding-right: 15vw;
     }
 

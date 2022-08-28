@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
 import { UseCurrentUser } from './contexts/userCtx'
 import Homepage from './pages/homepage/Homepage'
 import Message from './pages/message/Message'

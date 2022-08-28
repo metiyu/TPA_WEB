@@ -37,22 +37,28 @@ export default function ProfileBox() {
 
     useEffect(() => {
         if (!loading) {
-            if (getUser().pending_request != null || getUser().pending_request.length == 0) {
-                if (getUser().pending_request.includes(data.user.id)) {
-                    setButton("pending")
+            if (getUser().pending_request != null) {
+                if (getUser().pending_request.length > 0) {
+                    if (getUser().pending_request.includes(data.user.id)) {
+                        setButton("pending")
+                    }
                 }
             }
-            if (getUser().connected_user != null || getUser().connected_user.length == 0) {
-                if (getUser().connected_user.includes(data.user.id)) {
-                    setButton("unconnect")
+            if (getUser().connected_user != null) {
+                if (getUser().connected_user.length > 0) {
+                    if (getUser().connected_user.includes(data.user.id)) {
+                        setButton("unconnect")
+                    }
                 }
             }
-            if (getUser().followed_user != null || getUser().followed_user.length == 0) {
-                if (getUser().followed_user.includes(data.user.id)) {
-                    setFollowBtn("unfollow")
-                }
-                else {
-                    setFollowBtn("follow")
+            if (getUser().followed_user != null) {
+                if (getUser().followed_user.length > 0) {
+                    if (getUser().followed_user.includes(data.user.id)) {
+                        setFollowBtn("unfollow")
+                    }
+                    else {
+                        setFollowBtn("follow")
+                    }
                 }
             }
             console.log(getUser());
@@ -122,7 +128,11 @@ export default function ProfileBox() {
             {!data ? (
                 <div className="default__profile">
                     <div className="cover__photo">
-                        <img src={currUser.photo_background} alt="" />
+                        {currUser.photo_background ? (
+                            <img src={currUser.photo_background} alt="" />
+                        ) : (
+                            <img src="https://i.picsum.photos/id/599/800/200.jpg?hmac=OHWF33Uii02mcUZCEh6O8PgadRmKGNNfM_34vHv952c" alt="" />
+                        )}
                     </div>
                     <Avatar className="profile__photo" src={currUser.photo_profile} />
                     <h3>{currUser.name}</h3>
@@ -152,7 +162,11 @@ export default function ProfileBox() {
             ) : (
                 <div className="default__profile">
                     <div className="cover__photo">
-                        <img src={data.user.background_photo} alt="" />
+                        {currUser.photo_background ? (
+                            <img src={currUser.photo_background} alt="" />
+                        ) : (
+                            <img src="https://i.picsum.photos/id/599/800/200.jpg?hmac=OHWF33Uii02mcUZCEh6O8PgadRmKGNNfM_34vHv952c" alt="" />
+                        )}
                     </div>
                     <Avatar className="profile__photo" src={data.user.photo_profile} />
                     <h3>{data.user.name}</h3>

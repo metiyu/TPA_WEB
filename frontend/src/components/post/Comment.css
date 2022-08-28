@@ -1,0 +1,15 @@
+.comment__container {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  background-color: var(--search_accent);
+  color: var(--text_accent);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.comment__container .comment__name_comment {
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
+}/*# sourceMappingURL=Comment.css.map */

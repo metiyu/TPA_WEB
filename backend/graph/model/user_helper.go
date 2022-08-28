@@ -11,3 +11,8 @@ type ForgetCode struct {
 	UserID string `json:"userId"`
 	Code   string `json:"code"`
 }
+
+type Search struct{
+	Users []*User `json:"users"`
+	Posts []*Post `json:"posts"`
+}

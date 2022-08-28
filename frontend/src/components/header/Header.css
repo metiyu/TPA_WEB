@@ -1,6 +1,5 @@
 .header {
-  position: -webkit-sticky;
-  position: sticky;
+  position: fixed;
   top: 0;
   display: flex;
   background-color: var(--primary);
@@ -24,7 +23,7 @@
   height: 40px;
   margin-right: 10px;
 }
-.header__outer .header__search {
+.header__outer .search__header {
   padding: 10px;
   display: flex;
   align-items: center;
@@ -33,16 +32,17 @@
   color: gray;
   background-color: var(--search_accent);
 }
-.header__outer .header__search input {
+.header__outer .search__header input {
   outline: none;
   border: none;
   background: none;
   color: var(--text_accent);
 }
 .header__outer .drop {
-  position: relative;
+  position: fixed;
   z-index: 20;
-  float: right;
+  top: 11%;
+  right: 3%;
   padding-right: 15vw;
 }
 .header__outer .invisible {

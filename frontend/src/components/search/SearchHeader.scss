@@ -1,6 +1,6 @@
 .header__search {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    top: 9%;
     display: flex;
     background-color: var(--primary);
     border-bottom: 0.1px solid var(--border_accent);

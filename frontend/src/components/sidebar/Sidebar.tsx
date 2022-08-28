@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import { UseCurrentUser } from "../../contexts/userCtx";
 
 export default function Sidebar() {
-    const {getUser} = UseCurrentUser()
+    const { getUser } = UseCurrentUser()
     const currUser = getUser()
 
     const recentItem = (topic: string) => (
@@ -17,10 +17,11 @@ export default function Sidebar() {
     return (
         <div className="sidebar">
             <div className="sidebar__top">
-                <img
-                    src={currUser.photo_background}
-                    alt=""
-                />
+                {currUser.photo_background ? (
+                    <img src={currUser.photo_background} alt="" />
+                ) : (
+                    <img src="https://i.picsum.photos/id/599/800/200.jpg?hmac=OHWF33Uii02mcUZCEh6O8PgadRmKGNNfM_34vHv952c" alt="" />
+                )}
                 <Avatar src={currUser.photo_profile} className="sidebar__avatar" sx={{ width: 70, height: 70 }}>
                     {currUser.email}
                 </Avatar>

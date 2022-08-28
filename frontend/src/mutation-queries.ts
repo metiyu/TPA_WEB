@@ -69,3 +69,23 @@ export const UNFOLLOW_USER_QUERY = gql`
     mutation UnfollowUser($id: ID!, $unfollowedId: ID!){
         unfollowUser(id: $id, unfollowedId: $unfollowedId)
     }`;
+
+export const CREATE_POST_QUERY = gql`
+    mutation CreatePost($id:ID!, $userId: ID!,  $caption: String!, $photo_url: String, $video_url: String){
+        createPost(id: $id, userId: $userId, caption: $caption, photo_url: $photo_url, video_url: $video_url)
+    }`;
+
+export const LIKE_POST = gql`
+    mutation LikePost($id: ID!, $likerId: ID!) {
+        likePost(id: $id, likerId: $likerId)
+    }`;
+
+export const UNLIKE_POST = gql`
+    mutation UnlikePost($id: ID!, $unlikerId: ID!) {
+        unlikePost(id: $id, unlikerId: $unlikerId)
+    }`;
+
+export const COMMENT_POST = gql`
+    mutation CommentPost($postId: ID!, $commenterId: ID!, $comment: String!) {
+        commentPost(postId: $postId, commenterId: $commenterId, comment: $comment)
+    }`;

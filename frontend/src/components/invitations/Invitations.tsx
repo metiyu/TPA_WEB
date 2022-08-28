@@ -9,7 +9,6 @@ export default function Invitations() {
     const { getUser } = UseCurrentUser()
     console.log(getUser().request_connect);
 
-
     return (
         <div className="container__invitations">
             <div className='container__header'>
@@ -18,15 +17,15 @@ export default function Invitations() {
             </div>
             <div className='container__cards'>
                 {getUser().request_connect ?
-                    getUser().request_connect.map((user: any) =>
-                        <>
-                            <hr />
-                            <ProfileCard props={user} />
-                        </>
-                    ) : ""
+                    getUser().request_connect.length != 0 ?
+                        getUser().request_connect.map((user: any) =>
+                            <>
+                                <hr />
+                                <ProfileCard props={user} />
+                            </>
+                        ) : ""
+                    : ""
                 }
-
-
             </div>
         </div>
     )

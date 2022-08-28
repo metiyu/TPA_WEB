@@ -75,11 +75,22 @@ func (r *queryResolver) Search(ctx context.Context, keyword string, limit int, o
 	}
 	search.Users = users
 
+	if posts, err := service.GetPostsByName(ctx, keyword, limit, offset); err != nil {
+		return nil, err
+	} else {
+		search.Posts = posts
+	}
+
 	return search, nil
 }
 
 // Users is the resolver for the users field.
 func (r *searchResolver) Users(ctx context.Context, obj *model.Search) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+// Posts is the resolver for the posts field.
+func (r *searchResolver) Posts(ctx context.Context, obj *model.Search) ([]*model.Post, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

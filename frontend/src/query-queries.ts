@@ -29,3 +29,18 @@ export const USER_YOU_MIGHT_KNOW_QUERY = gql`
     query UserYouMightKnow($id: ID!){
         userYouMightKnow(id: $id)
     }`;
+
+export const GENERATE_ID = gql`
+    query GenerateID{
+        generateID
+    }`;
+
+export const GET_POSTS = gql`
+    query GetPosts($id: ID!, $limit: Int!, $offset: Int!) {
+        getPosts(id: $id, limit: $limit, offset: $offset)
+    }`;
+
+export const GET_COMMENTS = gql`
+    query GetComments($postId: ID!){
+        getComment(postId: $postId)
+    }`;

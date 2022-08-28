@@ -1,14 +1,14 @@
 .sidebar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 80px;
+  position: fixed;
+  top: 12%;
+  left: 12%;
   flex: 0.2;
   border-radius: 10px;
   text-align: center;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-  min-width: 200px;
+  max-width: 200px;
 }
 
 .sidebar__top {

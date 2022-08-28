@@ -7,12 +7,12 @@
 }
 
 .app__body {
+  background-color: var(--secondary);
   position: absolute;
   display: flex;
   margin-top: 100px;
-  max-width: 1200px;
-  margin-left: 20px;
-  margin-right: 20px;
+  width: 100vw;
+  justify-content: center;
 }
 
 .profile__body {
@@ -26,10 +26,16 @@
 }
 
 .search__body {
+  background-color: var(--secondary);
   position: absolute;
   display: flex;
   margin-top: 150px;
-  max-width: 1200px;
-  margin-left: 20px;
-  margin-right: 20px;
+  width: 100vw;
+  justify-content: center;
+}
+
+.search__all {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }/*# sourceMappingURL=styles.css.map */

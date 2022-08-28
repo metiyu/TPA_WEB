@@ -4,6 +4,7 @@
   background-color: var(--primary);
   align-items: center;
   border-radius: 10px;
+  cursor: pointer;
 }
 .search_people__container .avatar {
   margin-top: 1.6rem;

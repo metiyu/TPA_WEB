@@ -1,13 +1,14 @@
 .feed {
   flex: 0.6;
   margin: 0 20px;
-  background-color: var(--primary);
+  background-color: var(--secondary);
   border-radius: 10px;
-  border: 1px solid var(--border_accent);
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
   padding-bottom: 10px;
+  overflow: auto;
+  max-width: 30%;
 }
 
 .feed__inputContainer {
@@ -23,7 +24,6 @@
   border-radius: 30px;
   display: flex;
   padding: 10px;
-  color: gray;
   padding-left: 15px;
 }
 .feed__input form {
@@ -45,4 +45,42 @@
 .feed__inputOptions {
   display: flex;
   justify-content: space-evenly;
+}
+
+.create_post__show {
+  position: fixed;
+  background-color: var(--primary);
+  width: 500px;
+  min-height: 250px;
+  max-height: 500px;
+  top: 50%;
+  left: 50%;
+  margin-top: -250px;
+  margin-left: -250px;
+  border: 1px solid var(--border_accent);
+  box-shadow: 0.5px 0.5px 0.5px 0.5px var(--border_accent);
+  border-radius: 10px;
+  z-index: 4;
+  overflow-y: scroll;
+}
+
+#overlay_show {
+  display: block;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
+}
+
+.create_post__invisible {
+  display: none;
+}
+
+#overlay_invisible {
+  display: none;
 }/*# sourceMappingURL=Feed.css.map */

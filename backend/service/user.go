@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"errors"
-	"sort"
 	"strings"
 
 	"github.com/google/uuid"
@@ -152,10 +151,7 @@ func UnfollowUser(ctx context.Context, id string, unfollowedId string) (interfac
 	if err != nil {
 		return nil, err
 	}
-	index := sort.StringSlice(model.FollowedUser).Search(unfollowedId)
-	model.FollowedUser[index] = model.FollowedUser[len(model.FollowedUser)-1]
-	model.FollowedUser[len(model.FollowedUser)-1] = ""
-	model.FollowedUser = model.FollowedUser[:len(model.FollowedUser)-1]
+	model.FollowedUser = RemoveElementFromArray(model.FollowedUser, unfollowedId)
 	return model, db.Where("id = ?", id).Save(model).Error
 }
 

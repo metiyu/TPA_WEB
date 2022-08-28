@@ -14,15 +14,17 @@ export default function PeopleCard({ props }: { props: any }) {
     const navigate = useNavigate()
 
     console.log(getUser());
+    console.log(props);
+    
 
     useEffect(() => {
         if (getUser().pending_request != null) {
-            if (getUser().pending_request.includes(props.ID)) {
+            if (getUser().pending_request.includes(props.id)) {
                 setButton("pending")
             }
         }
         if (getUser().connected_user != null) {
-            if (getUser().connected_user.includes(props.ID)) {
+            if (getUser().connected_user.includes(props.id)) {
                 setButton("unconnect")
             }
         }
@@ -32,7 +34,7 @@ export default function PeopleCard({ props }: { props: any }) {
         sendConnectFunc({
             variables: {
                 id: getUser().id,
-                requestedId: e.ID
+                requestedId: e.id
             }
         }).then((e) => {
             console.log("success");
@@ -47,7 +49,7 @@ export default function PeopleCard({ props }: { props: any }) {
         unconnectFunc({
             variables: {
                 id: getUser().id,
-                unconnectedId: e.ID
+                unconnectedId: e.id
             }
         }).then((e) => {
             console.log("success");
@@ -57,7 +59,7 @@ export default function PeopleCard({ props }: { props: any }) {
     }
 
     return (
-        <div className="search_people__container" onClick={() => navigate(`/profile/${props.ID}`)}>
+        <div className="search_people__container" onClick={() => navigate(`/profile/${props.id}`)}>
             <Avatar className='avatar' src={props.photo_profile} />
             <div className='people_data'>
                 <h4>{props.name}</h4>

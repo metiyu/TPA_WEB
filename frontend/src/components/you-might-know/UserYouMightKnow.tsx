@@ -16,7 +16,6 @@ export default function UserYouMightKnow() {
     if (data)
         console.log(data);
 
-
     return (
         <div className="container__invitations">
             <div className='container__header'>
@@ -26,12 +25,15 @@ export default function UserYouMightKnow() {
             <div className='container__cards'>
                 {getUser().connected_user ?
                     data ?
-                        data.userYouMightKnow.map((user: any) =>
-                            <>
-                                <hr />
-                                <PeopleCard props={user} key={user}/>
-                            </>
-                        ) : "" : ""
+                        data.userYouMightKnow ?
+                            data.userYouMightKnow.map((user: any) =>
+                                <>
+                                    <hr />
+                                    <PeopleCard props={user} key={user} />
+                                </>
+                            ) : ""
+                        : ""
+                    : ""
                 }
             </div>
         </div>

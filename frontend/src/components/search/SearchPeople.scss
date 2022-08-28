@@ -4,6 +4,16 @@
     background-color: var(--primary);
     align-items: center;
     border-radius: 10px;
-    
+}
 
+.search_post__container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // overflow: ;
+}
+
+.search__posts{
+    width: 40%;
 }

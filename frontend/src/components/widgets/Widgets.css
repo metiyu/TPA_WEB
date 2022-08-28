@@ -60,10 +60,12 @@
 
 footer {
   display: flex;
+  position: fixed;
   flex-wrap: wrap;
   width: 18vw;
   justify-content: center;
   align-self: center;
+  margin-top: 21%;
 }
 footer .link {
   cursor: pointer;
@@ -72,6 +74,8 @@ footer .link {
 
 .logo__container {
   color: var(--text_accent);
+  position: fixed;
+  margin-top: 25%;
 }
 .logo__container .logo {
   width: 70px;

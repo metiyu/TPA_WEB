@@ -11,6 +11,7 @@ type ForgetCode{
 
 type Search {
     users: [User!]! @goField(forceResolver: true)
+    posts: [Post!]! @goField(forceResolver: true)
 }
 
 extend type Query {

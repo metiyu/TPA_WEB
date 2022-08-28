@@ -1,5 +1,4 @@
 import { ApolloClient, ApolloLink, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client'
-import './App.css'
 import { UseCurrentUser } from './contexts/userCtx'
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from './config/firebase'

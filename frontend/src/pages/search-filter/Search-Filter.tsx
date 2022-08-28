@@ -19,9 +19,9 @@ export default function SearchFilter() {
         }
     })
 
-    if(data)
+    if (data)
         console.log(data);
-        
+
 
     return (
         <div className="app" style={{ ...getTheme() }}>
@@ -31,9 +31,14 @@ export default function SearchFilter() {
                 <div className="search__body">
                     {data ? (
                         type == "all" ? (
-                            ""
+                            <div className="search__all">
+                                <h2>Posts</h2>
+                                <SearchPosts props={data} />
+                                <h2>People</h2>
+                                <SearchPeople props={data} />
+                            </div>
                         ) : type == "posts" ? (
-                            <SearchPosts />
+                            <SearchPosts props={data} />
                         ) : (
                             <SearchPeople props={data} />
                         )
