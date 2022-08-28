@@ -7,7 +7,13 @@
 - send email activation link
 - activate account (validate acc if want to login)
 - forget pass (send email with code, reset pass)
-- search (only user)
+- search
 - send connect request (accept & ignore) & unconnect
-- follow & unfollow (only backend)
+- follow & unfollow
 - user you might know
+- create post (photo & video can be up in one post)
+- like & unlike post
+- comment post
+
+Error
+- feed still err
