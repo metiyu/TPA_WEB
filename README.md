@@ -14,6 +14,7 @@
 - create post (photo & video can be up in one post)
 - like & unlike post
 - comment post
+- messaging page
 
 Error
 - feed still err
