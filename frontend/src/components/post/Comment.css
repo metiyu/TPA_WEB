@@ -1,15 +1,22 @@
 .comment__container {
   display: flex;
   flex-direction: row;
-  width: 50%;
-  background-color: var(--search_accent);
+  width: 100%;
   color: var(--text_accent);
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
 }
 .comment__container .comment__name_comment {
   display: flex;
   flex-direction: column;
   padding-left: 10px;
+  width: 100%;
+}
+
+.comment__container__outer {
+  display: flex;
+  min-width: 250px;
+  flex-direction: column;
+  background-color: var(--search_accent);
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }/*# sourceMappingURL=Comment.css.map */

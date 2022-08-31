@@ -50,6 +50,7 @@ export default function Middleman() {
                 <Route path='/reset-password/:id' element={<ResetPassword />} />
                 <Route path='/feed' element={<Homepage />} />
                 <Route path='/mynetwork' element={<MyNetwork />} />
+                <Route path='/message/:id' element={<Message />} />
                 <Route path='/message' element={<Message />} />
                 <Route path='/profile/:id' element={<Profile />} />
                 <Route path='/profile' element={<Profile />} />

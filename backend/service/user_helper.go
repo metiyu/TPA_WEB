@@ -4,6 +4,8 @@ import (
 	"crypto/rand"
 	"io"
 	"sort"
+
+	"github.com/metiyu/gqlgen-linkhedin/graph/model"
 )
 
 var table = [...]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
@@ -26,4 +28,13 @@ func RemoveElementFromArray(model []string, toSearch string) []string {
 	model[len(model)-1] = ""
 	model = model[:len(model)-1]
 	return model
+}
+
+func contains(users []*model.User, user *model.User) bool {
+	for _, v := range users {
+		if v.ID == user.ID {
+			return true
+		}
+	}
+	return false
 }

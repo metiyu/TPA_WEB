@@ -271,7 +271,9 @@ func UserYouMightKnow(ctx context.Context, id string) (interface{}, error) {
 				if err != nil {
 					return nil, err
 				}
-				users = append(users, userFriends)
+				if !contains(users, userFriends) {
+					users = append(users, userFriends)
+				}
 			}
 		}
 	}

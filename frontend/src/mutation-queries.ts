@@ -89,3 +89,13 @@ export const COMMENT_POST = gql`
     mutation CommentPost($postId: ID!, $commenterId: ID!, $comment: String!) {
         commentPost(postId: $postId, commenterId: $commenterId, comment: $comment)
     }`;
+
+export const LIKE_COMMENT = gql`
+    mutation LikeCommentPost($commentId: ID!, $likerId: ID!){
+        likeComment(commentId: $commentId, likerId: $likerId)
+    }`;
+
+export const UNLIKE_COMMENT = gql`
+    mutation UnlikeCommentPost($commentId: ID!, $unlikerId: ID!){
+        unlikeComment(commentId: $commentId, unlikerId: $unlikerId)
+    }`;

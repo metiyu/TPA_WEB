@@ -38,7 +38,7 @@ export default function CreatePost() {
                 toast.promise(
                     getDownloadURL(photoRef).then((e) => {
                         setPostPhotoURL(e)
-                        if(postCaption != "")
+                        if (postCaption != "")
                             setBtnClassname("post_button__true")
                     }), {
                     loading: "Uploading",
@@ -50,7 +50,7 @@ export default function CreatePost() {
                 toast.promise(
                     getDownloadURL(photoRef).then((e) => {
                         setPostVideoURL(e)
-                        if(postCaption != "")
+                        if (postCaption != "")
                             setBtnClassname("post_button__true")
                     }), {
                     loading: "Uploading",
@@ -94,6 +94,11 @@ export default function CreatePost() {
         }
     }
 
+    function handleDetach() {
+        setPostPhotoURL("")
+        setPostVideoURL("")
+    }
+
     return (
         <div className="create_post__container">
             <Toaster position="top-right" />
@@ -109,7 +114,12 @@ export default function CreatePost() {
                 value={postCaption}
                 onChange={(e) => handlePostCaption(e.target.value)}
             />
-            <img src={postPhotoURL} alt="" />
+            {postPhotoURL != "" ?
+                <button onClick={() => handleDetach()}>X</button>
+                : ""}
+            <div>
+                <img src={postPhotoURL} alt="" />
+            </div>
             {postVideoURL == "" ?
                 ""
                 :

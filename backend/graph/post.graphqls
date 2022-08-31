@@ -23,4 +23,6 @@ extend type Mutation{
     likePost(id: ID!, likerId: ID!): Any!
     unlikePost(id: ID!, unlikerId: ID!): Any!
     commentPost(postId: ID!, commenterId: ID!, comment: String!): Any!
+    likeComment(commentId: ID!, likerId: ID!): Any!
+    unlikeComment(commentId: ID!, unlikerId: ID!): Any!
 }

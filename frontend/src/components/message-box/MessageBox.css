@@ -1,1 +1,71 @@
-/*# sourceMappingURL=MessageBox.css.map */
+.container__messagebox {
+  width: 60%;
+  min-height: 600px;
+  background-color: var(--primary);
+  border-radius: 10px;
+  border: 1px solid var(--border_accent);
+  color: var(--text_accent);
+  display: flex;
+}
+.container__messagebox .container__people {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+.container__messagebox .container__people p {
+  padding: 15px;
+}
+.container__messagebox .container__people .people__bubble {
+  display: flex;
+  height: 50px;
+  align-items: center;
+  padding: 10px;
+}
+.container__messagebox .container__message {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+.container__messagebox .container__message p {
+  padding: 15px;
+}
+.container__messagebox .container__message .chat__section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10px;
+  height: 15%;
+  width: 100%;
+  background-color: var(--primary);
+}
+.container__messagebox .container__message .chat__section .input__file {
+  display: flex;
+  height: 25px;
+  width: 25px;
+  color: var(--logo_accent);
+  cursor: pointer;
+}
+.container__messagebox .container__message .chat__section .input__file > input {
+  display: none;
+}
+.container__messagebox .container__message .chat__section .send_button__true {
+  background-color: aqua;
+  cursor: pointer;
+}
+.container__messagebox .container__message .chat__section .send_button__false {
+  cursor: not-allowed;
+  color: rgba(255, 255, 255, 0.5);
+}
+.container__messagebox .container__message .chat__bubble__section {
+  overflow: auto;
+  height: 85%;
+  max-height: 550px;
+  background-color: var(--primary);
+}
+.container__messagebox .container__message .chat__bubble__section .left__bubble_chat {
+  display: flex;
+}
+.container__messagebox .container__message .chat__bubble__section .right__bubble_chat {
+  display: flex;
+  justify-content: flex-end;
+}/*# sourceMappingURL=MessageBox.css.map */

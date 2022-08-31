@@ -142,7 +142,7 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
                             : ""
                         }
                         {props.comments ?
-                            props.comments.length == 0 ?
+                            props.comments.length != 0 ?
                                 <>
                                     <p>{props.comments.length} Comments</p>
                                     <p>•</p>
@@ -151,7 +151,7 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
                             : ""
                         }
                         {props.sends ?
-                            props.sends.length == 0 ?
+                            props.sends.length != 0 ?
                                 <>
                                     <p>{props.sends.length} Shares</p>
                                 </>

@@ -76,6 +76,27 @@ func (r *mutationResolver) CommentPost(ctx context.Context, postID string, comme
 	return post, r.DB.Where("id = ?", postID).Save(post).Error
 }
 
+// LikeComment is the resolver for the likeComment field.
+func (r *mutationResolver) LikeComment(ctx context.Context, commentID string, likerID string) (interface{}, error) {
+	model, err := service.GetCommentByID(ctx, commentID)
+	if err != nil {
+		return nil, err
+	}
+	model.Likes = append(model.Likes, likerID)
+
+	return model, r.DB.Where("id = ?", commentID).Save(model).Error
+}
+
+// UnlikeComment is the resolver for the unlikeComment field.
+func (r *mutationResolver) UnlikeComment(ctx context.Context, commentID string, unlikerID string) (interface{}, error) {
+	model, err := service.GetCommentByID(ctx, commentID)
+	if err != nil {
+		return nil, err
+	}
+	model.Likes = service.RemoveElementFromArray(model.Likes, unlikerID)
+	return model, r.DB.Where("id = ?", commentID).Save(model).Error
+}
+
 // GenerateID is the resolver for the generateID field.
 func (r *queryResolver) GenerateID(ctx context.Context) (interface{}, error) {
 	id := uuid.NewString()
