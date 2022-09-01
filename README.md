@@ -15,6 +15,8 @@
 - like & unlike post
 - comment post
 - messaging page
-
-Error
-- feed still err
+- regis & login google
+- middleware frontend
+- fixing footer
+- infinite scroll feed
+- search connected user (at message page)
