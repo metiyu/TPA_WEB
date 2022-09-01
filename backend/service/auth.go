@@ -56,6 +56,33 @@ func UserRegister(ctx context.Context, newUser model.NewUser) (interface{}, erro
 	}, nil
 }
 
+func UserRegisterByGoogle(ctx context.Context, email string, email_verified bool, name string, id string, picture string) (interface{}, error) {
+
+	_, err := GetUserByEmail(ctx, email)
+
+	if err == nil {
+		if err != gorm.ErrRecordNotFound {
+			return nil, err
+		}
+	}
+
+	createdUser, err := CreateUserByGoogle(ctx, email, email_verified, name, id, picture)
+
+	if err != nil {
+		return nil, err
+	}
+	token, err := JwtGenerate(ctx, createdUser.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{
+		"token": token,
+		"name":  createdUser.Name,
+		"email": createdUser.Email,
+	}, nil
+}
+
 func UserLogin(ctx context.Context, email string, password string) (interface{}, error) {
 	user, err := GetUserByEmail(ctx, email)
 	if err != nil {

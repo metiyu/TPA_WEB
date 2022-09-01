@@ -24,7 +24,7 @@ func EncodeToString(max int) string {
 
 func RemoveElementFromArray(model []string, toSearch string) []string {
 	index := sort.StringSlice(model).Search(toSearch)
-	model[index] = model[len(model)-1]
+	copy(model[index:], model[index+1:])
 	model[len(model)-1] = ""
 	model = model[:len(model)-1]
 	return model

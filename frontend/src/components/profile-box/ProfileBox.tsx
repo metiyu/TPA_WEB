@@ -2,6 +2,7 @@ import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import Avatar from '@mui/material/Avatar';
 import { addDoc, collection, onSnapshot, query } from 'firebase/firestore';
 import { useEffect, useState } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { UseCurrentUser } from "../../contexts/userCtx";
@@ -16,11 +17,19 @@ export default function ProfileBox() {
     const [dropdownClassname, setDropdownClassname] = useState("edit__profile_invisible")
     const [greyBackground, setGreyBackground] = useState("overlay_invisible")
     const { id } = useParams()
-    const { data, loading, error } = useQuery(GET_USER, {
+    const { data: dataNonCurrUser, loading: loadingNonCurrUser, error: errorNonCurrUser } = useQuery(GET_USER, {
         variables: {
             id: id
         }
     })
+    const { data: dataCurrUser, loading: loadingCurrUser, error: errorCurrUser } = useQuery(GET_USER, {
+        variables: {
+            id: getUser().id
+        }
+    })
+
+    console.log(dataCurrUser);
+    console.log(dataNonCurrUser);
 
     function handleShowEditProfile() {
         if (dropdownClassname == "edit__profile_invisible") {
@@ -38,24 +47,27 @@ export default function ProfileBox() {
     const [button, setButton] = useState("connect")
 
     useEffect(() => {
-        if (!loading) {
-            if (getUser().pending_request != null) {
-                if (getUser().pending_request.length > 0) {
-                    if (getUser().pending_request.includes(data.user.id)) {
+        if (dataCurrUser && dataNonCurrUser) {
+            console.log(dataCurrUser);
+            console.log(dataNonCurrUser);
+
+            if (dataCurrUser.user.pending_request != null) {
+                if (dataCurrUser.user.pending_request.length > 0) {
+                    if (dataCurrUser.user.pending_request.includes(dataNonCurrUser.user.id)) {
                         setButton("pending")
                     }
                 }
             }
-            if (getUser().connected_user != null) {
-                if (getUser().connected_user.length > 0) {
-                    if (getUser().connected_user.includes(data.user.id)) {
+            if (dataCurrUser.user.connected_user != null) {
+                if (dataCurrUser.user.connected_user.length > 0) {
+                    if (dataCurrUser.user.connected_user.includes(dataNonCurrUser.user.id)) {
                         setButton("unconnect")
                     }
                 }
             }
-            if (getUser().followed_user != null) {
-                if (getUser().followed_user.length > 0) {
-                    if (getUser().followed_user.includes(data.user.id)) {
+            if (dataCurrUser.user.followed_user != null) {
+                if (dataCurrUser.user.followed_user.length > 0) {
+                    if (dataCurrUser.user.followed_user.includes(dataNonCurrUser.user.id)) {
                         setFollowBtn("unfollow")
                     }
                     else {
@@ -63,15 +75,14 @@ export default function ProfileBox() {
                     }
                 }
             }
-            console.log(getUser());
         }
-    }, [data])
+    }, [dataNonCurrUser])
 
     function handleConnect() {
         sendConnectFunc({
             variables: {
-                id: getUser().id,
-                requestedId: data.user.id
+                id: dataCurrUser.user.id,
+                requestedId: dataNonCurrUser.user.id
             }
         }).then((e) => {
             console.log("success");
@@ -85,8 +96,8 @@ export default function ProfileBox() {
     function handleUnconnect() {
         unconnectFunc({
             variables: {
-                id: getUser().id,
-                unconnectedId: data.user.id
+                id: dataCurrUser.user.id,
+                unconnectedId: dataNonCurrUser.user.id
             }
         }).then((e) => {
             console.log("success");
@@ -102,8 +113,8 @@ export default function ProfileBox() {
     function handleFollow() {
         followFunc({
             variables: {
-                id: getUser().id,
-                followedId: data.user.id
+                id: dataCurrUser.user.id,
+                followedId: dataNonCurrUser.user.id
             }
         }).then((e) => {
             console.log("success");
@@ -115,8 +126,8 @@ export default function ProfileBox() {
     function handleUnfollow() {
         unfollowFunc({
             variables: {
-                id: getUser().id,
-                unfollowedId: data.user.id
+                id: dataCurrUser.user.id,
+                unfollowedId: dataNonCurrUser.user.id
             }
         }).then((e) => {
             console.log("success");
@@ -128,15 +139,20 @@ export default function ProfileBox() {
     const navigate = useNavigate()
     const [room, setRoom] = useState([{}])
     function handleMakeChatRoom() {
-        const q = query(collection(db, "rooms"))
-        onSnapshot(q, (docs) => {
-            let array = [{}]
-            docs.forEach(doc => {
-                if (doc.data().users_id.includes(id) && doc.data().users_id.includes(getUser().id))
-                    array.push({ ...doc.data(), id: doc.id })
-            })
-            handleNavigate(array)
-        })
+        if (dataCurrUser.user.connected_user != null) {
+            if (dataCurrUser.user.connected_user.includes(id)) {
+                const q = query(collection(db, "rooms"))
+                onSnapshot(q, (docs) => {
+                    let array = [{}]
+                    docs.forEach(doc => {
+                        if (doc.data().users_id.includes(id) && doc.data().users_id.includes(dataCurrUser.user.id))
+                            array.push({ ...doc.data(), id: doc.id })
+                    })
+                    handleNavigate(array)
+                })
+            }
+        }
+        toast("User is not connected yet")
     }
 
     function handleNavigate(array: any) {
@@ -145,7 +161,7 @@ export default function ProfileBox() {
         }
         else {
             addDoc(collection(db, "rooms"), {
-                users_id: [getUser().id, id]
+                users_id: [dataCurrUser.user.id, id]
             }).then((e) => {
                 navigate('/message/' + id)
                 console.log(e);
@@ -155,8 +171,9 @@ export default function ProfileBox() {
 
     return (
         <>
-            {!data ? (
+            {!dataNonCurrUser ? (
                 <div className="default__profile">
+                    <Toaster position="top-right" />
                     <div className="cover__photo">
                         {currUser.photo_background ? (
                             <img src={currUser.photo_background} alt="" />
@@ -191,6 +208,7 @@ export default function ProfileBox() {
                 </div>
             ) : (
                 <div className="default__profile">
+                    <Toaster position="top-right" />
                     <div className="cover__photo">
                         {currUser.photo_background ? (
                             <img src={currUser.photo_background} alt="" />
@@ -198,21 +216,21 @@ export default function ProfileBox() {
                             <img src="https://i.picsum.photos/id/599/800/200.jpg?hmac=OHWF33Uii02mcUZCEh6O8PgadRmKGNNfM_34vHv952c" alt="" />
                         )}
                     </div>
-                    <Avatar className="profile__photo" src={data.user.photo_profile} />
-                    <h3>{data.user.name}</h3>
-                    {data.user.work ? (
-                        <h4>{data.user.work}</h4>
+                    <Avatar className="profile__photo" src={dataNonCurrUser.user.photo_profile} />
+                    <h3>{dataNonCurrUser.user.name}</h3>
+                    {dataNonCurrUser.user.work ? (
+                        <h4>{dataNonCurrUser.user.work}</h4>
                     ) : ("")}
-                    {data.user.education ? (
-                        <h4>{data.user.education}</h4>
+                    {dataNonCurrUser.user.education ? (
+                        <h4>{dataNonCurrUser.user.education}</h4>
                     ) : ("")}
                     <div className="sub__information">
-                        {data.user.region ? (
-                            <p>{data.user.region}</p>
+                        {dataNonCurrUser.user.region ? (
+                            <p>{dataNonCurrUser.user.region}</p>
                         ) : ("")}
                     </div>
-                    {data.user.connected_user ? (
-                        <p className="connection">{data.user.connected_user.length} Connection</p>
+                    {dataNonCurrUser.user.connected_user ? (
+                        <p className="connection">{dataNonCurrUser.user.connected_user.length} Connection</p>
                     ) : ("")}
                     <div className="buttons">
                         {followBtn == "follow" ? (

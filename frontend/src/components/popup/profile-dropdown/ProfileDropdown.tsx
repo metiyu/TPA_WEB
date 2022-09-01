@@ -10,7 +10,7 @@ export default function ProfileDropdown() {
 
     function handleSignout() {
         localStorage.removeItem('user')
-        navigate('/')
+        window.location.reload()
     }
 
     return (

@@ -9,6 +9,7 @@ export default function CurrentUserProvider({ children }: { children: any }) {
 
     function getUserFromStorage() {
         const userLoad = localStorage.getItem('user') || ""
+        
         if (userLoad === "")
             return false
         const user = JSON.parse(userLoad)

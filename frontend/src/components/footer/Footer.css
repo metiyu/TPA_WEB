@@ -1,0 +1,26 @@
+.footer__allpages {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: 100%;
+  background-color: var(--primary);
+  color: var(--text_accent);
+  text-align: center;
+}
+.footer__allpages a {
+  color: var(--text_accent);
+}
+.footer__allpages .logo {
+  height: 20px;
+  width: auto;
+  padding-right: 5px;
+}
+.footer__allpages .footer__logo_container {
+  display: flex;
+  padding-left: 20px;
+}/*# sourceMappingURL=Footer.css.map */

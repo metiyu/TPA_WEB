@@ -17,6 +17,7 @@
   height: fit-content;
   padding-top: 10px;
   padding-bottom: 10px;
+  max-height: 250px;
 }
 .widgets h2 {
   font-size: 16px;

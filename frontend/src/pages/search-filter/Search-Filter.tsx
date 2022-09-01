@@ -43,6 +43,7 @@ export default function SearchFilter() {
                             <SearchPeople props={data} />
                         )
                     ) : ""}
+                    
                 </div>
             </>
         </div>

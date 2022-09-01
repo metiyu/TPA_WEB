@@ -1,3 +1,4 @@
+import Footer from '../../components/footer/Footer'
 import Header from '../../components/header/Header'
 import Invitations from '../../components/invitations/Invitations'
 import UserYouMightKnow from '../../components/you-might-know/UserYouMightKnow'
@@ -13,6 +14,7 @@ export default function MyNetwork() {
                 <div className='profile__body'>
                     <Invitations />
                     <UserYouMightKnow />
+                    <Footer />
                 </div>
             </>
         </div>

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./SignIn.css";
 import logo from '../../assets/logo.png'
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "@apollo/client";
-import { LOGIN_QUERY } from "../../mutation-queries";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { LOGIN_QUERY, REGISTER_BY_GOOGLE_QUERY } from "../../mutation-queries";
 import { UseCurrentUser } from "../../contexts/userCtx";
 import toast, { Toaster } from 'react-hot-toast';
-import { GET_USER } from "../../query-queries";
+import { GET_USER, GET_USER_BY_EMAIL } from "../../query-queries";
+import { CredentialModel, CredentialResponse, GsiButtonConfiguration, PromptMomentNotification } from "./GoogleModel";
+import { ParseJwt } from "./token";
 
 export default function SignIn() {
     const [email, setEmail] = useState(() => "");
@@ -24,7 +26,7 @@ export default function SignIn() {
             }
         })
         if (!loading) {
-            if(data == undefined){
+            if (data == undefined) {
                 window.localStorage.removeItem("user")
             }
         }
@@ -52,7 +54,7 @@ export default function SignIn() {
         }).then((e) => {
             console.log("success login");
             console.log(data);
-            
+
             if (data && data.login.token !== undefined) {
                 const user = data.login
                 console.log(user);
@@ -67,6 +69,72 @@ export default function SignIn() {
                 toast.error("Your account is not activated")
             else
                 toast.error(err.message)
+        })
+    }
+
+    const clientId = "440667264331-m1jjflq6en71gboicmvv626q05dgovvv.apps.googleusercontent.com"
+    const googleId = window.google?.accounts.id
+    useEffect(() => {
+        googleId?.initialize({
+            client_id: clientId,
+            callback: handleCallBack
+        })
+
+        googleId?.renderButton
+            (
+                document.getElementById("GoogleSignIn") as HTMLElement,
+                {
+                    type: "standard",
+                    theme: "outline",
+                    size: "large",
+                    text: "signup_with",
+                    shape: "pill",
+                    width: "350px",
+                } as GsiButtonConfiguration,
+
+            )
+
+        googleId?.prompt((notification: PromptMomentNotification) => {
+            notification.isDisplayed()
+        })
+
+    }, [])
+
+    const [getUserByEmailFunc, { data: userData, loading: userLoading }] = useLazyQuery(GET_USER_BY_EMAIL)
+    const [registerUserByGoogle] = useMutation(REGISTER_BY_GOOGLE_QUERY)
+    const handleCallBack = (response: CredentialResponse) => {
+        const credentialData = ParseJwt(response.credential as string) as CredentialModel
+        getUserByEmailFunc({
+            variables: {
+                email: credentialData.email
+            }
+        }).then((e) => {
+            if (e.error) {
+                if (e.error?.message == "record not found") {
+                    registerUserByGoogle({
+                        variables: {
+                            email: credentialData.email,
+                            email_verified: credentialData.email_verified,
+                            name: credentialData.name,
+                            id: credentialData.sub,
+                            picture: credentialData.picture
+                        }
+                    }).then((e) => {
+                        getUserByEmailFunc({
+                            variables: {
+                                email: credentialData.email
+                            }
+                        }).then((e) => {
+                            setUserToStorage(e.data.getUserByEmail);
+                            navigate('/feed')
+                        })
+                    })
+                }
+            }
+            else {
+                setUserToStorage(e.data.getUserByEmail);
+                navigate('/feed')
+            }
         })
     }
 
@@ -100,10 +168,7 @@ export default function SignIn() {
                 </button>
                 <hr className="hr-text" data-content="OR" />
             </form>
-            <button className="another_button" /*onclick*/>
-                <img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="" />
-                Sign in with Google
-            </button>
+            <div id="GoogleSignIn"></div>
 
             <p>
                 New to LinkedIn? {` `}

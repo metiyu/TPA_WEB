@@ -1,3 +1,4 @@
+import Footer from '../../components/footer/Footer'
 import Header from '../../components/header/Header'
 import MessageBox from '../../components/message-box/MessageBox'
 import { UseCurrentTheme } from '../../contexts/themeCtx'
@@ -11,6 +12,7 @@ export default function Message() {
                 <Header />
                 <div className='app__body'>
                     <MessageBox />
+                    <Footer />
                 </div>
             </>
         </div>

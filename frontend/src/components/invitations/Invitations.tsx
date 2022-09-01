@@ -7,26 +7,37 @@ import ProfileCard from './ProfileCard'
 
 export default function Invitations() {
     const { getUser } = UseCurrentUser()
-    console.log(getUser().request_connect);
+    const { data, loading } = useQuery(GET_USER, {
+        variables: {
+            id: getUser().id
+        }
+    })
+    if (data)
+        console.log(data.user);
 
     return (
-        <div className="container__invitations">
-            <div className='container__header'>
-                <p>Invitations</p>
-                <button>Manage</button>
-            </div>
-            <div className='container__cards'>
-                {getUser().request_connect ?
-                    getUser().request_connect.length != 0 ?
-                        getUser().request_connect.map((user: any) =>
-                            <>
-                                <hr />
-                                <ProfileCard props={user} />
-                            </>
-                        ) : ""
-                    : ""
-                }
-            </div>
-        </div>
+        <>
+            {data ?
+                <div className="container__invitations">
+                    <div className='container__header'>
+                        <p>Invitations</p>
+                        <button>Manage</button>
+                    </div>
+                    <div className='container__cards'>
+                        {data.user.request_connect ?
+                            data.user.request_connect.length != 0 ?
+                                data.user.request_connect.map((user: any) =>
+                                    <>
+                                        <hr />
+                                        <ProfileCard props={user} />
+                                    </>
+                                ) : ""
+                            : ""
+                        }
+                    </div>
+                </div>
+                : ""}
+        </>
+
     )
 }

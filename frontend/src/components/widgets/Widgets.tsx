@@ -9,7 +9,7 @@ export default function Widgets() {
     const links = [
         { title: "Home", link: "/feed" },
         { title: "My Network", link: "/mynetwork" },
-        { title: "Jobs", link: "/feed" },
+        { title: "Jobs", link: "/jobs" },
         { title: "Message", link: "/message" },
         { title: "Profile", link: "/profile" }
     ]

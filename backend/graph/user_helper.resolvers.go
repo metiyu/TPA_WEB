@@ -6,6 +6,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/google/uuid"
 	"github.com/metiyu/gqlgen-linkhedin/graph/generated"
@@ -82,6 +83,19 @@ func (r *queryResolver) Search(ctx context.Context, keyword string, limit int, o
 	}
 
 	return search, nil
+}
+
+// SearchConnectedUser is the resolver for the searchConnectedUser field.
+func (r *queryResolver) SearchConnectedUser(ctx context.Context, keyword string) (interface{}, error) {
+	if keyword == "" {
+		keyword = "%"
+	}
+
+	var users []*model.User
+	if err := r.DB.Find(&users, "LOWER(name) like ?", "%"+strings.ToLower(keyword)+"%").Error; err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
 // Users is the resolver for the users field.

@@ -51,7 +51,7 @@ export default function ProfileCard({ props }: { props: any }) {
         <>
             {!loading ? (
                 <div className="container__card">
-                    <Avatar className="avatar" src={"https://picsum.photos/200"} />
+                    <Avatar className="avatar" src={data.user.photo_profile} />
                     <div className="card__description">
                         <p className="name">{data.user.name}</p>
                         <p className="work">{data.user.work}</p>

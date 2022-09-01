@@ -5,6 +5,11 @@ export const REGISTER_QUERY = gql`
         register(input: $input)
     }`;
 
+export const REGISTER_BY_GOOGLE_QUERY = gql`
+    mutation RegisterByGoogle($email: String!, $email_verified: Boolean!, $name: String!, $id: String!, $picture: String!){
+        registerByGoogle(email: $email, email_verified: $email_verified, name: $name, id: $id, picture: $picture)
+    }`;
+
 export const LOGIN_QUERY = gql`
     mutation Login($email: String!, $password: String!){
         login(email: $email, password: $password)

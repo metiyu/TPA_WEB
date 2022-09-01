@@ -1,6 +1,6 @@
 .container__messagebox {
   width: 60%;
-  min-height: 600px;
+  min-height: 550px;
   background-color: var(--primary);
   border-radius: 10px;
   border: 1px solid var(--border_accent);
@@ -11,6 +11,10 @@
   display: flex;
   flex-direction: column;
   width: 40%;
+}
+.container__messagebox .container__people input {
+  text-decoration: none;
+  border: 0;
 }
 .container__messagebox .container__people p {
   padding: 15px;
@@ -70,4 +74,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+.container__messagebox .container__message .search_connected_user__container {
+  min-height: 100px;
+  max-height: 400px;
+  overflow-y: auto;
 }/*# sourceMappingURL=MessageBox.css.map */

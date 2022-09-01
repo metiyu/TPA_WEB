@@ -1,3 +1,4 @@
+import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import Analytics from "../../components/profile-box/Analytics";
 import ProfileBox from "../../components/profile-box/ProfileBox";
@@ -12,6 +13,7 @@ export default function Profile() {
                 <div className="profile__body">
                     <ProfileBox />
                     <Analytics />
+                    <Footer />
                 </div>
             </>
         </div>

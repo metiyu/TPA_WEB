@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import { UseCurrentUser } from './contexts/userCtx'
 import Homepage from './pages/homepage/Homepage'
 import Message from './pages/message/Message'
@@ -14,15 +14,16 @@ import SearchFilter from './pages/search-filter/Search-Filter'
 import { useEffect } from 'react'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { GET_USER } from './query-queries'
+import { ProtectedRoute, UnprotectedRoute } from './middleware/Middleware'
 
 export default function Middleman() {
     const { getUser, setUserToStorage } = UseCurrentUser()
 
     const [updateUser, { loading, called, data }] = useLazyQuery(GET_USER, {
-            variables: {
-                id: getUser().id
-            }
-        })
+        variables: {
+            id: getUser().id
+        }
+    })
 
     if (!called) {
         if (window.performance) {
@@ -31,31 +32,51 @@ export default function Middleman() {
             }
         }
     }
-    
+
 
     // useEffect(() => {
     //     if(data != undefined)
     //         setUserToStorage(data)
     // }, [data])
 
+    const Protected = () => {
+        return (
+            <ProtectedRoute>
+                <Outlet></Outlet>
+            </ProtectedRoute>
+        )
+    }
+
+    const Unprotected = () => {
+        return (
+            <UnprotectedRoute>
+                <Outlet></Outlet>
+            </UnprotectedRoute>
+        )
+    }
+
     return (
         <BrowserRouter>
             <Routes>
                 {/* <Route path='' element={< />} /> */}
-                <Route path='/' element={<SignIn />} />
-                <Route path='/sign-up' element={<SignUp />} />
-                <Route path='/:id' element={<Activation />} />
-                <Route path='/forgot-password' element={<ForgotPassword />} />
-                <Route path='/code-verification/:id' element={<CodeFromEmail />} />
-                <Route path='/reset-password/:id' element={<ResetPassword />} />
-                <Route path='/feed:limit' element={<Homepage />} />
-                <Route path='/feed' element={<Homepage />} />
-                <Route path='/mynetwork' element={<MyNetwork />} />
-                <Route path='/message/:id' element={<Message />} />
-                <Route path='/message' element={<Message />} />
-                <Route path='/profile/:id' element={<Profile />} />
-                <Route path='/profile' element={<Profile />} />
-                <Route path='/search/:type/keyword=:keyword/page=:page' element={<SearchFilter />} />
+                <Route element={<Unprotected />}>
+                    <Route path='/' element={<SignIn />} />
+                    <Route path='/sign-up' element={<SignUp />} />
+                    <Route path='/:id' element={<Activation />} />
+                    <Route path='/forgot-password' element={<ForgotPassword />} />
+                    <Route path='/code-verification/:id' element={<CodeFromEmail />} />
+                    <Route path='/reset-password/:id' element={<ResetPassword />} />
+                </Route>
+                <Route element={<Protected />}>
+                    <Route path='/feed:limit' element={<Homepage />} />
+                    <Route path='/feed' element={<Homepage />} />
+                    <Route path='/mynetwork' element={<MyNetwork />} />
+                    <Route path='/message/:id' element={<Message />} />
+                    <Route path='/message' element={<Message />} />
+                    <Route path='/profile/:id' element={<Profile />} />
+                    <Route path='/profile' element={<Profile />} />
+                    <Route path='/search/:type/keyword=:keyword/page=:page' element={<SearchFilter />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     )

@@ -35,6 +35,29 @@ func CreateUser(ctx context.Context, newUser model.NewUser) (*model.User, error)
 	return &user, nil
 }
 
+func CreateUserByGoogle(ctx context.Context, email string, email_verified bool, name string, id string, picture string) (*model.User, error) {
+	db := database.GetDB()
+	var emptyArrString []string
+	user := model.User{
+		ID:             id,
+		Name:           name,
+		Email:          strings.ToLower(email),
+		Password:       "",
+		Validate:       false,
+		Work:           "",
+		Region:         "",
+		PhotoProfile:   picture,
+		RequestConnect: emptyArrString,
+		FollowedUser:   emptyArrString,
+		ConnectedUser:  emptyArrString,
+		PendingRequest: emptyArrString,
+	}
+	if err := db.Model(user).Create(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
+}
+
 func UserGetByID(ctx context.Context, id string) (*model.User, error) {
 	db := database.GetDB()
 	var user model.User

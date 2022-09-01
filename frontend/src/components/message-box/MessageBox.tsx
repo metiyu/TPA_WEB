@@ -6,10 +6,10 @@ import './MessageBox.css'
 import ImageIcon from '@mui/icons-material/Image';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { UseCurrentUser } from '../../contexts/userCtx'
-import { useQuery } from '@apollo/client'
-import { GENERATE_ID, GET_USER } from '../../query-queries'
+import { useLazyQuery, useQuery } from '@apollo/client'
+import { GENERATE_ID, GET_USER, SEARCH_CONNECTED_USER_QUERY } from '../../query-queries'
 import toast from 'react-hot-toast'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import PeopleBubble from './PeopleBubble'
 
 export default function MessageBox() {
@@ -34,7 +34,8 @@ export default function MessageBox() {
         onSnapshot(q, (docs) => {
             let array = [{}]
             docs.forEach(doc => {
-                array.push({ ...doc.data(), id: doc.id })
+                if (doc.data().users_id.includes(getUser().id))
+                    array.push({ ...doc.data(), id: doc.id })
                 if (doc.data().users_id.includes(getUser().id) && doc.data().users_id.includes(id))
                     setRoomID(doc.id)
             })
@@ -90,17 +91,63 @@ export default function MessageBox() {
 
     function handleMessage(e: any) {
         setMessage(e)
-        if (e == "") {
+        if (e == "" || id == undefined) {
             setBtnClassname("send_button__false")
         } else {
             setBtnClassname("send_button__true")
         }
     }
 
-    if (chats[1])
-        console.log(chats[1].createdAt);
+    const [searchUser, { data: searchData, loading: searchLoading }] = useLazyQuery(SEARCH_CONNECTED_USER_QUERY)
 
-    // console.log(new Date(chats[1].createdAt.seconds * 1000 + chats[1].createdAt.nanoseconds / 1000000));
+    const [keyword, setKeyword] = useState("")
+    function handleSearchConnectedUser(e: any) {
+        setKeyword(e)
+        searchUser({
+            variables: {
+                keyword: e
+            }
+        })
+    }
+
+    function handleMakeChatRoom(e: any) {
+        console.log(e);
+        console.log(getUser());
+        if (getUser().connected_user != null) {
+            if (getUser().connected_user.includes(e.id)) {
+                const q = query(collection(db, "rooms"))
+                onSnapshot(q, (docs) => {
+                    let array = [{}]
+                    docs.forEach(doc => {
+                        if (doc.data().users_id.includes(e.id) && doc.data().users_id.includes(getUser().id))
+                            array.push({ ...doc.data(), id: doc.id })
+                    })
+                    handleNavigate(array)
+                })
+            }
+            else {
+                navigate('/profile/' + e.id)
+            }
+        }
+        else {
+            navigate('/profile/' + e.id)
+        }
+    }
+
+    const navigate = useNavigate()
+    function handleNavigate(array: any) {
+        if (array[1] != undefined) {
+            navigate('/message/' + id)
+        }
+        else {
+            addDoc(collection(db, "rooms"), {
+                users_id: [getUser().id, id]
+            }).then((e) => {
+                navigate('/message/' + id)
+                console.log(e);
+            })
+        }
+    }
 
     return (
         <>
@@ -109,8 +156,7 @@ export default function MessageBox() {
                     <div className='container__people'>
                         <p>Messaging</p>
                         <hr />
-                        <input type="text" placeholder='Find Connected User...' />
-                        {rooms.map((room) =>
+                        {rooms.map((room: any) =>
                             room.id != undefined ?
                                 <PeopleBubble props={room} /> : ""
                         )}
@@ -120,21 +166,21 @@ export default function MessageBox() {
                         <p>{data.user.name}</p>
                         <hr />
                         <div className='chat__bubble__section'>
-                            {chats.map((chat) =>
+                            {chats.map((chat: any) =>
                                 chat != {} ?
                                     chat.createdAt != undefined ?
                                         chat.sender != getUser().id ?
                                             // console.log(new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000))
                                             <div className='left__bubble_chat'>
-                                                <p>{new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getHours().toString().padStart(2, "0")}:  
-                                                {new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getMinutes().toString().padStart(2, "0")}</p>
-                                                <p>{chat.message}</p>
+                                                <p>{new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getHours().toString().padStart(2, "0")}:
+                                                    {new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getMinutes().toString().padStart(2, "0")}</p>
+                                                <div>{chat.message}</div>
                                             </div>
                                             :
                                             <div className='right__bubble_chat'>
-                                                <p>{new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getHours().toString().padStart(2, "0")}:  
-                                                {new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getMinutes().toString().padStart(2, "0")}</p>
-                                                <p>{chat.message}</p>
+                                                <p>{new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getHours().toString().padStart(2, "0")}:
+                                                    {new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getMinutes().toString().padStart(2, "0")}</p>
+                                                <div>{chat.message}</div>
                                             </div>
                                         : ""
                                     : ""
@@ -160,7 +206,57 @@ export default function MessageBox() {
                         </div>
                     </div>
                 </div>
-                : ""}
+                :
+                <div className='container__messagebox'>
+                    <div className='container__people'>
+                        <p>Messaging</p>
+                        <hr />
+                        {rooms.map((room: any) =>
+                            room.id != undefined ?
+                                <PeopleBubble props={room} /> : ""
+                        )}
+                    </div>
+                    <hr />
+                    <div className='container__message'>
+                        <p>New Message</p>
+                        <hr />
+                        <input type="text" placeholder='Find Connected User...' onChange={(e) => handleSearchConnectedUser(e.target.value)} />
+                        <hr />
+                        <div className='search_connected_user__container'>
+                            {searchData ?
+                                searchData.searchConnectedUser.map((search: any) =>
+                                    search.id != getUser().id ?
+                                        <div onClick={() => handleMakeChatRoom(search)}>
+                                            <p>{search.name}</p>
+                                            <hr />
+                                        </div>
+                                        : ""
+                                )
+                                : ""}
+                        </div>
+                        <div className='chat__bubble__section'>
+                        </div>
+                        <hr />
+                        <div className='chat__section'>
+                            <input type="text" value={message}
+                                onChange={(e) => handleMessage(e.target.value)} />
+                            <div className='input__file'>
+                                <label htmlFor="postPhoto">
+                                    <div className='icon'>
+                                        <ImageIcon />
+                                    </div>
+                                </label>
+                                <input className='input_file' type="file" id="postPhoto" name="postPhoto" accept="image/png, image/gif, image/jpeg" onChange={(e) => handleSetContent(e)} />
+                            </div>
+                            {btnClassname == "post_button__false" ?
+                                <button className={btnClassname} disabled>Send</button>
+                                :
+                                <button className={btnClassname} onClick={() => sendChat(getUser().id)}>Send</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
         </>
     )
 }

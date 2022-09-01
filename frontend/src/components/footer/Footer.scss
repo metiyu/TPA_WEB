@@ -1,0 +1,27 @@
+.footer__allpages {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: fit-content;
+    width: 100%;
+    background-color: var(--primary);
+    color: var(--text_accent);
+    text-align: center;
+
+    a {
+        color: var(--text_accent);
+    }
+
+    .logo {
+        height: 20px;
+        width: auto;
+        padding-right: 5px;
+    }
+
+    .footer__logo_container{
+        display: flex;
+        padding-left: 20px;
+    }
+}

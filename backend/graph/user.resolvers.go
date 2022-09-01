@@ -17,6 +17,11 @@ func (r *mutationResolver) Register(ctx context.Context, input model.NewUser) (i
 	return service.UserRegister(ctx, input)
 }
 
+// RegisterByGoogle is the resolver for the registerByGoogle field.
+func (r *mutationResolver) RegisterByGoogle(ctx context.Context, email string, emailVerified bool, name string, id string, picture string) (interface{}, error) {
+	return service.UserRegisterByGoogle(ctx, email, emailVerified, name, id, picture)
+}
+
 // Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, email string, password string) (interface{}, error) {
 	return service.UserLogin(ctx, email, password)
@@ -87,6 +92,11 @@ func (r *queryResolver) UserYouMightKnow(ctx context.Context, id string) (interf
 	return service.UserYouMightKnow(ctx, id)
 }
 
+// GetUserByEmail is the resolver for the getUserByEmail field.
+func (r *queryResolver) GetUserByEmail(ctx context.Context, email string) (interface{}, error) {
+	return service.GetUserByEmail(ctx, email)
+}
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
@@ -102,6 +112,9 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *mutationResolver) LoginByGoogle(ctx context.Context, email string, emailVerified bool, name string, id string, picture string) (interface{}, error) {
+	panic(fmt.Errorf("not implemented"))
+}
 func (r *mutationResolver) UserYouMightKnow(ctx context.Context, id string) (interface{}, error) {
 	return service.UserYouMightKnow(ctx, id)
 }

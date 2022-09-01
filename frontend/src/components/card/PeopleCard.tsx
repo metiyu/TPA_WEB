@@ -1,9 +1,10 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Avatar } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UseCurrentUser } from "../../contexts/userCtx";
 import { SEND_CONNECT_QUERY, UNCONNECT_USER_QUERY } from "../../mutation-queries";
+import { GET_USER } from "../../query-queries";
 import './PeopleCard.css'
 
 export default function PeopleCard({ props }: { props: any }) {
@@ -15,16 +16,21 @@ export default function PeopleCard({ props }: { props: any }) {
 
     console.log(getUser());
     console.log(props);
-    
+
+    const { data, loading, error } = useQuery(GET_USER, {
+        variables: {
+            id: getUser().id
+        }
+    })
 
     useEffect(() => {
-        if (getUser().pending_request != null) {
-            if (getUser().pending_request.includes(props.id)) {
+        if (data.user.pending_request != null) {
+            if (data.user.pending_request.includes(props.id)) {
                 setButton("pending")
             }
         }
-        if (getUser().connected_user != null) {
-            if (getUser().connected_user.includes(props.id)) {
+        if (data.user.connected_user != null) {
+            if (data.user.connected_user.includes(props.id)) {
                 setButton("unconnect")
             }
         }

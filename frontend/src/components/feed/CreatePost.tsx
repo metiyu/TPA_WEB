@@ -76,6 +76,7 @@ export default function CreatePost() {
                 }
             }).then((e) => {
                 console.log(e);
+                window.location.reload()
             }).catch((err) => {
                 console.log(err);
             }), {

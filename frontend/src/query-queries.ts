@@ -5,6 +5,11 @@ export const GET_USER = gql`
         user(id: $id)
     }`;
 
+export const GET_USER_BY_EMAIL = gql`
+    query GetUserByEmail($email: String!) {
+        getUserByEmail(email: $email)
+    }`;
+
 export const GET_LINK_QUERY = gql`
     query GetLink($id: String!) {
         getLink(id: $id) {
@@ -23,6 +28,11 @@ query GetForgetCode($id: String!) {
 export const SEARCH_QUERY = gql`
 query Search($keyword: String!, $limit: Int!, $offset: Int!){
     search(keyword: $keyword, limit: $limit, offset: $offset)
+    }`;
+
+export const SEARCH_CONNECTED_USER_QUERY = gql`
+    query SearchConnectedUser($keyword: String!){
+        searchConnectedUser(keyword: $keyword)
     }`;
 
 export const USER_YOU_MIGHT_KNOW_QUERY = gql`

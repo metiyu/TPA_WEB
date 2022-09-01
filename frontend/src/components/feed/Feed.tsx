@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Feed.css";
 import CreateIcon from '@mui/icons-material/Create';
 import ImageIcon from '@mui/icons-material/Image';
@@ -36,11 +36,37 @@ function Feed() {
     const { data, loading, fetchMore } = useQuery(GET_POSTS, {
         variables: {
             id: getUser().id,
-            limit: 2,
+            limit: 5,
             offset: 0
         }
     })
     const [getUserById] = useLazyQuery(GET_USER)
+
+    function handleLoadMore() {
+        fetchMore({
+            variables: {
+                offset: data.getPosts.length
+            }
+        })
+    }
+
+    const ref = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        console.log(data);
+        const onScroll: EventListener = (event: Event) => {
+            if (ref) {
+                if (ref?.current?.offsetHeight) {
+                    if (window.innerHeight + window.scrollY >= ref?.current?.offsetHeight) {
+                        handleLoadMore()
+                    }
+                }
+            }
+        }
+        window.addEventListener("scroll", onScroll);
+        return () => {
+            window.removeEventListener("scroll", onScroll)
+        }
+    }, [])
 
     return (
         <>
@@ -70,7 +96,7 @@ function Feed() {
                             <div className="feed__input" onClick={() => handleShowCreatePost()}>
                                 <CreateIcon />
                             </div>
-                            <div className="feed__inputOptions">
+                            {/* <div className="feed__inputOptions">
                                 <InputOption Icon={ImageIcon} title="Photo" color="#70B5F9" />
                                 <InputOption Icon={SubscriptionsIcon} title="Video" color="#E7A33E" />
                                 <InputOption Icon={EventNoteIcon} title="Event" color="#C0CBCD" />
@@ -79,9 +105,9 @@ function Feed() {
                                     title="Write article"
                                     color="#7FC15E"
                                 />
-                            </div>
+                            </div> */}
                         </div>
-                        <div className="post__container">
+                        <div className="post__container" ref={ref}>
                             {data ?
                                 data.getPosts.map((post: any) =>
                                     <Post
