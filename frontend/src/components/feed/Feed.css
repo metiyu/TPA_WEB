@@ -84,4 +84,33 @@
 
 #overlay_invisible {
   display: none;
+}
+
+.loadmore__button {
+  display: flex;
+  justify-content: center;
+}
+.loadmore__button button {
+  background-color: var(--primary);
+  color: var(--normal_accent);
+  border: 1px solid var(--normal_accent);
+  font-size: small;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 20px;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-weight: 600;
+}
+.loadmore__button button:hover {
+  background-color: var(--hover_accent);
+  border: 2px solid var(--normal_accent);
+}
+
+.loading__feed {
+  display: flex;
+  width: 100px;
+  justify-content: center;
+  padding-left: 30%;
+  padding-right: 220px;
 }/*# sourceMappingURL=Feed.css.map */

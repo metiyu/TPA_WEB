@@ -48,6 +48,7 @@ export default function Middleman() {
                 <Route path='/forgot-password' element={<ForgotPassword />} />
                 <Route path='/code-verification/:id' element={<CodeFromEmail />} />
                 <Route path='/reset-password/:id' element={<ResetPassword />} />
+                <Route path='/feed:limit' element={<Homepage />} />
                 <Route path='/feed' element={<Homepage />} />
                 <Route path='/mynetwork' element={<MyNetwork />} />
                 <Route path='/message/:id' element={<Message />} />

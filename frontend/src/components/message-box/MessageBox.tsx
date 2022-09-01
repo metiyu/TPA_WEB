@@ -56,6 +56,9 @@ export default function MessageBox() {
         }
     }, [roomID])
 
+    console.log(chats);
+
+
     function sendChat(senderID: any) {
         addDoc(collection(db, "rooms", roomID, "chats"), {
             message: message,
@@ -94,6 +97,11 @@ export default function MessageBox() {
         }
     }
 
+    if (chats[1])
+        console.log(chats[1].createdAt);
+
+    // console.log(new Date(chats[1].createdAt.seconds * 1000 + chats[1].createdAt.nanoseconds / 1000000));
+
     return (
         <>
             {data ?
@@ -114,10 +122,21 @@ export default function MessageBox() {
                         <div className='chat__bubble__section'>
                             {chats.map((chat) =>
                                 chat != {} ?
-                                    chat.sender != getUser().id ?
-                                        <p className='left__bubble_chat'>{chat.message}</p>
-                                        :
-                                        <p className='right__bubble_chat'>{chat.message}</p>
+                                    chat.createdAt != undefined ?
+                                        chat.sender != getUser().id ?
+                                            // console.log(new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000))
+                                            <div className='left__bubble_chat'>
+                                                <p>{new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getHours().toString().padStart(2, "0")}:  
+                                                {new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getMinutes().toString().padStart(2, "0")}</p>
+                                                <p>{chat.message}</p>
+                                            </div>
+                                            :
+                                            <div className='right__bubble_chat'>
+                                                <p>{new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getHours().toString().padStart(2, "0")}:  
+                                                {new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getMinutes().toString().padStart(2, "0")}</p>
+                                                <p>{chat.message}</p>
+                                            </div>
+                                        : ""
                                     : ""
                             )}
                         </div>

@@ -36,7 +36,7 @@ func UserRegister(ctx context.Context, newUser model.NewUser) (interface{}, erro
 
 	verification := &model.ActivationLink{
 		ID:     newId,
-		Link:   "http://localhost:5173/" + newId,
+		Link:   "http://127.0.0.1:5173/" + newId,
 		UserID: createdUser.ID,
 	}
 

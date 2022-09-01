@@ -73,11 +73,13 @@
 
             .left__bubble_chat{
                 display: flex;
+                flex-direction: column;
             }
 
             .right__bubble_chat{
                 display: flex;
-                justify-content: flex-end;
+                flex-direction: column;
+                align-items: flex-end;
             }
 
         }

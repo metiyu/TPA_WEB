@@ -3,6 +3,7 @@ import { UseCurrentUser } from './contexts/userCtx'
 import { initializeApp } from 'firebase/app'
 import { firebaseConfig } from './config/firebase'
 import Middleman from './middleman'
+import { offsetLimitPagination } from '@apollo/client/utilities'
 
 function App() {
   const { user } = UseCurrentUser()
@@ -24,7 +25,15 @@ function App() {
 
   const client = new ApolloClient({
     link: auth_link.concat(httpLink),
-    cache: new InMemoryCache({}),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            getPosts: offsetLimitPagination()
+          },
+        },
+      },
+    })
   })
 
   initializeApp(firebaseConfig)

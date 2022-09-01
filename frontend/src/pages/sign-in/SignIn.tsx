@@ -51,6 +51,8 @@ export default function SignIn() {
             }
         }).then((e) => {
             console.log("success login");
+            console.log(data);
+            
             if (data && data.login.token !== undefined) {
                 const user = data.login
                 console.log(user);

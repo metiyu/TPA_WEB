@@ -1,15 +1,17 @@
 import "./Widgets.css";
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import logo from '../../assets/logo.png'
+import { useNavigate } from "react-router-dom";
 
 export default function Widgets() {
 
+    const navigate = useNavigate()
     const links = [
-        { title: "About", link: "https://about.linkedin.com/" },
-        { title: "Accesbility", link: "https://www.linkedin.com/accessibility" },
-        { title: "Help Center", link: "https://www.linkedin.com/help/linkedin" },
-        { title: "Privacy & Terms", link: "https://www.linkedin.com/legal/privacy-policy" },
-        { title: "Safety Center", link: "https://safety.linkedin.com/" }
+        { title: "Home", link: "/feed" },
+        { title: "My Network", link: "/mynetwork" },
+        { title: "Jobs", link: "/feed" },
+        { title: "Message", link: "/message" },
+        { title: "Profile", link: "/profile" }
     ]
 
     return (
@@ -19,7 +21,7 @@ export default function Widgets() {
             </div>
             <footer>
                 {links.map((item) => (
-                    <a className="link" onClick={() => window.open(item.link)} key={item.link}>{item.title}</a>
+                    <a className="link" onClick={() => navigate(item.link)} key={item.link}>{item.title}</a>
                 ))}
             </footer>
             <div className="logo__container">
