@@ -1,0 +1,25 @@
+register login jga hrs ad warna abu abu (60 30 10)
+theme hrs masuk local storage
+harus bkin responsive
+ketika regis email sama, benerin message error mnya
+tambahin tombol all di filter search
+waktu connect bisa kasi custom msg
+di bagian footer, bole tembak ke web linked in asli
+di login regis hrs ad footer
+setoap fetchmore dan loading, tampilin loading animasi
+order by timestamp kapan post
+bagian post cma bisa 1 foto atau video
+tambahin hover di profile post
+gausah refresh waktu like post (pke keunggulan react)
+tambahin load more di comment post
+bagian analytics di profile page bnerin, jgn dummy
+pas follow bsa liat posting an yg dibuat org di follow
+search connected user di msg bkin validasi hrs connected
+klo pencet user di search hrs ny buka chat, bukan buka profile dia
+
+perbedaan next js dan react js
+perbedaan dan keuntungan rest api & graphql
+keuntungan pke postgres
+apa itu microservices
+media komunikasi antar service itu apa
+apa ufngsi docker compose selain menjalankan dan me local host

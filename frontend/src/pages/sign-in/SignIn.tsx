@@ -72,7 +72,7 @@ export default function SignIn() {
         })
     }
 
-    const clientId = "440667264331-m1jjflq6en71gboicmvv626q05dgovvv.apps.googleusercontent.com"
+    const clientId = "72905273300-ab8lk319eu9r329qhto3pal87463qk55.apps.googleusercontent.com"
     const googleId = window.google?.accounts.id
     useEffect(() => {
         googleId?.initialize({
