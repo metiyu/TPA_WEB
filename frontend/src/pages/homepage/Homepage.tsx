@@ -11,7 +11,11 @@ export default function Homepage() {
     const { user } = UseCurrentUser()
     console.log(user);
 
-    const { getTheme } = UseCurrentTheme()
+    const { getTheme, getThemeFromStorage } = UseCurrentTheme()
+    console.log(getTheme());
+    const themeLoad = localStorage.getItem("theme") || ""
+        console.log(themeLoad == "\"light\"");
+    
 
     return (
         <div className="app" style={{ ...getTheme() }}>

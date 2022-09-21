@@ -12,6 +12,8 @@ import { GET_COMMENTS, GET_USER } from "../../query-queries";
 import { COMMENT_POST, LIKE_POST, UNLIKE_POST } from "../../mutation-queries";
 import { UseCurrentUser } from "../../contexts/userCtx";
 import Comment from "./Comment";
+import RichText from "../richtext/RichText";
+import HoverProfile from "../hover-modal/HoverProfile";
 
 const Post = forwardRef(({ props }: { props: any }, ref: any) => {
     const { getUser } = UseCurrentUser()
@@ -23,7 +25,9 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
         })
         const res2 = useQuery(GET_COMMENTS, {
             variables: {
-                postId: props.id
+                postId: props.id,
+                limit: 2,
+                offset: 0,
             }
         })
         return [res1, res2];
@@ -31,15 +35,19 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
 
     const [
         { loading: loading1, data: data1 },
-        { loading: loading2, data: data2 }
+        { loading: loading2, data: data2, fetchMore }
     ] = queryMultiple()
 
+    function handleLoadMore() {
+        // fetchMore({
+        //     variables: {
+        //         postId: props.id,
+        //         offset: data2.getComment.length
+        //     }
+        // })
+        console.log(data2);
 
-    // const { data, loading } = useQuery(GET_USER, {
-    //     variables: {
-    //         id: props.userId
-    //     }
-    // })
+    }
 
     const [likepostFunc] = useMutation(LIKE_POST)
     function handleLike() {
@@ -106,20 +114,25 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
         return false
     }
 
+    const [hovered, setHovered] = useState("hide_hover")
+
     return (
         <>
             {data1 ? (
                 <div ref={ref} className="post">
-                    <div className="post__header">
+                    <div className="post__header" onMouseEnter={() => setHovered("show_hover")} onMouseLeave={() => setHovered("hide_hover")}>
                         <Avatar src={data1.user.photo_profile}>{data1.user.name}</Avatar>
                         <div className="post__info">
                             <h2>{data1.user.name}</h2>
                             <p>{data1.user.work}</p>
                         </div>
                     </div>
-
+                    <div className={hovered}>
+                        <HoverProfile currUser={props.userId} />
+                    </div>
                     <div className="post__body">
-                        <p>{props.caption}</p>
+                        {/* <p>{props.caption}</p> */}
+                        <RichText texts={props.caption} />
                         {props.photo_url == "" ?
                             ""
                             :
@@ -175,9 +188,8 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
                             data2.getComment ?
                                 data2.getComment.map((comment: any) =>
                                     <Comment props={comment} key={comment} />
-                                )
-                                : ""
-                            : ""}
+                                ) : "" : ""}
+                        <button onClick={() => handleLoadMore()}>load more</button>
                     </div>
                 </div>
             ) : (

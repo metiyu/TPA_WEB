@@ -53,8 +53,8 @@ func (r *mutationResolver) UnfollowUser(ctx context.Context, id string, unfollow
 }
 
 // SendConnectRequest is the resolver for the sendConnectRequest field.
-func (r *mutationResolver) SendConnectRequest(ctx context.Context, id string, requestedID string) (interface{}, error) {
-	return service.SendConnectRequest(ctx, id, requestedID)
+func (r *mutationResolver) SendConnectRequest(ctx context.Context, id string, requestedID string, message *string) (interface{}, error) {
+	return service.SendConnectRequest(ctx, id, requestedID, *message)
 }
 
 // AcceptConnectRequest is the resolver for the acceptConnectRequest field.
@@ -70,6 +70,11 @@ func (r *mutationResolver) IgnoreConnectRequest(ctx context.Context, id string, 
 // UnconnectUser is the resolver for the unconnectUser field.
 func (r *mutationResolver) UnconnectUser(ctx context.Context, id string, unconnectedID string) (interface{}, error) {
 	return service.UnconnectUser(ctx, id, unconnectedID)
+}
+
+// ViewUserProfile is the resolver for the viewUserProfile field.
+func (r *mutationResolver) ViewUserProfile(ctx context.Context, id string, userProfileID string) (interface{}, error) {
+	return service.ViewUserProfile(ctx, id, userProfileID)
 }
 
 // User is the resolver for the user field.

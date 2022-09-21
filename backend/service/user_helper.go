@@ -30,9 +30,22 @@ func RemoveElementFromArray(model []string, toSearch string) []string {
 	return model
 }
 
+func RemoveArrayByIndex(slice []string, s int) []string {
+	return append(slice[:s], slice[s+1:]...)
+}
+
 func contains(users []*model.User, user *model.User) bool {
 	for _, v := range users {
 		if v.ID == user.ID {
+			return true
+		}
+	}
+	return false
+}
+
+func str_contains(users []string, user string) bool {
+	for _, v := range users {
+		if v == user {
 			return true
 		}
 	}

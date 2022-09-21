@@ -55,8 +55,9 @@ type Mutation {
   resetPassword(id: ID!, newPass: String!): Any!
   followUser(id: ID!, followedId: ID!): Any!
   unfollowUser(id: ID!, unfollowedId: ID!): Any!
-  sendConnectRequest(id: ID!, requestedId: ID!): Any!
+  sendConnectRequest(id: ID!, requestedId: ID!, message: String): Any!
   acceptConnectRequest(id: ID!, acceptedId: ID!): Any!
   ignoreConnectRequest(id: ID!, ignoredId: ID!): Any!
   unconnectUser(id: ID!, unconnectedId: ID!): Any!
+  viewUserProfile(id: ID!, userProfileId: ID!): Any!
 }

@@ -5,6 +5,7 @@ import { FORGET_CODE_QUERY } from '../../mutation-queries'
 import './ForgotPassword.css'
 import toast, { Toaster } from 'react-hot-toast';
 import { GET_FORGET_CODE_QUERY } from '../../query-queries'
+import Footer from '../../components/footer/Footer'
 
 export default function CodeFromEmail() {
     const [code, setCode] = useState("")
@@ -50,24 +51,27 @@ export default function CodeFromEmail() {
     }, [code])
 
     return (
-        <div className='user_helper'>
-            <Toaster position='top-right'/>
-            <div className="title">
-                <h2>We sent a code to your email</h2>
-                <p>Enter the 6-digit verification code sent to your email</p>
+        <div className='user_helper_outer'>
+            <div className='user_helper'>
+                <Toaster position='top-right' />
+                <div className="title">
+                    <h2>We sent a code to your email</h2>
+                    <p>Enter the 6-digit verification code sent to your email</p>
+                </div>
+                <form>
+                    <input
+                        value={code}
+                        pattern="[0-9]*"
+                        onChange={(e) => handleCode(e)}
+                        placeholder="6 digit code"
+                        type="text"
+                    />
+                    <button className={isSix} type="button" onClick={() => handleSubmit()} disabled={disabled}>
+                        Submit
+                    </button>
+                </form>
             </div>
-            <form>
-                <input
-                    value={code}
-                    pattern="[0-9]*"
-                    onChange={(e) => handleCode(e)}
-                    placeholder="6 digit code"
-                    type="text"
-                />
-                <button className={isSix} type="button" onClick={() => handleSubmit()} disabled={disabled}>
-                    Submit
-                </button>
-            </form>
+            <Footer />
         </div>
     )
 }

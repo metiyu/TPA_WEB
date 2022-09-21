@@ -28,6 +28,7 @@ func CreateUser(ctx context.Context, newUser model.NewUser) (*model.User, error)
 		FollowedUser:   emptyArrString,
 		ConnectedUser:  emptyArrString,
 		PendingRequest: emptyArrString,
+		ProfileViewer:  emptyArrString,
 	}
 	if err := db.Model(user).Create(&user).Error; err != nil {
 		return nil, err
@@ -43,7 +44,7 @@ func CreateUserByGoogle(ctx context.Context, email string, email_verified bool, 
 		Name:           name,
 		Email:          strings.ToLower(email),
 		Password:       "",
-		Validate:       false,
+		Validate:       true,
 		Work:           "",
 		Region:         "",
 		PhotoProfile:   picture,
@@ -51,6 +52,7 @@ func CreateUserByGoogle(ctx context.Context, email string, email_verified bool, 
 		FollowedUser:   emptyArrString,
 		ConnectedUser:  emptyArrString,
 		PendingRequest: emptyArrString,
+		ProfileViewer:  emptyArrString,
 	}
 	if err := db.Model(user).Create(&user).Error; err != nil {
 		return nil, err
@@ -108,6 +110,7 @@ func UpdateUser(ctx context.Context, id string, name string, work string, educat
 		"pending_request":  model.RequestConnect,
 		"request_connect":  model.RequestConnect,
 		"connected_user":   model.ConnectedUser,
+		"profile_viewer":   model.ProfileViewer,
 		"photo_profile":    model.PhotoProfile,
 		"photo_background": model.BackgroundPhoto,
 		"token":            token,
@@ -178,13 +181,14 @@ func UnfollowUser(ctx context.Context, id string, unfollowedId string) (interfac
 	return model, db.Where("id = ?", id).Save(model).Error
 }
 
-func SendConnectRequest(ctx context.Context, id string, requestedId string) (interface{}, error) {
+func SendConnectRequest(ctx context.Context, id string, requestedId string, message string) (interface{}, error) {
 	db := database.GetDB()
 	userRequested, err := UserGetByID(ctx, requestedId)
 	if err != nil {
 		return nil, err
 	}
 	userRequested.RequestConnect = append(userRequested.RequestConnect, id)
+	userRequested.RequestConnectMessage = append(userRequested.RequestConnectMessage, message)
 	userNow, err := UserGetByID(ctx, id)
 	if err != nil {
 		return nil, err
@@ -203,6 +207,12 @@ func AcceptConnectRequest(ctx context.Context, id string, acceptedId string) (in
 		return nil, err
 	} else {
 		userNow.RequestConnect = RemoveElementFromArray(userNow.RequestConnect, acceptedId)
+		for i, val := range userNow.RequestConnect {
+			if val == userNow.ID {
+				userNow.RequestConnectMessage = RemoveArrayByIndex(userNow.RequestConnectMessage, i)
+				break
+			}
+		}
 		userNow.ConnectedUser = append(userNow.ConnectedUser, acceptedId)
 		if err := db.Where("id = ?", id).Save(userNow).Error; err != nil {
 			return nil, err
@@ -301,4 +311,20 @@ func UserYouMightKnow(ctx context.Context, id string) (interface{}, error) {
 		}
 	}
 	return users, nil
+}
+
+func ViewUserProfile(ctx context.Context, id string, userProfileId string) (interface{}, error) {
+	db := database.GetDB()
+	model, err := UserGetByID(ctx, userProfileId)
+	if err != nil {
+		return nil, err
+	}
+	if model.ProfileViewer == nil ||  len(model.ProfileViewer) <= 0 {
+		model.ProfileViewer = append(model.ProfileViewer, id)
+	} else {
+		if !str_contains(model.ProfileViewer, id) {
+			model.ProfileViewer = append(model.ProfileViewer, id)
+		}
+	}
+	return model, db.Where("id = ?", userProfileId).Save(model).Error
 }

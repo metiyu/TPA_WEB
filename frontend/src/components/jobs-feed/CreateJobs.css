@@ -1,0 +1,55 @@
+.create_jobs__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+.create_jobs__container .create_jobs__title {
+  font-size: x-large;
+  background-color: var(--primary);
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+.create_jobs__container .create_jobs__title p {
+  color: var(--text_accent);
+}
+.create_jobs__container form {
+  display: flex;
+  flex-direction: column;
+}
+.create_jobs__container form input {
+  width: 350px;
+  height: 40px;
+  font-size: 15px;
+  padding-left: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+.create_jobs__container button {
+  margin-top: 2px;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-left: 10px;
+  font-size: medium;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 20px;
+  border: 1px solid var(--normal_accent);
+  background-color: var(--primary);
+  color: var(--text_accent);
+}
+.create_jobs__container button:hover {
+  border: 2px solid var(--normal_accent);
+  background-color: var(--hover_accent);
+}
+.create_jobs__container .post_jobs_button__true {
+  cursor: pointer;
+}
+.create_jobs__container .post_jobs_button__false {
+  cursor: not-allowed;
+}/*# sourceMappingURL=CreateJobs.css.map */

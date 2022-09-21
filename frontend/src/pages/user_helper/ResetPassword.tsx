@@ -5,6 +5,7 @@ import { FORGET_CODE_QUERY, RESET_PASSWORD_QUERY } from '../../mutation-queries'
 import './ForgotPassword.css'
 import toast, { Toaster } from 'react-hot-toast';
 import { GET_FORGET_CODE_QUERY } from '../../query-queries'
+import Footer from '../../components/footer/Footer'
 
 export default function ResetPassword() {
     const [password, setPassword] = useState("")
@@ -26,7 +27,7 @@ export default function ResetPassword() {
     }, [data])
 
     function handleSubmit() {
-        if (password == ""){
+        if (password == "") {
             toast.error("Password is empty")
             return
         }
@@ -48,29 +49,32 @@ export default function ResetPassword() {
     }
 
     return (
-        <div className='user_helper'>
-            <Toaster position='top-right'/>
-            <div className="title">
-                <h2>Choose a new password.</h2>
-                <p>Create a new password</p>
+        <div className='user_helper_outer'>
+            <div className='user_helper'>
+                <Toaster position='top-right' />
+                <div className="title">
+                    <h2>Choose a new password.</h2>
+                    <p>Create a new password</p>
+                </div>
+                <form>
+                    <input
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="New password"
+                        type="password"
+                    />
+                    <input
+                        value={confPassword}
+                        onChange={(e) => setConfPassword(e.target.value)}
+                        placeholder="Retype new password"
+                        type="password"
+                    />
+                    <button type="button" onClick={() => handleSubmit()}>
+                        Submit
+                    </button>
+                </form>
             </div>
-            <form>
-                <input
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="New password"
-                    type="password"
-                />
-                <input
-                    value={confPassword}
-                    onChange={(e) => setConfPassword(e.target.value)}
-                    placeholder="Retype new password"
-                    type="password"
-                />
-                <button type="button" onClick={() => handleSubmit()}>
-                    Submit
-                </button>
-            </form>
+            <Footer />
         </div>
     )
 }

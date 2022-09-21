@@ -1,29 +1,38 @@
-.login {
+.register {
   display: grid;
   place-items: center;
   margin-left: auto;
   margin-right: auto;
-  padding-top: 100px;
-  padding-bottom: 100px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  width: 30vw;
+  border-radius: 10px;
+  background-color: var(--primary);
+  border: 0.1px solid var(--border_accent);
 }
-.login img {
+.register img {
   -o-object-fit: contain;
      object-fit: contain;
   height: 70px;
   margin-top: 20px;
   margin-bottom: 20px;
 }
-.login .title {
+.register .title {
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   padding-bottom: 20px;
   width: 350px;
 }
-.login form {
+.register .title p {
+  margin-top: 0;
+  font-size: 15px;
+}
+.register form {
   display: flex;
   flex-direction: column;
 }
-.login form input {
+.register form input {
   width: 350px;
   height: 40px;
   font-size: 15px;
@@ -31,11 +40,11 @@
   margin-bottom: 10px;
   border-radius: 5px;
 }
-.login p {
+.register p {
   margin-top: 25px;
   font-size: 15px;
 }
-.login button {
+.register button {
   padding-top: 8px;
   padding-bottom: 8px;
   border-radius: 20px;
@@ -43,14 +52,14 @@
   background-color: #0177b7;
   color: white;
 }
-.login button:hover {
+.register button:hover {
   background-color: #004a71;
 }
-.login .or {
+.register .or {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.login .signin-google {
+.register .signin-google {
   display: flex;
   justify-content: center;
   background-color: white;
@@ -58,12 +67,12 @@
   height: 2rem;
   width: 360px;
 }
-.login .signin-google img {
+.register .signin-google img {
   position: relative;
   margin-top: -1.7rem;
   width: 30px;
 }
-.login .signin-google:hover {
+.register .signin-google:hover {
   background-color: rgb(227, 222, 222);
 }
 
@@ -80,4 +89,43 @@
   flex-direction: column;
   justify-content: center;
   color: red;
+}
+
+.hr-text {
+  padding: 10px;
+  line-height: 1em;
+  position: relative;
+  outline: 0;
+  border: 0;
+  color: black;
+  text-align: center;
+  height: 1.5em;
+  opacity: 0.5;
+}
+.hr-text:before {
+  content: "";
+  background: linear-gradient(to right, transparent, #676660, transparent);
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+}
+.hr-text:after {
+  content: attr(data-content);
+  position: relative;
+  display: inline-block;
+  color: black;
+  padding: 0 0.5em;
+  line-height: 1.5em;
+  color: #000000;
+  background-color: #fcfcfa;
+}
+
+.register_outer {
+  height: 90vh;
+  padding-top: 50px;
+  background-color: var(--secondary);
+  overflow: hidden;
+  color: var(--text_accent);
 }/*# sourceMappingURL=SignUp.css.map */

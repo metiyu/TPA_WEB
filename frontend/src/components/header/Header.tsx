@@ -52,7 +52,7 @@ export default function Header() {
                 <div className="header__right">
                     <HeaderOption Icon={HomeIcon} title="Home" avatar={undefined} onClick={() => navigate('/feed')} />
                     <HeaderOption Icon={SupervisorAccountIcon} title="My Network" avatar={undefined} onClick={() => navigate('/mynetwork')} />
-                    <HeaderOption Icon={BusinessCenterIcon} title="Jobs" avatar={undefined} onClick={undefined} />
+                    <HeaderOption Icon={BusinessCenterIcon} title="Jobs" avatar={undefined} onClick={() => navigate('/jobs')} />
                     <HeaderOption Icon={ChatIcon} title="Message" avatar={undefined} onClick={() => navigate('/message')} />
                     <HeaderOption Icon={NotificationsIcon} title="Notifications" avatar={undefined} onClick={undefined} />
                     <HeaderOption avatar={true} title="me" Icon={undefined} onClick={() => handleDropdown()} />

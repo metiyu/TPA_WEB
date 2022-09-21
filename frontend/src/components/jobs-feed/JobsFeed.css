@@ -1,0 +1,78 @@
+.container__jobs_feed {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--border_accent);
+  background-color: var(--primary);
+  border-radius: 20px;
+  width: 400px;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding-bottom: 30px;
+  color: var(--text_accent);
+}
+
+.container__jobs_feed_outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.container__jobs_feed_outer .button_post_job {
+  padding-bottom: 10px;
+}
+.container__jobs_feed_outer .button_post_job button {
+  margin-top: 2px;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-left: 10px;
+  font-size: medium;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 20px;
+  border: 1px solid var(--normal_accent);
+  background-color: var(--primary);
+  color: var(--normal_accent);
+}
+.container__jobs_feed_outer .button_post_job button:hover {
+  border: 2px solid var(--normal_accent);
+  background-color: var(--hover_accent);
+}
+
+.create_jobs__show {
+  position: fixed;
+  background-color: var(--primary);
+  width: 500px;
+  min-height: 250px;
+  max-height: 500px;
+  top: 50%;
+  left: 50%;
+  margin-top: -250px;
+  margin-left: -250px;
+  border: 1px solid var(--border_accent);
+  box-shadow: 0.5px 0.5px 0.5px 0.5px var(--border_accent);
+  border-radius: 10px;
+  z-index: 4;
+  overflow-y: scroll;
+}
+
+#overlay_show {
+  display: block;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 3;
+}
+
+.create_jobs__invisible {
+  display: none;
+}
+
+#overlay_invisible {
+  display: none;
+}/*# sourceMappingURL=JobsFeed.css.map */

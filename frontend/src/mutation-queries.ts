@@ -46,8 +46,8 @@ export const RESET_PASSWORD_QUERY = gql`
     }`;
 
 export const SEND_CONNECT_QUERY = gql`
-    mutation SendConnect($id: ID!, $requestedId: ID!){
-        sendConnectRequest(id: $id, requestedId: $requestedId)
+    mutation SendConnect($id: ID!, $requestedId: ID!,  $message: String) {
+        sendConnectRequest(id: $id, requestedId: $requestedId, message: $message)
     }`;
 
 export const ACCEPT_CONNECT_QUERY = gql`
@@ -104,3 +104,17 @@ export const UNLIKE_COMMENT = gql`
     mutation UnlikeCommentPost($commentId: ID!, $unlikerId: ID!){
         unlikeComment(commentId: $commentId, unlikerId: $unlikerId)
     }`;
+
+export const VIEW_PROFILE = gql`
+    mutation ViewProfile($id: ID!, $userProfileId: ID!){
+        viewUserProfile(id: $id, userProfileId: $userProfileId)
+    }`;
+
+export const CREATE_JOBS_QUERY = gql`
+mutation CreateJobs($creatorId: ID!, $position: String!, $company: String!, $location: String!) {
+    createJobs(
+        creatorId: $creatorId
+        position: $position
+        company: $company
+        location: $location
+    )}`;

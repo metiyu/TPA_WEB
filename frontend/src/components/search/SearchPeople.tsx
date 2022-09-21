@@ -8,7 +8,6 @@ export default function SearchPeople({ props }: { props: any }) {
 
     return (
         <div>
-            <hr />
             {props == undefined ? (
                 ""
             ) : (
@@ -16,7 +15,6 @@ export default function SearchPeople({ props }: { props: any }) {
                     user.id != getUser().id ? (
                         <div>
                             <PeopleCard props={user} />
-                            <hr />
                         </div>
                     ) : ("")
                 ))

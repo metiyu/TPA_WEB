@@ -9,6 +9,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { GET_USER, GET_USER_BY_EMAIL } from "../../query-queries";
 import { CredentialModel, CredentialResponse, GsiButtonConfiguration, PromptMomentNotification } from "./GoogleModel";
 import { ParseJwt } from "./token";
+import { UseCurrentTheme } from "../../contexts/themeCtx";
+import Footer from "../../components/footer/Footer";
 
 export default function SignIn() {
     const [email, setEmail] = useState(() => "");
@@ -63,7 +65,7 @@ export default function SignIn() {
             }
         }).catch((err) => {
             console.log(err);
-            if (err.message == "crypto/bcrypt: hashedPassword is not the hash of the given password")
+            if (err.message == "crypto/bcrypt: hashedPassword is not the hash of the given password" || err.message == "crypto/bcrypt: hashedSecret too short to be a bcrypted password")
                 toast.error("Wrong password")
             else if (err.message == "your account is not authenticated")
                 toast.error("Your account is not activated")
@@ -139,43 +141,46 @@ export default function SignIn() {
     }
 
     return (
-        <div className="login">
-            <Toaster position="top-right" />
-            <img
-                src={logo}
-                alt=""
-            />
-            <div className="title">
-                <h2>Sign in</h2>
-                <p>Stay updated on your professional world</p>
-            </div>
-            <form>
-                <input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    type="email"
+        <div className="login_outer">
+            <div className="login">
+                <Toaster position="top-right" />
+                <img
+                    src={logo}
+                    alt=""
                 />
-                <input
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    type="password"
-                />
-                <span className="href" onClick={() => navigate('/forgot-password')}>Forgot password?</span>
-                <button type="button" onClick={() => handleSubmit()}>
-                    Sign In
-                </button>
-                <hr className="hr-text" data-content="OR" />
-            </form>
-            <div id="GoogleSignIn"></div>
+                <div className="title">
+                    <h2>Sign in</h2>
+                    <p>Stay updated on your professional world</p>
+                </div>
+                <form>
+                    <input
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Email"
+                        type="email"
+                    />
+                    <input
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        type="password"
+                    />
+                    <span className="href" onClick={() => navigate('/forgot-password')}>Forgot password?</span>
+                    <button type="button" onClick={() => handleSubmit()}>
+                        Sign In
+                    </button>
+                    <hr className="hr-text" data-content="OR" />
+                </form>
+                <div id="GoogleSignIn"></div>
 
-            <p>
-                New to LinkedIn? {` `}
-                <span className="href" onClick={() => navigate('/sign-up')}>
-                    Register Now
-                </span>
-            </p>
+                <p>
+                    New to LinkedIn? {` `}
+                    <span className="href" onClick={() => navigate('/sign-up')}>
+                        Register Now
+                    </span>
+                </p>
+            </div>
+            <Footer />
         </div>
     );
 }

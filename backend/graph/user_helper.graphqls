@@ -18,7 +18,7 @@ extend type Query {
   getLink(id: String!): ActivationLink!
   getCode(id: String!): ForgetCode!
   search(keyword: String!, limit: Int!, offset: Int!): Any!
-  searchConnectedUser(keyword: String!): Any!
+  searchConnectedUser(id: ID!, keyword: String!): Any!
 }
 
 extend type Mutation {

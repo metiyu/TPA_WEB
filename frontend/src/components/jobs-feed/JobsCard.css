@@ -1,0 +1,39 @@
+.container__jobs_card {
+  display: flex;
+  width: 80%;
+  margin-bottom: 15px;
+}
+.container__jobs_card .avatar {
+  width: 70px;
+  height: 70px;
+}
+.container__jobs_card .card__description {
+  font-size: medium;
+  margin-left: 10px;
+}
+.container__jobs_card .card__description p {
+  margin-bottom: 2px;
+}
+.container__jobs_card .card__description .name {
+  font-weight: 500;
+}
+.container__jobs_card .card__description .work {
+  font-weight: 300;
+}
+.container__jobs_card .card__description button {
+  margin-top: 2px;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-left: 10px;
+  font-size: medium;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 20px;
+  border: 1px solid var(--normal_accent);
+  background-color: var(--primary);
+  color: var(--normal_accent);
+}
+.container__jobs_card .card__description button:hover {
+  border: 2px solid var(--normal_accent);
+  background-color: var(--hover_accent);
+}/*# sourceMappingURL=JobsCard.css.map */

@@ -15,9 +15,12 @@ import { useEffect } from 'react'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { GET_USER } from './query-queries'
 import { ProtectedRoute, UnprotectedRoute } from './middleware/Middleware'
+import { UseCurrentTheme } from './contexts/themeCtx'
+import Jobs from './pages/jobs/Jobs'
 
 export default function Middleman() {
     const { getUser, setUserToStorage } = UseCurrentUser()
+    const { getTheme } = UseCurrentTheme()
 
     const [updateUser, { loading, called, data }] = useLazyQuery(GET_USER, {
         variables: {
@@ -56,28 +59,31 @@ export default function Middleman() {
     }
 
     return (
-        <BrowserRouter>
-            <Routes>
-                {/* <Route path='' element={< />} /> */}
-                <Route element={<Unprotected />}>
-                    <Route path='/' element={<SignIn />} />
-                    <Route path='/sign-up' element={<SignUp />} />
-                    <Route path='/:id' element={<Activation />} />
-                    <Route path='/forgot-password' element={<ForgotPassword />} />
-                    <Route path='/code-verification/:id' element={<CodeFromEmail />} />
-                    <Route path='/reset-password/:id' element={<ResetPassword />} />
-                </Route>
-                <Route element={<Protected />}>
-                    <Route path='/feed:limit' element={<Homepage />} />
-                    <Route path='/feed' element={<Homepage />} />
-                    <Route path='/mynetwork' element={<MyNetwork />} />
-                    <Route path='/message/:id' element={<Message />} />
-                    <Route path='/message' element={<Message />} />
-                    <Route path='/profile/:id' element={<Profile />} />
-                    <Route path='/profile' element={<Profile />} />
-                    <Route path='/search/:type/keyword=:keyword/page=:page' element={<SearchFilter />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
+        <div style={{ ...getTheme() }}>
+            <BrowserRouter>
+                <Routes>
+                    {/* <Route path='' element={< />} /> */}
+                    <Route element={<Unprotected />}>
+                        <Route path='/' element={<SignIn />} />
+                        <Route path='/sign-up' element={<SignUp />} />
+                        <Route path='/:id' element={<Activation />} />
+                        <Route path='/forgot-password' element={<ForgotPassword />} />
+                        <Route path='/code-verification/:id' element={<CodeFromEmail />} />
+                        <Route path='/reset-password/:id' element={<ResetPassword />} />
+                    </Route>
+                    <Route element={<Protected />}>
+                        <Route path='/feed:limit' element={<Homepage />} />
+                        <Route path='/feed' element={<Homepage />} />
+                        <Route path='/mynetwork' element={<MyNetwork />} />
+                        <Route path='/message/:id' element={<Message />} />
+                        <Route path='/message' element={<Message />} />
+                        <Route path='/profile/:id' element={<Profile />} />
+                        <Route path='/profile' element={<Profile />} />
+                        <Route path='/search/:type/keyword=:keyword/page=:page' element={<SearchFilter />} />
+                        <Route path='/jobs' element={<Jobs />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </div>
     )
 }

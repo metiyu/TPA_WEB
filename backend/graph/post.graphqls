@@ -4,6 +4,9 @@ type Post {
     Caption: String!
     PhotoURL: String
     VideoURL: String
+    Likes: [String!]!
+    Comments: [String!]!
+    Sends: [String!]!
 }
 
 type Comment {
@@ -12,10 +15,19 @@ type Comment {
 	Comment: String!
 }
 
+type Jobs {
+    ID: ID!
+	Position:  String!    
+	Company:  String! 
+	Location:  String!  
+}
+
 extend type Query{
     generateID: Any!
     getPosts(id: ID!, limit: Int!, offset: Int!): Any!
-    getComment(postId: ID!): Any!
+    getComment(postId: ID!, limit: Int!, offset: Int!): Any!
+    getCommentById(id: ID!): Any!
+    getJobs: Any!
 }
 
 extend type Mutation{
@@ -25,4 +37,6 @@ extend type Mutation{
     commentPost(postId: ID!, commenterId: ID!, comment: String!): Any!
     likeComment(commentId: ID!, likerId: ID!): Any!
     unlikeComment(commentId: ID!, unlikerId: ID!): Any!
+    replyComment(postId: ID!, userCommentId: ID!, commentId: ID!, commenterId: ID!, comment: String!): Any!
+    createJobs(creatorId: ID!, position: String!, company: String!, location: String!): Any!
 }

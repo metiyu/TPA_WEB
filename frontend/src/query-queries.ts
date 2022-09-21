@@ -31,8 +31,8 @@ query Search($keyword: String!, $limit: Int!, $offset: Int!){
     }`;
 
 export const SEARCH_CONNECTED_USER_QUERY = gql`
-    query SearchConnectedUser($keyword: String!){
-        searchConnectedUser(keyword: $keyword)
+    query SearchConnectedUser($id: ID!, $keyword: String!) {
+        searchConnectedUser(id: $id, keyword: $keyword)
     }`;
 
 export const USER_YOU_MIGHT_KNOW_QUERY = gql`
@@ -51,6 +51,16 @@ export const GET_POSTS = gql`
     }`;
 
 export const GET_COMMENTS = gql`
-    query GetComments($postId: ID!){
-        getComment(postId: $postId)
+    query GetComments($postId: ID!, $offset: Int!, $limit: Int!) {
+        getComment(postId: $postId, offset: $offset, limit: $limit)
+    }`;
+
+export const GET_COMMENT_BY_ID = gql`
+    query GetCommentByID($id: ID!){
+        getCommentById(id: $id)
+    }`;
+
+export const GET_JOBS = gql`
+    query GetJobs {
+        getJobs
     }`;

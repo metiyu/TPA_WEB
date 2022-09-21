@@ -86,7 +86,7 @@ func (r *queryResolver) Search(ctx context.Context, keyword string, limit int, o
 }
 
 // SearchConnectedUser is the resolver for the searchConnectedUser field.
-func (r *queryResolver) SearchConnectedUser(ctx context.Context, keyword string) (interface{}, error) {
+func (r *queryResolver) SearchConnectedUser(ctx context.Context, id string, keyword string) (interface{}, error) {
 	if keyword == "" {
 		keyword = "%"
 	}
@@ -95,7 +95,22 @@ func (r *queryResolver) SearchConnectedUser(ctx context.Context, keyword string)
 	if err := r.DB.Find(&users, "LOWER(name) like ?", "%"+strings.ToLower(keyword)+"%").Error; err != nil {
 		return nil, err
 	}
-	return users, nil
+	userNow, err := service.UserGetByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	var connectedUsers []*model.User
+	if len(userNow.ConnectedUser) > 0 && len(users) > 0 {
+		for i := 0; i < len(users); i++ {
+			for j := 0; j < len(userNow.ConnectedUser); j++ {
+				if users[i].ID == userNow.ConnectedUser[j] {
+					connectedUsers = append(connectedUsers, users[i])
+				}
+			}
+		}
+	}
+
+	return connectedUsers, nil
 }
 
 // Users is the resolver for the users field.

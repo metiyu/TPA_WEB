@@ -7,11 +7,11 @@ export default function Widgets() {
 
     const navigate = useNavigate()
     const links = [
-        { title: "Home", link: "/feed" },
-        { title: "My Network", link: "/mynetwork" },
-        { title: "Jobs", link: "/jobs" },
-        { title: "Message", link: "/message" },
-        { title: "Profile", link: "/profile" }
+        { title: "About", link: "https://about.linkedin.com/" },
+        { title: "Accessibility", link: "https://www.linkedin.com/accessibility" },
+        { title: "Safety Center", link: "https://safety.linkedin.com/" },
+        { title: "Community Guidelines", link: "https://www.linkedin.com/legal/professional-community-policies" },
+        { title: "Careers", link: "https://careers.linkedin.com/" }
     ]
 
     return (
@@ -21,7 +21,7 @@ export default function Widgets() {
             </div>
             <footer>
                 {links.map((item) => (
-                    <a className="link" onClick={() => navigate(item.link)} key={item.link}>{item.title}</a>
+                    <a className="link" onClick={() => window.open(item.link)} key={item.link}>{item.title}</a>
                 ))}
             </footer>
             <div className="logo__container">

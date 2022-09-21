@@ -5,13 +5,16 @@ import HeaderOption from '../header/HeaderOption';
 import { async } from '@firebase/util';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { UseCurrentUser } from '../../contexts/userCtx';
-import { useMutation, useQuery } from '@apollo/client';
-import { GENERATE_ID } from '../../query-queries';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { GENERATE_ID, GET_USER } from '../../query-queries';
 import { useEffect, useState } from 'react';
 import { CREATE_POST_QUERY } from '../../mutation-queries';
 import toast, { Toaster } from 'react-hot-toast';
+import RichText from '../richtext/RichText';
+import { Mention, MentionsInput, SuggestionDataItem } from 'react-mentions';
+import { mentionInputPostStyle, mentionStyle } from '../richtext/mentionStyle';
 
-export default function CreatePost() {
+export default function CreatePost({ refetch, mentionDatas }: { refetch: any, mentionDatas: any }) {
     const { getUser } = UseCurrentUser()
     const storage = getStorage()
     const { data, loading } = useQuery(GENERATE_ID)
@@ -20,6 +23,7 @@ export default function CreatePost() {
     const [postVideoURL, setPostVideoURL] = useState("")
     const [postCaption, setPostCaption] = useState("")
     const [btnClassname, setBtnClassname] = useState("post_button__false")
+    const [haveContent, setHaveContent] = useState(false)
 
     useEffect(() => {
         if (data)
@@ -27,7 +31,12 @@ export default function CreatePost() {
     }, [loading])
 
     async function handleSetContent(e: any, type: any) {
+        if (haveContent) {
+            setPostPhotoURL("")
+            setPostVideoURL("")
+        }
         setBtnClassname("post_button__false")
+        setHaveContent(true)
         const files = e.target.files[0]
         console.log(files);
         let photoRef = ref(storage, `lost/${getUser().id}`)
@@ -76,7 +85,8 @@ export default function CreatePost() {
                 }
             }).then((e) => {
                 console.log(e);
-                window.location.reload()
+                refetch()
+                // window.location.reload()
             }).catch((err) => {
                 console.log(err);
             }), {
@@ -100,6 +110,8 @@ export default function CreatePost() {
         setPostVideoURL("")
     }
 
+    console.log(mentionDatas);
+
     return (
         <div className="create_post__container">
             <Toaster position="top-right" />
@@ -107,15 +119,27 @@ export default function CreatePost() {
                 <p>Create a post</p>
             </div>
             <hr />
-            <textarea cols={65}
+            {/* <textarea cols={65}
                 rows={5}
                 name="text"
                 id="text"
                 placeholder='What do you want to talk about?'
                 value={postCaption}
                 onChange={(e) => handlePostCaption(e.target.value)}
-            />
-            {postPhotoURL != "" ?
+            /> */}
+            <MentionsInput id='test-rich-text' value={postCaption} style={{ width: "100%", height: "100px", ...mentionInputPostStyle }} placeholder="What do you want to talk about" onChange={(e) => handlePostCaption(e.target.value)}>
+                <Mention
+                    trigger="@"
+                    data={mentionDatas}
+                    style={mentionStyle}
+                />
+                {/* <Mention
+                    trigger="#"
+                    data={hastagDatas}
+                    style={mentionStyle}
+                /> */}
+            </MentionsInput>
+            {postPhotoURL != "" || postVideoURL != "" ?
                 <button onClick={() => handleDetach()}>X</button>
                 : ""}
             <div>

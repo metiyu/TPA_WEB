@@ -23,11 +23,17 @@ export default function MessageBox() {
     const [message, setMessage] = useState("")
     const { id } = useParams()
     const [rooms, setRooms] = useState([{}])
+    const { data: currUserData, loading: currUserLoading } = useQuery(GET_USER, {
+        variables: {
+            id: getUser().id
+        }
+    })
     const { data, loading } = useQuery(GET_USER, {
         variables: {
             id: id
         }
     })
+    
 
     useEffect(() => {
         const q = query(collection(db, "rooms"))
@@ -56,9 +62,6 @@ export default function MessageBox() {
             })
         }
     }, [roomID])
-
-    console.log(chats);
-
 
     function sendChat(senderID: any) {
         addDoc(collection(db, "rooms", roomID, "chats"), {
@@ -101,49 +104,47 @@ export default function MessageBox() {
     const [searchUser, { data: searchData, loading: searchLoading }] = useLazyQuery(SEARCH_CONNECTED_USER_QUERY)
 
     const [keyword, setKeyword] = useState("")
+    console.log(getUser().id);
+    console.log(searchData);
+    
+    
     function handleSearchConnectedUser(e: any) {
         setKeyword(e)
         searchUser({
             variables: {
+                id: getUser().id,
                 keyword: e
             }
         })
     }
 
-    function handleMakeChatRoom(e: any) {
-        console.log(e);
-        console.log(getUser());
-        if (getUser().connected_user != null) {
-            if (getUser().connected_user.includes(e.id)) {
+    function handleMakeChatRoom(search: any) {
+        if (currUserData.user.connected_user != null) {
+            if (currUserData.user.connected_user.includes(search.id)) {
                 const q = query(collection(db, "rooms"))
                 onSnapshot(q, (docs) => {
                     let array = [{}]
                     docs.forEach(doc => {
-                        if (doc.data().users_id.includes(e.id) && doc.data().users_id.includes(getUser().id))
+                        if (doc.data().users_id.includes(search.id) && doc.data().users_id.includes(currUserData.user.id))
                             array.push({ ...doc.data(), id: doc.id })
                     })
-                    handleNavigate(array)
+                    handleNavigate(array, search)
                 })
             }
-            else {
-                navigate('/profile/' + e.id)
-            }
         }
-        else {
-            navigate('/profile/' + e.id)
-        }
+        toast("User is not connected yet")
     }
 
     const navigate = useNavigate()
-    function handleNavigate(array: any) {
+    function handleNavigate(array: any, search: any) {
         if (array[1] != undefined) {
-            navigate('/message/' + id)
+            navigate('/message/' + search.id)
         }
         else {
             addDoc(collection(db, "rooms"), {
-                users_id: [getUser().id, id]
+                users_id: [getUser().id, search.id]
             }).then((e) => {
-                navigate('/message/' + id)
+                navigate('/message/' + search.id)
                 console.log(e);
             })
         }
@@ -224,15 +225,16 @@ export default function MessageBox() {
                         <hr />
                         <div className='search_connected_user__container'>
                             {searchData ?
-                                searchData.searchConnectedUser.map((search: any) =>
-                                    search.id != getUser().id ?
-                                        <div onClick={() => handleMakeChatRoom(search)}>
-                                            <p>{search.name}</p>
-                                            <hr />
-                                        </div>
-                                        : ""
-                                )
-                                : ""}
+                                searchData.searchConnectedUser != undefined ?
+                                    searchData.searchConnectedUser.map((search: any) =>
+                                        search.id != getUser().id ?
+                                            <div onClick={() => handleMakeChatRoom(search)}>
+                                                <p>{search.name}</p>
+                                                <hr />
+                                            </div>
+                                            : ""
+                                    )
+                                    : "" : ""}
                         </div>
                         <div className='chat__bubble__section'>
                         </div>

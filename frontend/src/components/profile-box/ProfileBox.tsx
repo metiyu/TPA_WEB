@@ -1,17 +1,18 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import Avatar from '@mui/material/Avatar';
 import { addDoc, collection, onSnapshot, query } from 'firebase/firestore';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { UseCurrentUser } from "../../contexts/userCtx";
-import { FOLLOW_USER_QUERY, SEND_CONNECT_QUERY, UNCONNECT_USER_QUERY, UNFOLLOW_USER_QUERY } from '../../mutation-queries';
+import { FOLLOW_USER_QUERY, SEND_CONNECT_QUERY, UNCONNECT_USER_QUERY, UNFOLLOW_USER_QUERY, VIEW_PROFILE } from '../../mutation-queries';
 import { GET_USER } from '../../query-queries';
 import EditProfile from "../popup/edit-profile/EditProfile";
 import './ProfileBox.css'
+import ReactToPrint, { useReactToPrint } from 'react-to-print';
 
-export default function ProfileBox() {
+export default function ProfileBox({ refetch, refetchNonCurrUser }: { refetch: any, refetchNonCurrUser: any }) {
     const { getUser, setUserToStorage } = UseCurrentUser()
     const currUser = getUser()
     const [dropdownClassname, setDropdownClassname] = useState("edit__profile_invisible")
@@ -77,6 +78,30 @@ export default function ProfileBox() {
             }
         }
     }, [dataNonCurrUser])
+
+    const [viewUserProfile] = useMutation(VIEW_PROFILE)
+    useEffect(() => {
+        if (dataCurrUser && dataNonCurrUser) {
+            viewUserProfile({
+                variables: {
+                    id: dataCurrUser.user.id,
+                    userProfileId: dataNonCurrUser.user.id
+                }
+            }).then((e) => {
+                console.log("success");
+                console.log(e);
+                refetch()
+                refetchNonCurrUser()
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
+    }, [dataCurrUser])
+
+    useEffect(() => {
+        refetch()
+        refetchNonCurrUser()
+    }, [])
 
     function handleConnect() {
         sendConnectFunc({
@@ -169,10 +194,15 @@ export default function ProfileBox() {
         }
     }
 
+    const componentRef = useRef(null);
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+    });
+
     return (
         <>
             {!dataNonCurrUser ? (
-                <div className="default__profile">
+                <div className="default__profile" ref={componentRef}>
                     <Toaster position="top-right" />
                     <div className="cover__photo">
                         {currUser.photo_background ? (
@@ -199,7 +229,7 @@ export default function ProfileBox() {
                     ) : ("")}
                     <div className="buttons">
                         <button onClick={() => handleShowEditProfile()}>Edit profile</button>
-                        <button>Save as pdf</button>
+                        <button onClick={handlePrint}>Save as pdf</button>
                     </div>
                     <div className={dropdownClassname}>
                         <EditProfile />
@@ -250,7 +280,7 @@ export default function ProfileBox() {
                         <button onClick={() => handleMakeChatRoom()}>Message</button>
                         <button>Share profile</button>
                         <button>Block</button>
-                        <button>Save as pdf</button>
+                        <button onClick={handlePrint}>Save as pdf</button>
                     </div>
                     <div className={dropdownClassname}>
                         <EditProfile />

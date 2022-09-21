@@ -3,8 +3,12 @@
     place-items: center;
     margin-left: auto;
     margin-right: auto;
-    padding-top: 100px;
-    padding-bottom: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    width: 30vw;
+    border-radius: 10px;
+    background-color: var(--primary);
+    border: 0.1px solid var(--border_accent);
 
     img {
         object-fit: contain;
@@ -130,6 +134,13 @@
             background-color: #fcfcfa;
         }
     }
+}
 
-    
+.login_outer{
+    // width: 100vw;
+    height: 90vh;
+    padding-top: 70px;
+    background-color: var(--secondary);
+    overflow: hidden;
+    color: var(--text_accent);
 }

@@ -6,6 +6,7 @@ import { UseCurrentUser } from "../../contexts/userCtx";
 import { SEND_CONNECT_QUERY, UNCONNECT_USER_QUERY } from "../../mutation-queries";
 import { GET_USER } from "../../query-queries";
 import './PeopleCard.css'
+import SendConnectModal from "./SendConnectModal";
 
 export default function PeopleCard({ props }: { props: any }) {
     const [sendConnectFunc] = useMutation(SEND_CONNECT_QUERY)
@@ -64,25 +65,47 @@ export default function PeopleCard({ props }: { props: any }) {
         })
     }
 
+    const [dropdownClassname, setDropdownClassname] = useState("send_connect__invisible")
+    const [greyBackground, setGreyBackground] = useState("overlay_invisible")
+
+    function handleShowSendConnect() {
+        console.log("clicked");
+        if (dropdownClassname == "send_connect__invisible") {
+            setDropdownClassname("send_connect__show")
+            setGreyBackground("overlay_show")
+        }
+        else {
+            setDropdownClassname("send_connect__invisible")
+            setGreyBackground("overlay_invisible")
+        }
+    }
+
+
     return (
-        <div className="search_people__container" onClick={() => navigate(`/profile/${props.id}`)}>
-            <Avatar className='avatar' src={props.photo_profile} />
-            <div className='people_data'>
-                <h4>{props.name}</h4>
-                <p>{props.work}</p>
-                <p>{props.region}</p>
+        <>
+            <div id={greyBackground} onClick={() => handleShowSendConnect()}></div>
+            <div className={dropdownClassname}>
+                <SendConnectModal />
             </div>
-            <div className='connect_button'>
-                {button == "connect" ? (
-                    <button onClick={() => handleConnect(props)}>Connect</button>
-                ) : (
-                    button == "unconnect" ? (
-                        <button onClick={() => handleUnconnect(props)}>Unconnect</button>
+            <div className="search_people__container">
+                <Avatar className='avatar' src={props.photo_profile} onClick={() => navigate(`/profile/${props.id}`)} />
+                <div className='people_data' onClick={() => navigate(`/profile/${props.id}`)}>
+                    <h4>{props.name}</h4>
+                    <p>{props.work}</p>
+                    <p>{props.region}</p>
+                </div>
+                <div className='connect_button'>
+                    {button == "connect" ? (
+                        <button onClick={() => handleShowSendConnect()}>Connect</button>
                     ) : (
-                        <button>Pending</button>
-                    )
-                )}
+                        button == "unconnect" ? (
+                            <button onClick={() => handleUnconnect(props)}>Unconnect</button>
+                        ) : (
+                            <button>Pending</button>
+                        )
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     )
 }
