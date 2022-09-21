@@ -25,6 +25,7 @@ type Jobs {
 extend type Query{
     generateID: Any!
     getPosts(id: ID!, limit: Int!, offset: Int!): Any!
+    getPostById(id: ID!): Any!
     getComment(postId: ID!, limit: Int!, offset: Int!): Any!
     getCommentById(id: ID!): Any!
     getJobs: Any!

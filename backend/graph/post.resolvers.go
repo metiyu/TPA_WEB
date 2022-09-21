@@ -225,6 +225,11 @@ func (r *queryResolver) GetPosts(ctx context.Context, id string, limit int, offs
 	return posts, nil
 }
 
+// GetPostByID is the resolver for the getPostById field.
+func (r *queryResolver) GetPostByID(ctx context.Context, id string) (interface{}, error) {
+	return service.GetPostByID(ctx, id)
+}
+
 // GetComment is the resolver for the getComment field.
 func (r *queryResolver) GetComment(ctx context.Context, postID string, limit int, offset int) (interface{}, error) {
 	var comments []*model.Comment

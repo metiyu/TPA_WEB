@@ -11,7 +11,7 @@ v	order by timestamp kapan post
 v	bagian post cma bisa 1 foto atau video
 v	tambahin hover di profile post
 v	gausah refresh waktu like post (pke keunggulan react)
-	tambahin load more di comment post
+v	tambahin load more di comment post
 v	bagian analytics di profile page bnerin, jgn dummy
 v	pas follow bsa liat posting an yg dibuat org di follow
 v	search connected user di msg bkin validasi hrs connected

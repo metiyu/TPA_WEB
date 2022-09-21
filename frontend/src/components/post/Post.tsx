@@ -15,7 +15,7 @@ import Comment from "./Comment";
 import RichText from "../richtext/RichText";
 import HoverProfile from "../hover-modal/HoverProfile";
 
-const Post = forwardRef(({ props }: { props: any }, ref: any) => {
+const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: any) => {
     const { getUser } = UseCurrentUser()
     const queryMultiple = () => {
         const res1 = useQuery(GET_USER, {
@@ -38,15 +38,48 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
         { loading: loading2, data: data2, fetchMore }
     ] = queryMultiple()
 
-    function handleLoadMore() {
-        // fetchMore({
-        //     variables: {
-        //         postId: props.id,
-        //         offset: data2.getComment.length
-        //     }
-        // })
-        console.log(data2);
+    const [hasMore, setHasMore] = useState(true)
 
+    useEffect(() => {
+        if (props.comments == null) {
+            setHasMore(false)
+        } else if (props.comments) {
+            if (props.comments.length <= 1) {
+                setHasMore(false)
+            }
+        }
+    }, [])
+
+    function handleLoadMore() {
+        fetchMore({
+            variables: {
+                offset: data2.getComment.length
+            },
+            updateQuery: (previousResult, { fetchMoreResult }) => {
+                let check = false;
+                if (previousResult.getComment.length + fetchMoreResult.getComment.length == props.comments.length) {
+                    setHasMore(false)
+                }
+                for (let i = 0; i < previousResult.getComment.length; i++) {
+                    for (let j = 0; j < fetchMoreResult.getComment.length; j++) {
+                        if (previousResult.getComment[i].id === fetchMoreResult.getComment[j].id) {
+                            check = true
+                        }
+                    }
+                }
+                if (check === true || fetchMoreResult.getComment.length == 0) {
+                    return previousResult
+                } else {
+                    setHasMore(true)
+                    return { getComment: [...previousResult.getComment, ...fetchMoreResult.getComment] }
+                }
+            }
+        }).then((e) => {
+            console.log(e);
+        }).catch((err) => {
+            setHasMore(false)
+            console.log(err);
+        })
     }
 
     const [likepostFunc] = useMutation(LIKE_POST)
@@ -58,7 +91,8 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
             }
         }).then((e) => {
             console.log(e);
-            window.location.reload()
+            refetch()
+            // window.location.reload()
         })
     }
 
@@ -71,7 +105,8 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
             }
         }).then((e) => {
             console.log(e);
-            window.location.reload()
+            refetch()
+            // window.location.reload()
         })
     }
 
@@ -84,10 +119,6 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
     const [commentFunc] = useMutation(COMMENT_POST)
     function handleComment(e: any) {
         if (e.code == "Enter") {
-            console.log(props.id);
-            console.log(getUser().id);
-            console.log(comment);
-
             commentFunc({
                 variables: {
                     postId: props.id,
@@ -104,7 +135,6 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
     function handleShare() {
         console.log("share");
     }
-
 
     function checkIsLike() {
         if (props.likes) {
@@ -189,7 +219,8 @@ const Post = forwardRef(({ props }: { props: any }, ref: any) => {
                                 data2.getComment.map((comment: any) =>
                                     <Comment props={comment} key={comment} />
                                 ) : "" : ""}
-                        <button onClick={() => handleLoadMore()}>load more</button>
+                        {hasMore ?
+                            <button onClick={() => handleLoadMore()}>load more</button> : ""}
                     </div>
                 </div>
             ) : (

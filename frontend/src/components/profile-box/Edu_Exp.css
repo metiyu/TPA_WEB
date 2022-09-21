@@ -1,0 +1,38 @@
+.analytics {
+  background-color: var(--primary);
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  width: 50vw;
+  color: var(--text_accent);
+}
+.analytics .analytics__contents {
+  display: flex;
+}
+.analytics .analytics__contents .analytics__content {
+  padding-right: 1.5rem;
+  width: 100%;
+}
+.analytics .title__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 25%;
+}
+
+.text__content {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.edit_remove__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.edit_remove__container .edit_remove__button {
+  display: flex;
+}/*# sourceMappingURL=Edu_Exp.css.map */

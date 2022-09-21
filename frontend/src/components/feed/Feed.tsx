@@ -37,7 +37,7 @@ export default function Feed() {
     const { data, loading, fetchMore, refetch } = useQuery(GET_POSTS, {
         variables: {
             id: getUser().id,
-            limit: 5,
+            limit: 3,
             offset: 0
         }
     })
@@ -71,8 +71,6 @@ export default function Feed() {
             })
         }
     }, [])
-    console.log(mentionDatas);
-    
 
     function handleLoadMore() {
         fetchMore({
@@ -145,6 +143,7 @@ export default function Feed() {
                                     <Post
                                         key={post.id}
                                         props={post}
+                                        refetch={refetch}
                                     />
                                 ) : ""
                             }

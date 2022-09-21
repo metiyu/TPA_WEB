@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import Analytics from "../../components/profile-box/Analytics";
+import Education from "../../components/profile-box/Education";
+import Experience from "../../components/profile-box/Experience";
 import ProfileBox from "../../components/profile-box/ProfileBox";
 import { UseCurrentTheme } from "../../contexts/themeCtx";
 import { UseCurrentUser } from "../../contexts/userCtx";
@@ -34,6 +36,8 @@ export default function Profile() {
                 <div className="profile__body">
                     <ProfileBox refetch={refetch} refetchNonCurrUser={refetchNonCurrUser} />
                     <Analytics dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
+                    <Education dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
+                    <Experience dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
                     <Footer />
                 </div>
             </>
