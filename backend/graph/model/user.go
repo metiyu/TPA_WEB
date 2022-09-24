@@ -19,4 +19,24 @@ type User struct {
 	ProfileViewer         pq.StringArray `json:"profile_viewer" gorm:"type:text[]"`
 	PhotoProfile          string         `json:"photo_profile"`
 	BackgroundPhoto       string         `json:"background_photo"`
+	Educations            pq.StringArray `json:"educations" gorm:"type:text[]"`
+	Experiences           pq.StringArray `json:"experiences" gorm:"type:text[]"`
+}
+
+type Education struct {
+	ID          string `json:"id"`
+	School      string   `json:"school"`
+	Degree      string   `json:"degree"`
+	StartDate   string   `json:"startDate" gorm:"embedded"`
+	EndDate     string   `json:"endDate" gorm:"embedded"`
+}
+
+type Experience struct {
+	ID             string `json:"id"`
+	Title          string  `json:"title"`
+	EmploymentType string  `json:"employmentType"`
+	CompanyName    string  `json:"companyName"`
+	Location       string  `json:"location" gorm:"embedded"`
+	StartDate      string  `json:"startDate" gorm:"embedded"`
+	EndDate        string  `json:"endDate" gorm:"embedded"`
 }

@@ -1,0 +1,17 @@
+type Education {
+    id: ID!
+    school: String!
+    degree: String!
+    startDate: String!
+    endDate: String
+}
+
+extend type Query{
+    getEducation(id: ID!): Any!
+}
+
+extend type Mutation {
+    createEducation(userID: ID!, school: String!, degree: String, startDate: String!, endDate: String!): Any! @goField(forceResolver: true)
+    updateEducation(educationID: ID!, school: String!, degree: String, startDate: String!, endDate: String!): Any! @goField(forceResolver: true)
+    deleteEducation(userID: ID!, educationID: ID!): Any! @goField(forceResolver: true)
+}

@@ -1,5 +1,5 @@
 import { Avatar } from '@mui/material'
-import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { addDoc, collection, doc, onSnapshot, orderBy, query, setDoc, updateDoc } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { db } from '../../config/firebase'
 import './MessageBox.css'
@@ -11,6 +11,8 @@ import { GENERATE_ID, GET_USER, SEARCH_CONNECTED_USER_QUERY } from '../../query-
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import PeopleBubble from './PeopleBubble'
+import CallIcon from '@mui/icons-material/Call';
+import HeaderOption from '../header/HeaderOption'
 
 export default function MessageBox() {
     const [roomID, setRoomID] = useState("")
@@ -33,7 +35,7 @@ export default function MessageBox() {
             id: id
         }
     })
-    
+
 
     useEffect(() => {
         const q = query(collection(db, "rooms"))
@@ -70,6 +72,13 @@ export default function MessageBox() {
             sender: senderID
         }).then((e) => {
             setMessage("")
+            if (id) {
+                addDoc(collection(db, "user", id, "notification"), {
+                    createdAt: new Date(),
+                    type: "chat",
+                    from_id: getUser().id
+                })
+            }
         })
     }
 
@@ -104,10 +113,8 @@ export default function MessageBox() {
     const [searchUser, { data: searchData, loading: searchLoading }] = useLazyQuery(SEARCH_CONNECTED_USER_QUERY)
 
     const [keyword, setKeyword] = useState("")
-    console.log(getUser().id);
-    console.log(searchData);
-    
-    
+
+
     function handleSearchConnectedUser(e: any) {
         setKeyword(e)
         searchUser({
@@ -145,8 +152,40 @@ export default function MessageBox() {
                 users_id: [getUser().id, search.id]
             }).then((e) => {
                 navigate('/message/' + search.id)
-                console.log(e);
             })
+        }
+    }
+
+    const [room, setRoom]: any = useState()
+    useEffect(() => {
+        const q = query(collection(db, "rooms"))
+        onSnapshot(q, (docs) => {
+            let array: any = []
+            docs.forEach(doc => {
+                if (doc.id === roomID) {
+                    array.push({ ...doc.data(), id: doc.id })
+                }
+            })
+            setRoom(array[0])
+        })
+    }, [roomID])
+
+    async function handleVideoCall() {
+        if (id !== "") {
+            if (room.videoRoomID != undefined) {
+                console.log("asd");
+                navigate("/server/" + room.videoRoomID)
+                return
+            }
+            const callDoc = await doc(collection(db, "calls"));
+            await setDoc(callDoc, {
+                created: false,
+            }).then(() => {
+                updateDoc(doc(db, "rooms", roomID), {
+                    videoRoomID: callDoc.id
+                })
+            })
+            navigate("/server/" + callDoc.id);
         }
     }
 
@@ -199,6 +238,7 @@ export default function MessageBox() {
                                 </label>
                                 <input className='input_file' type="file" id="postPhoto" name="postPhoto" accept="image/png, image/gif, image/jpeg" onChange={(e) => handleSetContent(e)} />
                             </div>
+                            <HeaderOption Icon={CallIcon} title="" avatar={undefined} onClick={() => handleVideoCall()} />
                             {btnClassname == "post_button__false" ?
                                 <button className={btnClassname} disabled>Send</button>
                                 :

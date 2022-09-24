@@ -82,7 +82,6 @@ export default function Feed() {
 
     const ref = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        console.log(data);
         const onScroll: EventListener = (event: Event) => {
             if (ref) {
                 if (ref?.current?.offsetHeight) {
@@ -145,6 +144,7 @@ export default function Feed() {
                                         props={post}
                                         refetch={refetch}
                                     />
+                                    // console.log(post)
                                 ) : ""
                             }
                         </div>

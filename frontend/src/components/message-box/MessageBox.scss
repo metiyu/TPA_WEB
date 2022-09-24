@@ -53,6 +53,11 @@
                 width: 25px;
                 color: var(--logo_accent);
                 cursor: pointer;
+
+                .icon {
+                    display: flex;
+                }
+
             }
 
             .input__file>input {

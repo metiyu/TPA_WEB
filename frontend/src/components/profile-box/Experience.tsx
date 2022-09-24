@@ -9,9 +9,22 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 export default function Experience({ dataCurrUser, dataNonCurrUser }: { dataCurrUser: any, dataNonCurrUser: any }) {
     const { id } = useParams()
+    const [dropdownClassname, setDropdownClassname] = useState("edit__experience_invisible")
+    const [greyBackground, setGreyBackground] = useState("overlay_invisible")
 
-    function handleAddExperience(){
-        
+    function handleShowEditExperience() {
+        if (dropdownClassname == "edit__experience_invisible") {
+            setDropdownClassname("edit__experience_show")
+            setGreyBackground("overlay_show")
+        }
+        else {
+            setDropdownClassname("edit__experience_invisible")
+            setGreyBackground("overlay_invisible")
+        }
+    }
+
+    function handleAddExperience() {
+
     }
 
     function handleEditExperience() {

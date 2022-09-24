@@ -1,0 +1,19 @@
+type Experience {
+    id: ID!
+    title: String!
+    employmentType: String!
+    companyName: String!
+    location: String!
+    startDate: String!
+    endDate: String
+}
+
+extend type Query{
+    getExperience(id: ID!): Any!
+}
+
+extend type Mutation {
+    createExperience(userID: ID!, title: String!, employmentType: String!, companyName: String!, location: String!, startDate: String!, endDate: String): Any! @goField(forceResolver: true)
+    updateExperience(experienceID: ID!, title: String!, employmentType: String!, companyName: String!, location: String!, startDate: String!, endDate: String): Any! @goField(forceResolver: true)
+    deleteExperience(userID: ID!, experienceID: ID!): Any! @goField(forceResolver: true)
+}

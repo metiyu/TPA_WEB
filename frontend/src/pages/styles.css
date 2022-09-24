@@ -15,8 +15,17 @@
   justify-content: center;
 }
 
-.profile__body {
-  position: absolute;
+.outer_profile__body {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  background-color: var(--secondary);
+}
+.outer_profile__body .profile__body {
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-top: 100px;

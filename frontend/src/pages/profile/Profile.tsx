@@ -33,13 +33,15 @@ export default function Profile() {
         <div className="app" style={{ ...getTheme() }}>
             <>
                 <Header />
-                <div className="profile__body">
-                    <ProfileBox refetch={refetch} refetchNonCurrUser={refetchNonCurrUser} />
-                    <Analytics dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
-                    <Education dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
-                    <Experience dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
-                    <Footer />
-                </div>
+                <div className="outer_profile__body">
+                    <div className="profile__body">
+                        <ProfileBox refetch={refetch} refetchNonCurrUser={refetchNonCurrUser} />
+                        <Analytics dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
+                        <Education dataCurrUser={data} refetchCurrUser={refetch}  dataNonCurrUser={dataNonCurrUser} />
+                        <Experience dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
+                        <Footer />
+                    </div>
+                </div>=
             </>
         </div>
     )

@@ -1,0 +1,26 @@
+.notification__container {
+    width: 50vw;
+    min-height: 10vh;
+    background-color: var(--primary);
+    border-radius: 10px;
+    border: 1px solid var(--border_accent);
+    color: var(--text_accent);
+
+    .notification__list {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        padding-top: 10px;
+    }
+}
+
+.notification_card {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+    padding-left: 10px;
+
+    p {
+        padding-left: 10px;
+    }
+}

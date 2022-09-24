@@ -9,8 +9,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/gorilla/mux"
 	"github.com/metiyu/gqlgen-linkhedin/config"
-	"github.com/metiyu/gqlgen-linkhedin/graph"
 	"github.com/metiyu/gqlgen-linkhedin/directives"
+	"github.com/metiyu/gqlgen-linkhedin/graph"
 	"github.com/metiyu/gqlgen-linkhedin/graph/generated"
 	"github.com/metiyu/gqlgen-linkhedin/graph/model"
 	"github.com/metiyu/gqlgen-linkhedin/middlewares"
@@ -45,6 +45,8 @@ func main() {
 	db.AutoMigrate(&model.Comment{})
 	db.AutoMigrate(&model.Post{})
 	db.AutoMigrate(&model.Jobs{})
+	db.AutoMigrate(&model.Education{})
+	db.AutoMigrate(&model.Experience{})
 
 	c := generated.Config{Resolvers: &graph.Resolver{
 		DB: db,

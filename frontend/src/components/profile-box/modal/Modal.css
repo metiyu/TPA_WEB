@@ -1,0 +1,23 @@
+.modal__container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.modal__container .modal__title {
+  display: flex;
+  width: 100%;
+  height: auto;
+  justify-content: flex-start;
+  margin-top: 10px;
+  color: var(--text_accent);
+  font-size: larger;
+  font-weight: 600;
+}
+.modal__container .modal__title span {
+  display: flex;
+  color: var(--text_accent);
+  justify-content: flex-end;
+  cursor: pointer;
+  font-size: large;
+}/*# sourceMappingURL=Modal.css.map */

@@ -49,6 +49,9 @@
   color: var(--logo_accent);
   cursor: pointer;
 }
+.container__messagebox .container__message .chat__section .input__file .icon {
+  display: flex;
+}
 .container__messagebox .container__message .chat__section .input__file > input {
   display: none;
 }

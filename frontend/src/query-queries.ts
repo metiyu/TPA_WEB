@@ -64,3 +64,8 @@ export const GET_JOBS = gql`
     query GetJobs {
         getJobs
     }`;
+
+export const GET_EDUCATION = gql`
+    query GetEducation($id: ID!){
+        getEducation(id: $id)
+    }`;

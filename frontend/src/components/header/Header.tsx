@@ -54,7 +54,7 @@ export default function Header() {
                     <HeaderOption Icon={SupervisorAccountIcon} title="My Network" avatar={undefined} onClick={() => navigate('/mynetwork')} />
                     <HeaderOption Icon={BusinessCenterIcon} title="Jobs" avatar={undefined} onClick={() => navigate('/jobs')} />
                     <HeaderOption Icon={ChatIcon} title="Message" avatar={undefined} onClick={() => navigate('/message')} />
-                    <HeaderOption Icon={NotificationsIcon} title="Notifications" avatar={undefined} onClick={undefined} />
+                    <HeaderOption Icon={NotificationsIcon} title="Notifications" avatar={undefined} onClick={() => navigate('/notification')} />
                     <HeaderOption avatar={true} title="me" Icon={undefined} onClick={() => handleDropdown()} />
                     {theme === 'light' ? (
                         <HeaderOption Icon={LightModeIcon} title="Theme" avatar={undefined} onClick={() => changeTheme()} />

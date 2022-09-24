@@ -21,6 +21,7 @@ export default function EditProfile() {
     const storage = getStorage()
 
     async function handleSetImage(event: ChangeEvent<HTMLInputElement>, type: string) {
+        if (!event.target.files) return
         const files = event.target.files[0];
         console.log(files);
         let photoRef = ref(storage, `lost/${user.id}`)

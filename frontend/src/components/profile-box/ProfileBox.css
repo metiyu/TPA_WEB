@@ -6,6 +6,9 @@
   width: 50vw;
   color: var(--text_accent);
 }
+.default__profile .profile_in_pdf {
+  display: none;
+}
 .default__profile .cover__photo {
   width: 100%;
   height: 12rem;

@@ -111,10 +111,35 @@ export const VIEW_PROFILE = gql`
     }`;
 
 export const CREATE_JOBS_QUERY = gql`
-mutation CreateJobs($creatorId: ID!, $position: String!, $company: String!, $location: String!) {
-    createJobs(
-        creatorId: $creatorId
-        position: $position
-        company: $company
-        location: $location
+    mutation CreateJobs($creatorId: ID!, $position: String!, $company: String!, $location: String!) {
+        createJobs(
+            creatorId: $creatorId
+            position: $position
+            company: $company
+            location: $location
     )}`;
+
+export const CREATE_EDUCATION = gql`
+    mutation CreateEducation($userID: ID!, $school: String!, $degree: String!, $startDate: String!, $endDate: String!) {
+        createEducation(
+            userID: $userID
+            school: $school
+            degree: $degree
+            startDate: $startDate
+            endDate: $endDate
+    )}`;
+
+export const UPDATE_EDUCATION = gql`
+    mutation UpdateEducation($educationID: ID!, $school: String!, $degree: String!, $startDate: String!, $endDate: String!) {
+        updateEducation(
+            educationID: $educationID
+            school: $school
+            degree: $degree
+            startDate: $startDate
+            endDate: $endDate
+    )}`;
+
+export const DELETE_EDUCATION = gql`
+    mutation DeleteEducation($userID: ID!, $educationID: ID!) {
+        deleteEducation(userID: $userID, educationID: $educationID)
+    }`;

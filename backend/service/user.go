@@ -188,7 +188,7 @@ func SendConnectRequest(ctx context.Context, id string, requestedId string, mess
 		return nil, err
 	}
 	userRequested.RequestConnect = append(userRequested.RequestConnect, id)
-	userRequested.RequestConnectMessage = append(userRequested.RequestConnectMessage, message)
+	// userRequested.RequestConnectMessage = append(userRequested.RequestConnectMessage, message)
 	userNow, err := UserGetByID(ctx, id)
 	if err != nil {
 		return nil, err
@@ -207,12 +207,12 @@ func AcceptConnectRequest(ctx context.Context, id string, acceptedId string) (in
 		return nil, err
 	} else {
 		userNow.RequestConnect = RemoveElementFromArray(userNow.RequestConnect, acceptedId)
-		for i, val := range userNow.RequestConnect {
-			if val == userNow.ID {
-				userNow.RequestConnectMessage = RemoveArrayByIndex(userNow.RequestConnectMessage, i)
-				break
-			}
-		}
+		// for i, val := range userNow.RequestConnect {
+		// 	if val == userNow.ID {
+		// 		userNow.RequestConnectMessage = RemoveArrayByIndex(userNow.RequestConnectMessage, i)
+		// 		break
+		// 	}
+		// }
 		userNow.ConnectedUser = append(userNow.ConnectedUser, acceptedId)
 		if err := db.Where("id = ?", id).Save(userNow).Error; err != nil {
 			return nil, err
@@ -319,7 +319,7 @@ func ViewUserProfile(ctx context.Context, id string, userProfileId string) (inte
 	if err != nil {
 		return nil, err
 	}
-	if model.ProfileViewer == nil ||  len(model.ProfileViewer) <= 0 {
+	if model.ProfileViewer == nil || len(model.ProfileViewer) <= 0 {
 		model.ProfileViewer = append(model.ProfileViewer, id)
 	} else {
 		if !str_contains(model.ProfileViewer, id) {
@@ -327,4 +327,144 @@ func ViewUserProfile(ctx context.Context, id string, userProfileId string) (inte
 		}
 	}
 	return model, db.Where("id = ?", userProfileId).Save(model).Error
+}
+
+func GetEducationById(ctx context.Context, id string) (*model.Education, error) {
+	db := database.GetDB()
+
+	var education model.Education
+	if err := db.First(&education, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return &education, nil
+}
+
+func CreateEducation(ctx context.Context, userID string, school string, degree string, startDate string, endDate string) (interface{}, error) {
+	db := database.GetDB()
+
+	id := uuid.NewString()
+	education := model.Education{
+		ID:        id,
+		School:    school,
+		Degree:    degree,
+		StartDate: startDate,
+		EndDate:   endDate,
+	}
+
+	if err := db.Create(&education).Error; err != nil {
+		return nil, err
+	}
+
+	model, err := UserGetByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	model.Educations = append(model.Educations, id)
+
+	return model, db.Where("id = ?", userID).Save(model).Error
+}
+
+func UpdateEducation(ctx context.Context, educationID string, school string, degree string, startDate string, endDate string) (interface{}, error) {
+	db := database.GetDB()
+
+	education, err := GetEducationById(ctx, educationID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := db.Model(&education).Updates(model.Education{
+		School:    school,
+		Degree:    degree,
+		StartDate: startDate,
+		EndDate:   endDate,
+	}).Error; err != nil {
+		return nil, err
+	}
+
+	return education, nil
+}
+
+func DeleteEducation(ctx context.Context, userID string, educationID string) (interface{}, error) {
+	db := database.GetDB()
+
+	model, err := UserGetByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	model.Educations = RemoveElementFromArray(model.Educations, educationID)
+
+	return model, db.Where("id = ?", userID).Save(model).Error
+}
+
+func GetExperienceById(ctx context.Context, id string) (*model.Experience, error) {
+	db := database.GetDB()
+
+	var experience model.Experience
+	if err := db.First(&experience, "id = ?", id).Error; err != nil {
+		return nil, err
+	}
+
+	return &experience, nil
+}
+
+func CreateExperience(ctx context.Context, userID string, title string, employmentType string, companyName string, location string, startDate string, endDate string) (interface{}, error) {
+	db := database.GetDB()
+
+	id := uuid.NewString()
+	experience := model.Experience{
+		ID:             id,
+		Title:          title,
+		EmploymentType: employmentType,
+		CompanyName:    companyName,
+		Location:       location,
+		StartDate:      startDate,
+		EndDate:        endDate,
+	}
+
+	if err := db.Create(&experience).Error; err != nil {
+		return nil, err
+	}
+
+	model, err := UserGetByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	model.Experiences = append(model.Experiences, id)
+
+	return model, db.Where("id = ?", userID).Save(model).Error
+}
+
+func UpdateExperience(ctx context.Context, experienceID string, title string, employmentType string, companyName string, location string, startDate string, endDate string) (interface{}, error) {
+	db := database.GetDB()
+
+	experience, err := GetExperienceById(ctx, experienceID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := db.Model(&experience).Updates(model.Experience{
+		Title:          title,
+		EmploymentType: employmentType,
+		CompanyName:    companyName,
+		Location:       location,
+		StartDate:      startDate,
+		EndDate:        endDate,
+	}).Error; err != nil {
+		return nil, err
+	}
+
+	return experience, nil
+}
+
+func DeleteExperience(ctx context.Context, userID string, experienceID string) (interface{}, error) {
+	db := database.GetDB()
+	
+	model, err := UserGetByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	model.Experiences = RemoveElementFromArray(model.Experiences, experienceID)
+
+	return model, db.Where("id = ?", userID).Save(model).Error
 }

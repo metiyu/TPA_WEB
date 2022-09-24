@@ -17,6 +17,10 @@ import { GET_USER } from './query-queries'
 import { ProtectedRoute, UnprotectedRoute } from './middleware/Middleware'
 import { UseCurrentTheme } from './contexts/themeCtx'
 import Jobs from './pages/jobs/Jobs'
+import Notification from './pages/notification/Notification'
+import { VideoCallRoom } from './components/video-call/VideoCallRoom'
+import VideoCall from './components/video-call/VideoCall'
+import ProfileInPDF from './components/profile-box/ProfileInPDF'
 
 export default function Middleman() {
     const { getUser, setUserToStorage } = UseCurrentUser()
@@ -81,6 +85,12 @@ export default function Middleman() {
                         <Route path='/profile' element={<Profile />} />
                         <Route path='/search/:type/keyword=:keyword/page=:page' element={<SearchFilter />} />
                         <Route path='/jobs' element={<Jobs />} />
+                        <Route path='/notification' element={<Notification />} />
+                        <Route path="/room-create/:id/:time" element={<VideoCallRoom mode={"create"} callId={""} />} />
+                        <Route path="/room-create/:id" element={<VideoCallRoom mode={"create"} callId={""} />} />
+                        <Route path="/room/:id" element={<VideoCallRoom mode={"join"} callId={""} />} />
+                        <Route path="/server/:id" element={<VideoCall />} />
+                        {/* <Route path='/pdf' element={<ProfileInPDF />} /> */}
                     </Route>
                 </Routes>
             </BrowserRouter>

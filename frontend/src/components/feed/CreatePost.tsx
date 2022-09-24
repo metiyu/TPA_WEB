@@ -119,14 +119,14 @@ export default function CreatePost({ refetch, mentionDatas }: { refetch: any, me
                 <p>Create a post</p>
             </div>
             <hr />
-            {/* <textarea cols={65}
+            <textarea cols={65}
                 rows={5}
                 name="text"
                 id="text"
                 placeholder='What do you want to talk about?'
                 value={postCaption}
                 onChange={(e) => handlePostCaption(e.target.value)}
-            /> */}
+            />
             <MentionsInput id='test-rich-text' value={postCaption} style={{ width: "100%", height: "100px", ...mentionInputPostStyle }} placeholder="What do you want to talk about" onChange={(e) => handlePostCaption(e.target.value)}>
                 <Mention
                     trigger="@"

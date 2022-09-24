@@ -8,7 +8,7 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '../../mutation-queries';
 import { UseCurrentUser } from '../../contexts/userCtx';
 
-export default function Comment({ props }: { props: any }) {
+export default function Comment({ props, refetch }: { props: any, refetch: any }) {
     console.log(props);
     const { getUser } = UseCurrentUser()
     const { data, loading } = useQuery(GET_USER, {
@@ -26,7 +26,8 @@ export default function Comment({ props }: { props: any }) {
             }
         }).then((e) => {
             console.log(e);
-            window.location.reload()
+            refetch()
+            // window.location.reload()
         })
     }
 
@@ -39,7 +40,8 @@ export default function Comment({ props }: { props: any }) {
             }
         }).then((e) => {
             console.log(e);
-            window.location.reload()
+            refetch()
+            // window.location.reload()
         })
     }
 

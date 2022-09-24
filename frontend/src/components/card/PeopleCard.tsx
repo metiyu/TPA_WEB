@@ -1,7 +1,9 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { Avatar } from "@mui/material";
+import { addDoc, collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { db } from "../../config/firebase";
 import { UseCurrentUser } from "../../contexts/userCtx";
 import { SEND_CONNECT_QUERY, UNCONNECT_USER_QUERY } from "../../mutation-queries";
 import { GET_USER } from "../../query-queries";
@@ -43,10 +45,15 @@ export default function PeopleCard({ props }: { props: any }) {
                 id: getUser().id,
                 requestedId: e.id
             }
-        }).then((e) => {
+        }).then((result) => {
             console.log("success");
-            console.log(e.data.sendConnectRequest.userNow);
-            setUserToStorage(e.data.sendConnectRequest.userNow)
+            console.log(result.data.sendConnectRequest.userNow);
+            setUserToStorage(result.data.sendConnectRequest.userNow)
+            addDoc(collection(db, "user", e.id, "notification"), {
+                createdAt: new Date(),
+                type: "connect",
+                from_id: getUser().id
+            })
         }).catch((err) => {
             console.log(err);
         })
@@ -96,7 +103,7 @@ export default function PeopleCard({ props }: { props: any }) {
                 </div>
                 <div className='connect_button'>
                     {button == "connect" ? (
-                        <button onClick={() => handleShowSendConnect()}>Connect</button>
+                        <button onClick={() => handleConnect(props)}>Connect</button>
                     ) : (
                         button == "unconnect" ? (
                             <button onClick={() => handleUnconnect(props)}>Unconnect</button>

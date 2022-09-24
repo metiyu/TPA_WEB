@@ -11,6 +11,7 @@ import { GET_USER } from '../../query-queries';
 import EditProfile from "../popup/edit-profile/EditProfile";
 import './ProfileBox.css'
 import ReactToPrint, { useReactToPrint } from 'react-to-print';
+import ProfileInPDF from './ProfileInPDF';
 
 export default function ProfileBox({ refetch, refetchNonCurrUser }: { refetch: any, refetchNonCurrUser: any }) {
     const { getUser, setUserToStorage } = UseCurrentUser()
@@ -107,12 +108,18 @@ export default function ProfileBox({ refetch, refetchNonCurrUser }: { refetch: a
         sendConnectFunc({
             variables: {
                 id: dataCurrUser.user.id,
-                requestedId: dataNonCurrUser.user.id
+                requestedId: dataNonCurrUser.user.id,
+                message: ""
             }
         }).then((e) => {
             console.log("success");
             console.log(e.data.sendConnectRequest.userNow);
             setUserToStorage(e.data.sendConnectRequest.userNow)
+            addDoc(collection(db, "user", dataNonCurrUser.user.id, "notification"), {
+                createdAt: new Date(),
+                type: "connect",
+                from_id: getUser().id
+            })
         }).catch((err) => {
             console.log(err);
         })
@@ -145,6 +152,11 @@ export default function ProfileBox({ refetch, refetchNonCurrUser }: { refetch: a
             console.log("success");
             console.log(e.data.followUser);
             setUserToStorage(e.data.followUser)
+            addDoc(collection(db, "user", dataNonCurrUser.user.id, "notification"), {
+                createdAt: new Date(),
+                type: "follow",
+                from_id: getUser().id
+            })
         })
     }
 
@@ -202,7 +214,10 @@ export default function ProfileBox({ refetch, refetchNonCurrUser }: { refetch: a
     return (
         <>
             {!dataNonCurrUser ? (
-                <div className="default__profile" ref={componentRef}>
+                <div className="default__profile">
+                    <div className='profile_in_pdf' ref={componentRef}>
+                        <ProfileInPDF props={currUser}/>
+                    </div>
                     <Toaster position="top-right" />
                     <div className="cover__photo">
                         {currUser.photo_background ? (
@@ -238,10 +253,13 @@ export default function ProfileBox({ refetch, refetchNonCurrUser }: { refetch: a
                 </div>
             ) : (
                 <div className="default__profile">
+                    <div className='profile_in_pdf' ref={componentRef}>
+                        <ProfileInPDF props={dataNonCurrUser}/>
+                    </div>
                     <Toaster position="top-right" />
                     <div className="cover__photo">
-                        {currUser.photo_background ? (
-                            <img src={currUser.photo_background} alt="" />
+                        {dataNonCurrUser.photo_background ? (
+                            <img src={dataNonCurrUser.photo_background} alt="" />
                         ) : (
                             <img src="https://i.picsum.photos/id/599/800/200.jpg?hmac=OHWF33Uii02mcUZCEh6O8PgadRmKGNNfM_34vHv952c" alt="" />
                         )}

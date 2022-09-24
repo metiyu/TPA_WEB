@@ -14,6 +14,8 @@ import { UseCurrentUser } from "../../contexts/userCtx";
 import Comment from "./Comment";
 import RichText from "../richtext/RichText";
 import HoverProfile from "../hover-modal/HoverProfile";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../config/firebase";
 
 const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: any) => {
     const { getUser } = UseCurrentUser()
@@ -35,7 +37,7 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
 
     const [
         { loading: loading1, data: data1 },
-        { loading: loading2, data: data2, fetchMore }
+        { loading: loading2, data: data2, fetchMore, refetch: refetchComment }
     ] = queryMultiple()
 
     const [hasMore, setHasMore] = useState(true)
@@ -92,7 +94,11 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
         }).then((e) => {
             console.log(e);
             refetch()
-            // window.location.reload()
+            addDoc(collection(db, "user", props.userId, "notification"), {
+                createdAt: new Date(),
+                type: "like",
+                from_id: getUser().id
+            })
         })
     }
 
@@ -127,7 +133,12 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
                 }
             }).then((e) => {
                 console.log(e);
-                window.location.reload()
+                refetch()
+                addDoc(collection(db, "user", props.userId, "notification"), {
+                    createdAt: new Date(),
+                    type: "comment",
+                    from_id: getUser().id
+                })
             })
         }
     }
@@ -217,7 +228,7 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
                         {data2 ?
                             data2.getComment ?
                                 data2.getComment.map((comment: any) =>
-                                    <Comment props={comment} key={comment} />
+                                    <Comment props={comment} key={comment.id} refetch={refetchComment} />
                                 ) : "" : ""}
                         {hasMore ?
                             <button onClick={() => handleLoadMore()}>load more</button> : ""}
