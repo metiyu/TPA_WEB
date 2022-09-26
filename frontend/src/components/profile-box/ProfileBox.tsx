@@ -211,101 +211,105 @@ export default function ProfileBox({ refetch, refetchNonCurrUser }: { refetch: a
         content: () => componentRef.current,
     });
 
+    console.log(dataCurrUser);
+
+
     return (
         <>
-            {!dataNonCurrUser ? (
-                <div className="default__profile">
-                    <div className='profile_in_pdf' ref={componentRef}>
-                        <ProfileInPDF props={currUser}/>
-                    </div>
-                    <Toaster position="top-right" />
-                    <div className="cover__photo">
-                        {currUser.photo_background ? (
-                            <img src={currUser.photo_background} alt="" />
-                        ) : (
-                            <img src="https://i.picsum.photos/id/599/800/200.jpg?hmac=OHWF33Uii02mcUZCEh6O8PgadRmKGNNfM_34vHv952c" alt="" />
-                        )}
-                    </div>
-                    <Avatar className="profile__photo" src={currUser.photo_profile} />
-                    <h3>{currUser.name}</h3>
-                    {currUser.work ? (
-                        <h4>{currUser.work}</h4>
-                    ) : ("")}
-                    {currUser.education ? (
-                        <h4>{currUser.education}</h4>
-                    ) : ("")}
-                    <div className="sub__information">
-                        {currUser.region ? (
-                            <p>{currUser.region}</p>
-                        ) : ("")}
-                    </div>
-                    {currUser.connected_user ? (
-                        <p className="connection">{currUser.connected_user.length} Connection</p>
-                    ) : ("")}
-                    <div className="buttons">
-                        <button onClick={() => handleShowEditProfile()}>Edit profile</button>
-                        <button onClick={handlePrint}>Save as pdf</button>
-                    </div>
-                    <div className={dropdownClassname}>
-                        <EditProfile />
-                    </div>
-                    <div id={greyBackground} onClick={() => handleShowEditProfile()}></div>
-                </div>
-            ) : (
-                <div className="default__profile">
-                    <div className='profile_in_pdf' ref={componentRef}>
-                        <ProfileInPDF props={dataNonCurrUser}/>
-                    </div>
-                    <Toaster position="top-right" />
-                    <div className="cover__photo">
-                        {dataNonCurrUser.photo_background ? (
-                            <img src={dataNonCurrUser.photo_background} alt="" />
-                        ) : (
-                            <img src="https://i.picsum.photos/id/599/800/200.jpg?hmac=OHWF33Uii02mcUZCEh6O8PgadRmKGNNfM_34vHv952c" alt="" />
-                        )}
-                    </div>
-                    <Avatar className="profile__photo" src={dataNonCurrUser.user.photo_profile} />
-                    <h3>{dataNonCurrUser.user.name}</h3>
-                    {dataNonCurrUser.user.work ? (
-                        <h4>{dataNonCurrUser.user.work}</h4>
-                    ) : ("")}
-                    {dataNonCurrUser.user.education ? (
-                        <h4>{dataNonCurrUser.user.education}</h4>
-                    ) : ("")}
-                    <div className="sub__information">
-                        {dataNonCurrUser.user.region ? (
-                            <p>{dataNonCurrUser.user.region}</p>
-                        ) : ("")}
-                    </div>
-                    {dataNonCurrUser.user.connected_user ? (
-                        <p className="connection">{dataNonCurrUser.user.connected_user.length} Connection</p>
-                    ) : ("")}
-                    <div className="buttons">
-                        {followBtn == "follow" ? (
-                            <button onClick={() => handleFollow()}>Follow</button>
-                        ) : (
-                            <button onClick={() => handleUnfollow()}>Unfollow</button>
-                        )}
-                        {button == "connect" ? (
-                            <button onClick={() => handleConnect()}>Connect</button>
-                        ) : (
-                            button == "unconnect" ? (
-                                <button onClick={() => handleUnconnect()}>Unconnect</button>
+            {dataCurrUser ?
+                !dataNonCurrUser ? (
+                    <div className="default__profile">
+                        <div className='profile_in_pdf' ref={componentRef}>
+                            <ProfileInPDF props={dataCurrUser.user} />
+                        </div>
+                        <Toaster position="top-right" />
+                        <div className="cover__photo">
+                            {currUser.photo_background ? (
+                                <img src={currUser.photo_background} alt="" />
                             ) : (
-                                <button>Pending</button>
-                            )
-                        )}
-                        <button onClick={() => handleMakeChatRoom()}>Message</button>
-                        <button>Share profile</button>
-                        <button>Block</button>
-                        <button onClick={handlePrint}>Save as pdf</button>
+                                <img src="https://i.picsum.photos/id/599/800/200.jpg?hmac=OHWF33Uii02mcUZCEh6O8PgadRmKGNNfM_34vHv952c" alt="" />
+                            )}
+                        </div>
+                        <Avatar className="profile__photo" src={currUser.photo_profile} />
+                        <h3>{currUser.name}</h3>
+                        {currUser.work ? (
+                            <h4>{currUser.work}</h4>
+                        ) : ("")}
+                        {currUser.education ? (
+                            <h4>{currUser.education}</h4>
+                        ) : ("")}
+                        <div className="sub__information">
+                            {currUser.region ? (
+                                <p>{currUser.region}</p>
+                            ) : ("")}
+                        </div>
+                        {currUser.connected_user ? (
+                            <p className="connection">{currUser.connected_user.length} Connection</p>
+                        ) : ("")}
+                        <div className="buttons">
+                            <button onClick={() => handleShowEditProfile()}>Edit profile</button>
+                            <button onClick={handlePrint}>Save as pdf</button>
+                        </div>
+                        <div className={dropdownClassname}>
+                            <EditProfile />
+                        </div>
+                        <div id={greyBackground} onClick={() => handleShowEditProfile()}></div>
                     </div>
-                    <div className={dropdownClassname}>
-                        <EditProfile />
+                ) : (
+                    <div className="default__profile">
+                        <div className='profile_in_pdf' ref={componentRef}>
+                            <ProfileInPDF props={dataNonCurrUser} />
+                        </div>
+                        <Toaster position="top-right" />
+                        <div className="cover__photo">
+                            {dataNonCurrUser.photo_background ? (
+                                <img src={dataNonCurrUser.photo_background} alt="" />
+                            ) : (
+                                <img src="https://i.picsum.photos/id/599/800/200.jpg?hmac=OHWF33Uii02mcUZCEh6O8PgadRmKGNNfM_34vHv952c" alt="" />
+                            )}
+                        </div>
+                        <Avatar className="profile__photo" src={dataNonCurrUser.user.photo_profile} />
+                        <h3>{dataNonCurrUser.user.name}</h3>
+                        {dataNonCurrUser.user.work ? (
+                            <h4>{dataNonCurrUser.user.work}</h4>
+                        ) : ("")}
+                        {dataNonCurrUser.user.education ? (
+                            <h4>{dataNonCurrUser.user.education}</h4>
+                        ) : ("")}
+                        <div className="sub__information">
+                            {dataNonCurrUser.user.region ? (
+                                <p>{dataNonCurrUser.user.region}</p>
+                            ) : ("")}
+                        </div>
+                        {dataNonCurrUser.user.connected_user ? (
+                            <p className="connection">{dataNonCurrUser.user.connected_user.length} Connection</p>
+                        ) : ("")}
+                        <div className="buttons">
+                            {followBtn == "follow" ? (
+                                <button onClick={() => handleFollow()}>Follow</button>
+                            ) : (
+                                <button onClick={() => handleUnfollow()}>Unfollow</button>
+                            )}
+                            {button == "connect" ? (
+                                <button onClick={() => handleConnect()}>Connect</button>
+                            ) : (
+                                button == "unconnect" ? (
+                                    <button onClick={() => handleUnconnect()}>Unconnect</button>
+                                ) : (
+                                    <button>Pending</button>
+                                )
+                            )}
+                            <button onClick={() => handleMakeChatRoom()}>Message</button>
+                            <button>Share profile</button>
+                            <button>Block</button>
+                            <button onClick={handlePrint}>Save as pdf</button>
+                        </div>
+                        <div className={dropdownClassname}>
+                            <EditProfile />
+                        </div>
+                        <div id={greyBackground} onClick={() => handleShowEditProfile()}></div>
                     </div>
-                    <div id={greyBackground} onClick={() => handleShowEditProfile()}></div>
-                </div>
-            )}
+                ) : ""}
         </>
     )
 }

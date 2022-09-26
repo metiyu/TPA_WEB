@@ -143,3 +143,32 @@ export const DELETE_EDUCATION = gql`
     mutation DeleteEducation($userID: ID!, $educationID: ID!) {
         deleteEducation(userID: $userID, educationID: $educationID)
     }`;
+
+export const CREATE_EXPERIENCE = gql`
+    mutation CreateExperience($userID: ID!, $title: String!, $employmentType: String!, $companyName: String!, $location: String!, $startDate: String!, $endDate: String) {
+    createExperience(
+        userID: $userID
+        title: $title
+        employmentType: $employmentType
+        companyName: $companyName
+        location: $location
+        startDate: $startDate
+        endDate: $endDate
+    )}`;
+
+export const UPDATE_EXPERIENCE = gql`
+mutation UpdateExperience($experienceID: ID!, $title: String!, $employmentType: String!, $companyName: String!, $location: String!, $startDate: String!, $endDate: String) {
+    updateExperience(
+        experienceID: $experienceID
+        title: $title
+        employmentType: $employmentType
+        companyName: $companyName
+        location: $location
+        startDate: $startDate
+        endDate: $endDate
+    )}`;
+
+export const DELETE_EXPERIENCE = gql`
+    mutation DeleteExperience($userID: ID!, $experienceID: ID!) {
+        deleteExperience(userID: $userID, experienceID: $experienceID)
+    }`;

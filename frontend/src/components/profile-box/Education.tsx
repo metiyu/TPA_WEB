@@ -9,7 +9,7 @@ import HeaderOption from "../header/HeaderOption";
 import EditProfile from "../popup/edit-profile/EditProfile";
 import EducationModal from "./modal/EducationModal";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_EDUCATION } from "../../mutation-queries";
+import { CREATE_EDUCATION, DELETE_EDUCATION } from "../../mutation-queries";
 import { UseCurrentUser } from "../../contexts/userCtx";
 import toast, { Toaster } from "react-hot-toast";
 import { GET_EDUCATION } from "../../query-queries";
@@ -66,8 +66,18 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
         validation()
     }
 
-    function handleRemoveEducation() {
-
+    const [deleteEducationQuery] = useMutation(DELETE_EDUCATION)
+    function handleRemoveEducation(id: any) {
+        deleteEducationQuery({
+            variables: {
+                userID: dataCurrUser.user.id,
+                educationID: id
+            }
+        }).then((e) => {
+            console.log(e);
+            toast.success("Success")
+            refetchCurrUser()
+        })
     }
 
     function validation() {
@@ -93,23 +103,13 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
                 dataNonCurrUser.user.profile_viewer != null ?
                     <div className="analytics">
                         <div className="title__container">
-                            <h2>Education NOT UPDATED</h2>
-                            <HeaderOption Icon={AddIcon} title="" avatar={undefined} onClick={() => handleAddEducation()} />
+                            <h2>Education</h2>
                         </div>
                         <div className="analytics__contents">
                             <div className="analytics__content">
-                                {/* map */}
-                                <div className="edit_remove__container">
-                                    <div className="text__content">
-                                        <h4>School</h4>
-                                        <p>2022 - 2025</p>
-                                    </div>
-                                    <div className="edit_remove__button">
-                                        <HeaderOption Icon={EditIcon} title="" avatar={undefined} onClick={() => handleEditEducation()} />
-                                        <HeaderOption Icon={RemoveCircleOutlineIcon} title="" avatar={undefined} onClick={() => handleRemoveEducation()} />
-                                    </div>
-                                </div>
-                                {/*  */}
+                                {dataNonCurrUser.user.educations.map((edu: any) =>
+                                    <EducationCard props={edu} handleEdit={undefined} handleRemove={undefined} type={"nonCurrUser"} />
+                                )}
                             </div>
                         </div>
                         <div className={dropdownClassname}>
@@ -129,21 +129,9 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
                                 </div>
                                 <div className="analytics__contents">
                                     <div className="analytics__content">
-                                        {/* map */}
                                         {dataCurrUser.user.educations.map((edu: any) =>
-                                            <EducationCard props={edu} handleEdit={handleEditEducation} handleRemove={handleRemoveEducation}/>
+                                            <EducationCard props={edu} handleEdit={handleEditEducation} handleRemove={handleRemoveEducation} type={"currUser"} />
                                         )}
-                                        {/* <div className="edit_remove__container">
-                                            <div className="text__content">
-                                                <h4>School</h4>
-                                                <p>2022 - 2025</p>
-                                            </div>
-                                            <div className="edit_remove__button">
-                                                <HeaderOption Icon={EditIcon} title="" avatar={undefined} onClick={() => handleShowEditEducation()} />
-                                                <HeaderOption Icon={RemoveCircleOutlineIcon} title="" avatar={undefined} onClick={() => handleRemoveEducation()} />
-                                            </div>
-                                        </div> */}
-                                        {/*  */}
                                     </div>
                                 </div>
                             </div>

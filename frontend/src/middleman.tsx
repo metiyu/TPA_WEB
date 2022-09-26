@@ -90,7 +90,7 @@ export default function Middleman() {
                         <Route path="/room-create/:id" element={<VideoCallRoom mode={"create"} callId={""} />} />
                         <Route path="/room/:id" element={<VideoCallRoom mode={"join"} callId={""} />} />
                         <Route path="/server/:id" element={<VideoCall />} />
-                        {/* <Route path='/pdf' element={<ProfileInPDF />} /> */}
+                        <Route path='/pdf' element={<ProfileInPDF props={getUser()} />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

@@ -38,7 +38,7 @@ export default function Profile() {
                         <ProfileBox refetch={refetch} refetchNonCurrUser={refetchNonCurrUser} />
                         <Analytics dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
                         <Education dataCurrUser={data} refetchCurrUser={refetch}  dataNonCurrUser={dataNonCurrUser} />
-                        <Experience dataCurrUser={data} dataNonCurrUser={dataNonCurrUser} />
+                        <Experience dataCurrUser={data} refetchCurrUser={refetch} dataNonCurrUser={dataNonCurrUser} />
                         <Footer />
                     </div>
                 </div>=

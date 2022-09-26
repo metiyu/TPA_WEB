@@ -69,3 +69,8 @@ export const GET_EDUCATION = gql`
     query GetEducation($id: ID!){
         getEducation(id: $id)
     }`;
+
+export const GET_EXPERIENCE = gql`
+    query GetExperience($id: ID!){
+        getExperience(id: $id)
+    }`;
