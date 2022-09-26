@@ -40,8 +40,8 @@ export default function ProfileInPDF({ props }: { props: any }) {
                 <hr />
             </div>
             <h3>Contact</h3>
-            <p>Email</p>
-            <p>LinHEdIn link</p>
+            <p>{props.email}</p>
+            <p>{`localhost:3030/profile/${props.id}`}</p>
         </div>
     )
 }

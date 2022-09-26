@@ -10,7 +10,7 @@ import ExperienceCard from "./ExperienceCard";
 import ExperienceModal from "./modal/ExperienceModal";
 import toast from "react-hot-toast";
 import { useMutation } from "@apollo/client";
-import { CREATE_EXPERIENCE, DELETE_EXPERIENCE } from "../../mutation-queries";
+import { CREATE_EXPERIENCE, DELETE_EXPERIENCE, UPDATE_EXPERIENCE } from "../../mutation-queries";
 
 export default function Experience({ dataCurrUser, dataNonCurrUser, refetchCurrUser }: { dataCurrUser: any, dataNonCurrUser: any, refetchCurrUser: any }) {
     const { id } = useParams()
@@ -35,6 +35,7 @@ export default function Experience({ dataCurrUser, dataNonCurrUser, refetchCurrU
     const [startDate, setStartDate]: any = useState("")
     const [endDate, setEndDate]: any = useState("")
     const [type, setType]: any = useState()
+    const [experienceId, setExperienceId]: any = useState()
 
     const [createExperienceQuery] = useMutation(CREATE_EXPERIENCE)
     function handleAddExperience() {
@@ -59,10 +60,39 @@ export default function Experience({ dataCurrUser, dataNonCurrUser, refetchCurrU
         }
     }
 
-    function handleEditExperience() {
+    const [editExperienceQuery] = useMutation(UPDATE_EXPERIENCE)
+    const [isRefetch, setIsRefetch] = useState(false)
+    function handleEditExperience(e: any) {
         handleShowEditExperience()
         setType("edit")
-        validation()
+        console.log(e);
+
+        if (e != undefined) {
+            setExperienceId(e.id)
+            setTitle(e.title)
+            setEmploymentType(e.employmentType)
+            setCompanyName(e.companyName)
+            setLocation(e.location)
+            setStartDate(e.startDate)
+            setEndDate(e.endDate)
+        }
+        if (validation()) {
+            editExperienceQuery({
+                variables: {
+                    experienceID: experienceId,
+                    title: title,
+                    employmentType: employmentType,
+                    companyName: companyName,
+                    location: location,
+                    startDate: startDate,
+                    endDate: endDate
+                }
+            }).then((e) => {
+                console.log(e);
+                toast.success("Success")
+                setIsRefetch(true)
+            })
+        }
     }
 
     const [deleteExperienceQuery] = useMutation(DELETE_EXPERIENCE)
@@ -111,7 +141,7 @@ export default function Experience({ dataCurrUser, dataNonCurrUser, refetchCurrU
                         <div className="analytics__contents">
                             <div className="analytics__content">
                                 {dataNonCurrUser.user.experiences.map((edu: any) =>
-                                    <ExperienceCard props={edu} handleEdit={undefined} handleRemove={undefined} type={"nonCurrUser"} />
+                                    <ExperienceCard props={edu} handleEdit={undefined} handleRemove={undefined} type={"nonCurrUser"} isRefetch={undefined} />
                                 )}
                             </div>
                         </div>
@@ -128,13 +158,14 @@ export default function Experience({ dataCurrUser, dataNonCurrUser, refetchCurrU
                                 <div className="analytics__contents">
                                     <div className="analytics__content">
                                         {dataCurrUser.user.experiences.map((edu: any) =>
-                                            <ExperienceCard props={edu} handleEdit={handleEditExperience} handleRemove={handleRemoveExperience} type={"currUser"} />
+                                            <ExperienceCard props={edu} handleEdit={handleEditExperience} handleRemove={handleRemoveExperience} type={"currUser"} isRefetch={isRefetch} />
                                         )}
                                     </div>
                                 </div>
                             </div>
                             <div className={dropdownClassname}>
                                 <ExperienceModal
+                                    id={experienceId}
                                     title={title}
                                     setTitle={setTitle}
                                     employmentType={employmentType}

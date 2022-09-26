@@ -7,17 +7,17 @@ import ChatOutlinedIcon from '@mui/icons-material/ChatOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import InputOption from "../input/InputOption";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_COMMENTS, GET_USER } from "../../query-queries";
-import { COMMENT_POST, LIKE_POST, UNLIKE_POST } from "../../mutation-queries";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { GET_COMMENTS, GET_USER, SEARCH_CONNECTED_USER_QUERY } from "../../query-queries";
+import { COMMENT_POST, LIKE_POST, SHARE_POST, UNLIKE_POST } from "../../mutation-queries";
 import { UseCurrentUser } from "../../contexts/userCtx";
 import Comment from "./Comment";
 import RichText from "../richtext/RichText";
 import HoverProfile from "../hover-modal/HoverProfile";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "../../config/firebase";
 
-const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: any) => {
+const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: any) => {    
     const { getUser } = UseCurrentUser()
     const queryMultiple = () => {
         const res1 = useQuery(GET_USER, {
@@ -143,8 +143,25 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
         }
     }
 
+    const [popupClassname, setPopupClassname] = useState("post__popup_share_hide")
     function handleShare() {
-        console.log("share");
+        if (popupClassname == "post__popup_share_hide") {
+            setPopupClassname("post__popup_share_show")
+        } else {
+            setPopupClassname("post__popup_share_hide")
+        }
+    }
+
+    const [searchUser, { data: searchData, loading: searchLoading }] = useLazyQuery(SEARCH_CONNECTED_USER_QUERY)
+    const [keyword, setKeyword] = useState("")
+    function handleSearchConnectedUser(e: any) {
+        setKeyword(e)
+        searchUser({
+            variables: {
+                id: getUser().id,
+                keyword: e
+            }
+        })
     }
 
     function checkIsLike() {
@@ -156,6 +173,31 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
     }
 
     const [hovered, setHovered] = useState("hide_hover")
+
+    const [roomID, setRoomID] = useState("")
+    // const [sharePostFunc] = useMutation(SHARE_POST)
+    function sharePost(search: any) {
+        const q = query(collection(db, "rooms"))
+        onSnapshot(q, (docs) => {
+            docs.forEach(doc => {
+                if (doc.data().users_id.includes(getUser().id) && doc.data().users_id.includes(search.id))
+                    setRoomID(doc.id)
+            })
+        })
+
+        addDoc(collection(db, "rooms", roomID, "chats"), {
+            createdAt: new Date(),
+            sender: getUser().id,
+            post: props.id
+        }).then((e) => {
+            console.log(e);
+            // sharePostFunc({
+            //     variables: {
+            //         postId: props.id
+            //     }
+            // })
+        })
+    }
 
     return (
         <>
@@ -220,8 +262,26 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
                             <div onClick={() => handleLike()}><InputOption Icon={ThumbUpAltOutlinedIcon} title="Like" color="gray" /></div>
                         }
                         <div><InputOption Icon={ChatOutlinedIcon} title="Comment" color="gray" /></div>
-                        <div onClick={() => handleShare()}><InputOption Icon={ShareOutlinedIcon} title="Share" color="gray" /></div>
-                        <InputOption Icon={SendOutlinedIcon} title="Send" color="gray" />
+                        <div onClick={() => handleShare()}>
+                            <InputOption Icon={ShareOutlinedIcon} title="Share" color="gray" />
+                        </div>
+                        {/* <InputOption Icon={SendOutlinedIcon} title="Send" color="gray" /> */}
+                    </div>
+                    <div className={popupClassname}>
+                        <input type="text" placeholder="Search user..." onChange={(e) => handleSearchConnectedUser(e.target.value)} />
+                        <div className='search_connected_user__container'>
+                            {searchData ?
+                                searchData.searchConnectedUser != undefined ?
+                                    searchData.searchConnectedUser.map((search: any) =>
+                                        search.id != getUser().id ?
+                                            <div onClick={() => sharePost(search)}>
+                                                <p>{search.name}</p>
+                                                <hr />
+                                            </div>
+                                            : ""
+                                    )
+                                    : "" : ""}
+                        </div>
                     </div>
                     <div className="post__comment">
                         <input type="text" placeholder="Add a comment..." value={comment} onChange={(e) => setComment(e.target.value)} onKeyDown={(e) => handleComment(e)} />

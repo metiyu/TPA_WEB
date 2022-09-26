@@ -7,12 +7,13 @@ import ImageIcon from '@mui/icons-material/Image';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import { UseCurrentUser } from '../../contexts/userCtx'
 import { useLazyQuery, useQuery } from '@apollo/client'
-import { GENERATE_ID, GET_USER, SEARCH_CONNECTED_USER_QUERY } from '../../query-queries'
+import { GENERATE_ID, GET_POSTS, GET_POST_BY_ID, GET_USER, SEARCH_CONNECTED_USER_QUERY } from '../../query-queries'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import PeopleBubble from './PeopleBubble'
 import CallIcon from '@mui/icons-material/Call';
 import HeaderOption from '../header/HeaderOption'
+import Post from '../post/Post'
 
 export default function MessageBox() {
     const [roomID, setRoomID] = useState("")
@@ -114,7 +115,6 @@ export default function MessageBox() {
 
     const [keyword, setKeyword] = useState("")
 
-
     function handleSearchConnectedUser(e: any) {
         setKeyword(e)
         searchUser({
@@ -210,17 +210,24 @@ export default function MessageBox() {
                                 chat != {} ?
                                     chat.createdAt != undefined ?
                                         chat.sender != getUser().id ?
-                                            // console.log(new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000))
                                             <div className='left__bubble_chat'>
                                                 <p>{new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getHours().toString().padStart(2, "0")}:
                                                     {new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getMinutes().toString().padStart(2, "0")}</p>
                                                 <div>{chat.message}</div>
+                                                <div>{chat.post}</div>
+                                                {chat.post != undefined ?
+                                                    <PostInChat id={chat.post} />
+                                                    : ""}
                                             </div>
                                             :
                                             <div className='right__bubble_chat'>
                                                 <p>{new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getHours().toString().padStart(2, "0")}:
                                                     {new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getMinutes().toString().padStart(2, "0")}</p>
                                                 <div>{chat.message}</div>
+                                                {/* <div>{chat.post}</div> */}
+                                                {chat.post != undefined ?
+                                                    <PostInChat id={chat.post} />
+                                                    : ""}
                                             </div>
                                         : ""
                                     : ""
@@ -301,4 +308,23 @@ export default function MessageBox() {
             }
         </>
     )
+}
+
+function PostInChat({ id }: { id: any }) {
+    const { data, refetch } = useQuery(GET_POST_BY_ID, {
+        variables: {
+            id: id
+        }
+    })
+    console.log(id);
+    if(data)
+        console.log(data);
+
+    return <>
+        {data ?
+            <div className='postinchat__container'>
+                <Post props={data.getPostById} refetch={refetch} />
+            </div>
+            : ""}
+    </>
 }

@@ -5,13 +5,20 @@ import "./Analytics.css"
 import './Edu_Exp.css'
 import { useQuery } from "@apollo/client";
 import { GET_EDUCATION, GET_EXPERIENCE } from "../../query-queries";
+import { useEffect } from "react";
 
-export default function ExperienceCard({ props, handleEdit, handleRemove, type }: { props: any, handleEdit: any, handleRemove: any, type: any }) {
-    const { data } = useQuery(GET_EXPERIENCE, {
+export default function ExperienceCard({ props, handleEdit, handleRemove, type, isRefetch }: { props: any, handleEdit: any, handleRemove: any, type: any, isRefetch: any }) {
+    const { data, refetch } = useQuery(GET_EXPERIENCE, {
         variables: {
             id: props
         }
     })
+
+    useEffect(() => {
+        if (isRefetch) {
+            refetch()
+        }
+    }, [isRefetch])
 
     const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
@@ -33,7 +40,7 @@ export default function ExperienceCard({ props, handleEdit, handleRemove, type }
                     </div>
                     {type == "currUser" ?
                         <div className="edit_remove__button">
-                            <HeaderOption Icon={EditIcon} title="" avatar={undefined} onClick={() => handleEdit()} />
+                            <HeaderOption Icon={EditIcon} title="" avatar={undefined} onClick={() => handleEdit(data.getExperience)} />
                             <HeaderOption Icon={RemoveCircleOutlineIcon} title="" avatar={undefined} onClick={() => handleRemove(data.getExperience.id)} />
                         </div> : ""}
                 </div> : ""}

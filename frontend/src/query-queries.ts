@@ -50,6 +50,11 @@ export const GET_POSTS = gql`
         getPosts(id: $id, limit: $limit, offset: $offset)
     }`;
 
+export const GET_POST_BY_ID = gql`
+    query GetPostById($id: ID!) {
+        getPostById(id: $id)
+    }`;
+
 export const GET_COMMENTS = gql`
     query GetComments($postId: ID!, $offset: Int!, $limit: Int!) {
         getComment(postId: $postId, offset: $offset, limit: $limit)

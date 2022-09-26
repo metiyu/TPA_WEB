@@ -9,7 +9,7 @@ import HeaderOption from "../header/HeaderOption";
 import EditProfile from "../popup/edit-profile/EditProfile";
 import EducationModal from "./modal/EducationModal";
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_EDUCATION, DELETE_EDUCATION } from "../../mutation-queries";
+import { CREATE_EDUCATION, DELETE_EDUCATION, UPDATE_EDUCATION } from "../../mutation-queries";
 import { UseCurrentUser } from "../../contexts/userCtx";
 import toast, { Toaster } from "react-hot-toast";
 import { GET_EDUCATION } from "../../query-queries";
@@ -36,6 +36,7 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
     const [startDate, setStartDate]: any = useState("")
     const [endDate, setEndDate]: any = useState("")
     const [type, setType]: any = useState()
+    const [educationId, setEducationId]: any = useState()
 
     const { getUser } = UseCurrentUser()
 
@@ -60,10 +61,34 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
         }
     }
 
-    function handleEditEducation() {
+    const [editEducationQuery] = useMutation(UPDATE_EDUCATION)
+    const [isRefetch, setIsRefetch] = useState(false)
+    function handleEditEducation(e: any) {
+        console.log(e);
         handleShowEditEducation()
         setType("edit")
-        validation()
+        if (e != undefined) {
+            setEducationId(e.id)
+            setSchool(e.school)
+            setDegree(e.degree)
+            setStartDate(e.startDate)
+            setEndDate(e.endDate)
+        }
+        if (validation()) {
+            editEducationQuery({
+                variables: {
+                    educationID: educationId,
+                    school: school,
+                    degree: degree,
+                    startDate: startDate,
+                    endDate: endDate
+                }
+            }).then((e) => {
+                console.log(e);
+                toast.success("Success")
+                setIsRefetch(true)
+            })
+        }
     }
 
     const [deleteEducationQuery] = useMutation(DELETE_EDUCATION)
@@ -108,7 +133,7 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
                         <div className="analytics__contents">
                             <div className="analytics__content">
                                 {dataNonCurrUser.user.educations.map((edu: any) =>
-                                    <EducationCard props={edu} handleEdit={undefined} handleRemove={undefined} type={"nonCurrUser"} />
+                                    <EducationCard props={edu} handleEdit={undefined} handleRemove={undefined} type={"nonCurrUser"} isRefetch={undefined}/>
                                 )}
                             </div>
                         </div>
@@ -130,13 +155,14 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
                                 <div className="analytics__contents">
                                     <div className="analytics__content">
                                         {dataCurrUser.user.educations.map((edu: any) =>
-                                            <EducationCard props={edu} handleEdit={handleEditEducation} handleRemove={handleRemoveEducation} type={"currUser"} />
+                                            <EducationCard props={edu} handleEdit={handleEditEducation} handleRemove={handleRemoveEducation} type={"currUser"} isRefetch={isRefetch}/>
                                         )}
                                     </div>
                                 </div>
                             </div>
                             <div className={dropdownClassname}>
                                 <EducationModal
+                                    id={educationId}
                                     school={school}
                                     setSchool={setSchool}
                                     degree={degree}

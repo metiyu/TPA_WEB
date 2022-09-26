@@ -105,6 +105,11 @@ export const UNLIKE_COMMENT = gql`
         unlikeComment(commentId: $commentId, unlikerId: $unlikerId)
     }`;
 
+export const SHARE_POST = gql`
+    mutation SharePost($postId: ID!){
+        sharePost(postId: $postId)
+    }`;
+
 export const VIEW_PROFILE = gql`
     mutation ViewProfile($id: ID!, $userProfileId: ID!){
         viewUserProfile(id: $id, userProfileId: $userProfileId)

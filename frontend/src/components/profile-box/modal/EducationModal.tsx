@@ -3,6 +3,7 @@ import './Modal.css'
 
 export default function EducationModal(
     {
+        id,
         school,
         setSchool,
         degree,
@@ -16,6 +17,7 @@ export default function EducationModal(
         edit
     }:
         {
+            id: any
             school: any,
             setSchool: any,
             degree: any,
@@ -39,7 +41,13 @@ export default function EducationModal(
         if (type == "add")
             add()
         else if (type == "edit")
-            edit()
+            edit({
+                id,
+                school,
+                degree,
+                startDate,
+                endDate
+            })
     }
 
     return (

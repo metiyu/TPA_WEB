@@ -2,7 +2,8 @@ import { useState } from 'react'
 import './Modal.css'
 
 export default function ExperienceModal(
-    {
+    {   
+        id,
         title,
         setTitle,
         employmentType,
@@ -20,6 +21,7 @@ export default function ExperienceModal(
         edit
     }:
         {
+            id: any,
             title: any,
             setTitle: any,
             employmentType: any,
@@ -43,7 +45,15 @@ export default function ExperienceModal(
         if (type == "add")
             add()
         else if (type == "edit")
-            edit()
+            edit({
+                id,
+                title,
+                employmentType,
+                companyName,
+                location,
+                startDate,
+                endDate
+            })
     }
 
     return (
