@@ -6,7 +6,7 @@
     width: 50vw;
     color: var(--text_accent);
 
-    .profile_in_pdf{
+    .profile_in_pdf {
         display: none;
     }
 
@@ -115,5 +115,28 @@ $height: 500px;
 }
 
 #overlay_invisible {
+    display: none;
+}
+
+.post__popup_share_show {
+    position: absolute;
+    // display: flex;
+    margin-left: 200px;
+    width: 230px;
+    height: auto;
+    background-color: var(--primary);
+    border-radius: 10px;
+    border: 2px solid var(--border_accent);
+    padding: 10px;
+
+    hr {
+        border: 0;
+        height: 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+}
+
+.post__popup_share_hide {
     display: none;
 }

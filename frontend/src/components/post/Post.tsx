@@ -16,8 +16,10 @@ import RichText from "../richtext/RichText";
 import HoverProfile from "../hover-modal/HoverProfile";
 import { addDoc, collection, onSnapshot, query } from "firebase/firestore";
 import { db } from "../../config/firebase";
+import { Mention, MentionsInput, SuggestionDataItem } from "react-mentions";
+import { mentionInputPostStyle, mentionStyle } from "../richtext/mentionStyle";
 
-const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: any) => {    
+const Post = forwardRef(({ props, refetch, mentionDatas }: { props: any, refetch: any, mentionDatas: any }, ref: any) => {
     const { getUser } = UseCurrentUser()
     const queryMultiple = () => {
         const res1 = useQuery(GET_USER, {
@@ -124,7 +126,7 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
     const [comment, setComment] = useState("")
     const [commentFunc] = useMutation(COMMENT_POST)
     function handleComment(e: any) {
-        if (e.code == "Enter") {
+        // if (e.code == "Enter") {
             commentFunc({
                 variables: {
                     postId: props.id,
@@ -139,8 +141,9 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
                     type: "comment",
                     from_id: getUser().id
                 })
+                setComment("")
             })
-        }
+        // }
     }
 
     const [popupClassname, setPopupClassname] = useState("post__popup_share_hide")
@@ -284,11 +287,24 @@ const Post = forwardRef(({ props, refetch }: { props: any, refetch: any }, ref: 
                         </div>
                     </div>
                     <div className="post__comment">
-                        <input type="text" placeholder="Add a comment..." value={comment} onChange={(e) => setComment(e.target.value)} onKeyDown={(e) => handleComment(e)} />
+                        <MentionsInput className="mentions_input" id='test-rich-text' value={comment} style={{ width: "100%", height: "100px", ...mentionInputPostStyle }} placeholder="Add a comment..." onChange={(e) => setComment(e.target.value)}>
+                            <Mention
+                                trigger="@"
+                                data={mentionDatas}
+                                style={mentionStyle}
+                            />
+                            {/* <Mention
+                                trigger="#"
+                                data={hastagDatas}
+                                style={mentionStyle}
+                            /> */}
+                        </MentionsInput>
+                        <button onClick={handleComment}>Send</button>
+                        {/* <input type="text" placeholder="Add a comment..." value={comment} onChange={(e) => setComment(e.target.value)} onKeyDown={(e) => handleComment(e)} /> */}
                         {data2 ?
                             data2.getComment ?
                                 data2.getComment.map((comment: any) =>
-                                    <Comment props={comment} key={comment.id} refetch={refetchComment} />
+                                    <Comment props={comment} key={comment.id} refetch={refetchComment} setComment={setComment}/>
                                 ) : "" : ""}
                         {hasMore ?
                             <button onClick={() => handleLoadMore()}>load more</button> : ""}

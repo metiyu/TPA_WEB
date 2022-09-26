@@ -132,9 +132,10 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
                         </div>
                         <div className="analytics__contents">
                             <div className="analytics__content">
-                                {dataNonCurrUser.user.educations.map((edu: any) =>
-                                    <EducationCard props={edu} handleEdit={undefined} handleRemove={undefined} type={"nonCurrUser"} isRefetch={undefined}/>
-                                )}
+                                {dataNonCurrUser.user.educations ?
+                                    dataNonCurrUser.user.educations.map((edu: any) =>
+                                        <EducationCard props={edu} handleEdit={undefined} handleRemove={undefined} type={"nonCurrUser"} isRefetch={undefined} />
+                                    ) : ""}
                             </div>
                         </div>
                         <div className={dropdownClassname}>
@@ -155,7 +156,7 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
                                 <div className="analytics__contents">
                                     <div className="analytics__content">
                                         {dataCurrUser.user.educations.map((edu: any) =>
-                                            <EducationCard props={edu} handleEdit={handleEditEducation} handleRemove={handleRemoveEducation} type={"currUser"} isRefetch={isRefetch}/>
+                                            <EducationCard props={edu} handleEdit={handleEditEducation} handleRemove={handleRemoveEducation} type={"currUser"} isRefetch={isRefetch} />
                                         )}
                                     </div>
                                 </div>

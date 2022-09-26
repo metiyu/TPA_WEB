@@ -14,6 +14,7 @@ import PeopleBubble from './PeopleBubble'
 import CallIcon from '@mui/icons-material/Call';
 import HeaderOption from '../header/HeaderOption'
 import Post from '../post/Post'
+import PeopleCard from '../card/PeopleCard'
 
 export default function MessageBox() {
     const [roomID, setRoomID] = useState("")
@@ -214,9 +215,13 @@ export default function MessageBox() {
                                                 <p>{new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getHours().toString().padStart(2, "0")}:
                                                     {new Date(chat.createdAt.seconds * 1000 + chat.createdAt.nanoseconds / 1000000).getMinutes().toString().padStart(2, "0")}</p>
                                                 <div>{chat.message}</div>
-                                                <div>{chat.post}</div>
+                                                {/* <div>{chat.post}</div> */}
                                                 {chat.post != undefined ?
                                                     <PostInChat id={chat.post} />
+                                                    : ""}
+                                                {/* <div>{chat.profile}</div> */}
+                                                {chat.profile != undefined ?
+                                                    <ProfileInChat id={chat.profile} />
                                                     : ""}
                                             </div>
                                             :
@@ -227,6 +232,10 @@ export default function MessageBox() {
                                                 {/* <div>{chat.post}</div> */}
                                                 {chat.post != undefined ?
                                                     <PostInChat id={chat.post} />
+                                                    : ""}
+                                                {/* <div>{chat.profile}</div> */}
+                                                {chat.profile != undefined ?
+                                                    <ProfileInChat id={chat.profile} />
                                                     : ""}
                                             </div>
                                         : ""
@@ -317,13 +326,32 @@ function PostInChat({ id }: { id: any }) {
         }
     })
     console.log(id);
-    if(data)
+    if (data)
         console.log(data);
 
     return <>
         {data ?
             <div className='postinchat__container'>
-                <Post props={data.getPostById} refetch={refetch} />
+                <Post props={data.getPostById} refetch={refetch} mentionDatas={undefined} />
+            </div>
+            : ""}
+    </>
+}
+
+function ProfileInChat({ id }: { id: any }) {
+    const { data, refetch } = useQuery(GET_USER, {
+        variables: {
+            id: id
+        }
+    })
+    console.log(id);
+    if (data)
+        console.log(data);
+
+    return <>
+        {data ?
+            <div className='profileinchat__container'>
+                <PeopleCard props={data.user} />
             </div>
             : ""}
     </>

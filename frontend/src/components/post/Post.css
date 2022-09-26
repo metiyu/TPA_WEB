@@ -78,6 +78,10 @@
   width: 100%;
   background-color: var(--primary);
 }
+.post__comment .mentions_input {
+  width: 10px;
+  height: 10px;
+}
 
 .show_hover {
   position: absolute;

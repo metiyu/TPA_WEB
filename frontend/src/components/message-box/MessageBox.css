@@ -88,4 +88,9 @@
   max-width: 300px;
   border: 1px solid var(--border_accent);
   border-radius: 10px;
+}
+
+.profileinchat__container {
+  border: 1px solid var(--border_accent);
+  border-radius: 10px;
 }/*# sourceMappingURL=MessageBox.css.map */

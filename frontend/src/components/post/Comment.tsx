@@ -4,12 +4,14 @@ import { GET_USER } from '../../query-queries';
 import InputOption from '../input/InputOption';
 import './Comment.css'
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import ReplyIcon from '@mui/icons-material/Reply';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from '../../mutation-queries';
 import { UseCurrentUser } from '../../contexts/userCtx';
+import { SuggestionDataItem } from 'react-mentions';
+import RichText from '../richtext/RichText';
 
-export default function Comment({ props, refetch }: { props: any, refetch: any }) {
-    console.log(props);
+export default function Comment({ props, refetch, setComment }: { props: any, refetch: any, setComment: any }) {
     const { getUser } = UseCurrentUser()
     const { data, loading } = useQuery(GET_USER, {
         variables: {
@@ -53,6 +55,10 @@ export default function Comment({ props, refetch }: { props: any, refetch: any }
         return false
     }
 
+    function handleReply() {
+        setComment(`@[@${data.user.name}](${data.user.id})`)
+    }
+
     return (
         <>
             {data ? (
@@ -61,7 +67,8 @@ export default function Comment({ props, refetch }: { props: any, refetch: any }
                         <Avatar src={data.user.photo_profile} />
                         <div className='comment__name_comment'>
                             <h4>{data.user.name}</h4>
-                            <p>{props.comment}</p>
+                            <RichText texts={props.comment} />
+                            {/* <p>{props.comment}</p> */}
                         </div>
                     </div>
                     {props.likes ?
@@ -70,11 +77,14 @@ export default function Comment({ props, refetch }: { props: any, refetch: any }
                             : ""
                         : ""
                     }
-                    {checkIsLike() ?
-                        <div onClick={() => handleUnlike()}><InputOption Icon={ThumbUpAltIcon} title="Like" color="#0b65c3" /></div>
-                        :
-                        <div onClick={() => handleLike()}><InputOption Icon={ThumbUpAltOutlinedIcon} title="Like" color="gray" /></div>
-                    }
+                    <div style={{ display: "flex" }}>
+                        {checkIsLike() ?
+                            <div onClick={() => handleUnlike()}><InputOption Icon={ThumbUpAltIcon} title="Like" color="#0b65c3" /></div>
+                            :
+                            <div onClick={() => handleLike()}><InputOption Icon={ThumbUpAltOutlinedIcon} title="Like" color="gray" /></div>
+                        }
+                        <div onClick={() => handleReply()}><InputOption Icon={ReplyIcon} title="Reply" color="#0b65c3" /></div>
+                    </div>
                 </div>
             ) : ("")}
         </>

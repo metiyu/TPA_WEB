@@ -90,10 +90,10 @@ export default function PeopleCard({ props }: { props: any }) {
 
     return (
         <>
-            <div id={greyBackground} onClick={() => handleShowSendConnect()}></div>
+            {/* <div id={greyBackground} onClick={() => handleShowSendConnect()}></div>
             <div className={dropdownClassname}>
                 <SendConnectModal />
-            </div>
+            </div> */}
             <div className="search_people__container">
                 <Avatar className='avatar' src={props.photo_profile} onClick={() => navigate(`/profile/${props.id}`)} />
                 <div className='people_data' onClick={() => navigate(`/profile/${props.id}`)}>

@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { db } from '../../config/firebase';
 import { UseCurrentUser } from "../../contexts/userCtx";
 import { FOLLOW_USER_QUERY, SEND_CONNECT_QUERY, UNCONNECT_USER_QUERY, UNFOLLOW_USER_QUERY, VIEW_PROFILE } from '../../mutation-queries';
-import { GET_USER } from '../../query-queries';
+import { GET_USER, SEARCH_CONNECTED_USER_QUERY } from '../../query-queries';
 import EditProfile from "../popup/edit-profile/EditProfile";
 import './ProfileBox.css'
 import ReactToPrint, { useReactToPrint } from 'react-to-print';
@@ -211,8 +211,45 @@ export default function ProfileBox({ refetch, refetchNonCurrUser }: { refetch: a
         content: () => componentRef.current,
     });
 
-    console.log(dataCurrUser);
+    const [popupClassname, setPopupClassname] = useState("post__popup_share_hide")
+    function handleShareProfile() {
+        if (popupClassname == "post__popup_share_hide") {
+            setPopupClassname("post__popup_share_show")
+        } else {
+            setPopupClassname("post__popup_share_hide")
+        }
+    }
 
+    const [searchUser, { data: searchData, loading: searchLoading }] = useLazyQuery(SEARCH_CONNECTED_USER_QUERY)
+    const [keyword, setKeyword] = useState("")
+    function handleSearchConnectedUser(e: any) {
+        setKeyword(e)
+        searchUser({
+            variables: {
+                id: getUser().id,
+                keyword: e
+            }
+        })
+    }
+
+    const [roomID, setRoomID] = useState("")
+    function shareProfile(search: any) {
+        const q = query(collection(db, "rooms"))
+        onSnapshot(q, (docs) => {
+            docs.forEach(doc => {
+                if (doc.data().users_id.includes(getUser().id) && doc.data().users_id.includes(search.id))
+                    setRoomID(doc.id)
+            })
+        })
+
+        addDoc(collection(db, "rooms", roomID, "chats"), {
+            createdAt: new Date(),
+            sender: getUser().id,
+            profile: id
+        }).then((e) => {
+            console.log(e);
+        })
+    }
 
     return (
         <>
@@ -300,9 +337,25 @@ export default function ProfileBox({ refetch, refetchNonCurrUser }: { refetch: a
                                 )
                             )}
                             <button onClick={() => handleMakeChatRoom()}>Message</button>
-                            <button>Share profile</button>
+                            <button onClick={() => handleShareProfile()}>Share profile</button>
                             <button>Block</button>
                             <button onClick={handlePrint}>Save as pdf</button>
+                        </div>
+                        <div className={popupClassname}>
+                            <input type="text" placeholder="Search user..." onChange={(e) => handleSearchConnectedUser(e.target.value)} />
+                            <div className='search_connected_user__container'>
+                                {searchData ?
+                                    searchData.searchConnectedUser != undefined ?
+                                        searchData.searchConnectedUser.map((search: any) =>
+                                            search.id != getUser().id ?
+                                                <div onClick={() => shareProfile(search)}>
+                                                    <p>{search.name}</p>
+                                                    <hr />
+                                                </div>
+                                                : ""
+                                        )
+                                        : "" : ""}
+                            </div>
                         </div>
                         <div className={dropdownClassname}>
                             <EditProfile />

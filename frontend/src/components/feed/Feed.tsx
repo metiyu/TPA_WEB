@@ -142,6 +142,7 @@ export default function Feed() {
                                     <Post
                                         key={post.id}
                                         props={post}
+                                        mentionDatas={connectedUser}
                                         refetch={refetch}
                                     />
                                     // console.log(post)
