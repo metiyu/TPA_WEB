@@ -158,9 +158,10 @@ export default function Experience({ dataCurrUser, dataNonCurrUser, refetchCurrU
                                 </div>
                                 <div className="analytics__contents">
                                     <div className="analytics__content">
-                                        {dataCurrUser.user.experiences.map((edu: any) =>
-                                            <ExperienceCard props={edu} handleEdit={handleEditExperience} handleRemove={handleRemoveExperience} type={"currUser"} isRefetch={isRefetch} />
-                                        )}
+                                        {dataCurrUser.user.experiences ?
+                                            dataCurrUser.user.experiences.map((edu: any) =>
+                                                <ExperienceCard props={edu} handleEdit={handleEditExperience} handleRemove={handleRemoveExperience} type={"currUser"} isRefetch={isRefetch} />
+                                            ) : ""}
                                     </div>
                                 </div>
                             </div>

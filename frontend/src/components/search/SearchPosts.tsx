@@ -10,7 +10,7 @@ export default function SearchPosts({ props }: { props: any }) {
             ) : (
                 props.search.posts.map((post: any) => (
                     <div className="search__posts">
-                        <Post props={post} />
+                        <Post props={post} mentionDatas={undefined} refetch={undefined}/>
                     </div>
                 ))
             )}

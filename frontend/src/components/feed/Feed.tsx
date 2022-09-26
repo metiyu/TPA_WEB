@@ -53,22 +53,24 @@ export default function Feed() {
     let mentionDatas: SuggestionDataItem[] = []
     useEffect(() => {
         if (currUserData) {
-            currUserData.user.connected_user.map((id: any) => {
-                getUserById({
-                    variables: {
-                        id: id
-                    }
-                }).then((e) => {
-                    if (e.data) {
-                        let mentionData: SuggestionDataItem = { id: "", display: "" }
-                        let at: string = "@"
-                        mentionData.id = e.data.user.id
-                        mentionData.display = at.concat(e.data.user.name)
-                        mentionDatas.push(mentionData)
-                        setConnectedUser(mentionDatas)
-                    }
+            if (currUserData.user.connected_user) {
+                currUserData.user.connected_user.map((id: any) => {
+                    getUserById({
+                        variables: {
+                            id: id
+                        }
+                    }).then((e) => {
+                        if (e.data) {
+                            let mentionData: SuggestionDataItem = { id: "", display: "" }
+                            let at: string = "@"
+                            mentionData.id = e.data.user.id
+                            mentionData.display = at.concat(e.data.user.name)
+                            mentionDatas.push(mentionData)
+                            setConnectedUser(mentionDatas)
+                        }
+                    })
                 })
-            })
+            }
         }
     }, [])
 
@@ -138,15 +140,16 @@ export default function Feed() {
                         </div>
                         <div className="post__container" ref={ref}>
                             {data ?
-                                data.getPosts.map((post: any) =>
-                                    <Post
-                                        key={post.id}
-                                        props={post}
-                                        mentionDatas={connectedUser}
-                                        refetch={refetch}
-                                    />
-                                    // console.log(post)
-                                ) : ""
+                                data.getPosts ?
+                                    data.getPosts.map((post: any) =>
+                                        <Post
+                                            key={post.id}
+                                            props={post}
+                                            mentionDatas={connectedUser}
+                                            refetch={refetch}
+                                        />
+                                        // console.log(post)
+                                    ) : "" : ""
                             }
                         </div>
                     </div>

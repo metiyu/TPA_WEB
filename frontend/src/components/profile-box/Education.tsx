@@ -155,9 +155,10 @@ export default function Education({ dataCurrUser, dataNonCurrUser, refetchCurrUs
                                 </div>
                                 <div className="analytics__contents">
                                     <div className="analytics__content">
-                                        {dataCurrUser.user.educations.map((edu: any) =>
-                                            <EducationCard props={edu} handleEdit={handleEditEducation} handleRemove={handleRemoveEducation} type={"currUser"} isRefetch={isRefetch} />
-                                        )}
+                                        {dataCurrUser.user.educations ?
+                                            dataCurrUser.user.educations.map((edu: any) =>
+                                                <EducationCard props={edu} handleEdit={handleEditEducation} handleRemove={handleRemoveEducation} type={"currUser"} isRefetch={isRefetch} />
+                                            ) : ""}
                                     </div>
                                 </div>
                             </div>
